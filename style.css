@@ -1,0 +1,289 @@
+:root {
+    --bg-green: #3ea055;
+    --pink: #ffcdd2;
+    --light-green: #a5d6a7;
+    --yellow: #fff59d;
+    --blue: #81d4fa;
+    --gray-sidebar: #c2c2c2;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    background-color: var(--bg-green);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Master Layout Grid */
+.dashboard-wrapper {
+    display: grid;
+    grid-template-columns: 87% 11%;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 2.5vh 1.8vw;
+}
+
+/* Left Side Workspace Layout */
+.main-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-title {
+    background-color: white;
+    color: black;
+    text-align: center;
+    font-size: 5vh;
+    font-weight: bold;
+    padding: 0.8vh 2vw;
+    letter-spacing: 4px;
+    margin: 0 auto 2.5vh auto;
+    min-width: 45%;
+    max-width: 90%;
+    width: auto;
+    display: inline-flex;
+    justify-content: center;
+    gap: 1.5vw;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border: 0.4vh solid #000;
+    flex-shrink: 0;
+}
+
+/* Central Card Rows Grid Layout */
+.grid-container {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 2.5vh;
+    width: 100%;
+    flex: 1;
+}
+
+.grid-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1.15fr) 0.85fr;
+    gap: 1.8vw;
+    height: 100%;
+}
+
+/* Label Buttons */
+.card-btn {
+    border: 0.4vh solid #000;
+    border-radius: 2.5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2vh 1.4vw 1.5vh 1.4vw;
+    cursor: pointer;
+    box-shadow: 0px 1vh 0px #000;
+    position: relative;
+    top: 0;
+}
+
+.card-btn:active {
+    top: 0.5vh;
+    box-shadow: 0px 0.5vh 0px #000;
+}
+
+.row-2026 .card-btn { background-color: var(--pink); }
+.row-2027 .card-btn { background-color: var(--light-green); }
+.row-2028 .card-btn { background-color: var(--yellow); }
+.row-2029 .card-btn { background-color: var(--blue); }
+
+/* Typography Sizing */
+.q-text {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+    margin-bottom: 2.2vh;
+}
+
+/* Keeps the 'Q' and quarter number large and bold */
+.q-prefix {
+    font-size: 4.0vh !important;
+    display: inline-block !important;
+    vertical-align: baseline !important;
+    color: #000000;
+    font-weight: bold;
+}
+
+/* Scales the 'tr' text down independently */
+.small-tr {
+    font-size: 2.4vh !important;
+    font-weight: bold;
+    display: inline-block !important;
+    vertical-align: baseline !important;
+}
+
+/* Scales the YYYY text down and pushes it right to create a separation gap */
+.year-subtext {
+    font-size: 3.0vh !important; /* Scaled down slightly to separate visually from the quarter number */
+    display: inline-block !important;
+    vertical-align: baseline !important;
+    color: #000000;
+    font-weight: bold;
+    margin-left: 1.5vw !important; /* Forces a crisp horizontal separation gap between them */
+}
+
+
+.months-text {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 2.4vh;
+    width: 100%;
+    color: #000;
+}
+
+.year-card {
+    justify-content: center; /* Keeps text horizontally centered */
+    align-items: flex-end;   /* Direct fix: pushes the text line straight to the bottom */
+    font-size: 6.2vh;
+    font-weight: bold;
+    padding: 0;
+    padding-bottom: 1.2vh;   /* Gives it clean breathing room in the lower third */
+    box-sizing: border-box;  /* Protects the button dimensions from changing */
+}
+
+/* Right Structural Container Column: Uses a grid matching the grid-container */
+.sidebar-container {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr; /* Separates the header spacing from the grid footprint */
+}
+
+/* Grey Sidebar: Locked inside the grid row footprint to perfectly align top and bottom edges */
+.sidebar {
+    grid-row: 2; /* Forces the box to occupy the exact same vertical space span as the label grid */
+    width: 100%;
+    height: 100%; /* Dynamically expands to the precise boundaries of the row limits */
+    background-color: var(--gray-sidebar);
+    border: 0.4vh solid #000;
+    border-radius: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.5vh 0.4vw;
+    justify-content: space-between;
+}
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5vh;
+    width: 100%;
+    align-items: center;
+}
+
+.side-btn {
+    background: white;
+    border: 0.4vh solid #000;
+    border-radius: 1.5vh;
+    width: 92%;
+    height: 13vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6vh;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 0.5vh 0px #000;
+    position: relative;
+    top: 0;
+}
+
+.side-btn:active {
+    top: 0.2vh;
+    box-shadow: 0px 0.3vh 0px #000;
+}
+
+.side-btn svg {
+    width: 5.5vh;
+    height: 5.5vh;
+    margin-bottom: 0.5vh;
+}
+
+.status-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2vh;
+}
+
+.status-title {
+    font-size: 2.3vh;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 1.5vh;
+    letter-spacing: 1.5px;
+    width: 100%;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 92%;
+    height: 3.5vh;
+}
+
+.color-box {
+    width: 60%;
+    height: 2.8vh;
+    border: 0.3vh solid #000;
+    border-radius: 0.4vh;
+}
+.color-box.pink { background-color: var(--pink); }
+.color-box.green { background-color: var(--light-green); }
+.color-box.yellow { background-color: var(--yellow); }
+.color-box.blue { background-color: var(--blue); }
+.color-box.text-box {
+    background: white;
+    font-size: 1vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.led-dot {
+    width: 1.6vh;
+    height: 1.6vh;
+    border-radius: 50%;
+    background-color: #00ff00;
+    border: 0.3vh solid #000;
+    box-shadow: 0 0 0.6vh #00ff00;
+}
+
+#manual-sim-btn {
+    position: absolute;
+    top: 2.5vh;
+    left: 1.8vw;
+    padding: 1vh 1.5vw;
+    background-color: #ff9800;
+    color: #000;
+    border: 0.3vh solid #000;
+    border-radius: 1vh;
+    font-weight: bold;
+    font-size: 1.6vh;
+    cursor: pointer;
+    box-shadow: 0px 0.4vh 0px #000;
+    z-index: 99999;
+}
