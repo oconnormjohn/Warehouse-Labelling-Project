@@ -287,3 +287,65 @@ body {
     box-shadow: 0px 0.4vh 0px #000;
     z-index: 99999;
 }
+
+/* ======================================================================= */
+/* STAGE 1: FINAL FINESSED FULL-WIDTH MATRIX WITH CRISP CORNERS            */
+/* ======================================================================= */
+
+/* Outer full-screen layout context box for Screen 1 */
+#home-screen-workspace {
+    position: absolute;        /* Rips the home canvas clean out of global body constraints */
+    top: 0 !important;         /* Forces the box to lock flush with the top glass bezel    */
+    left: 0 !important;        /* Forces the box to lock flush with the left glass bezel   */
+    width: 100vw !important;   /* Locks the width to exactly 100% of the browser window    */
+    height: 100vh !important;  /* Locks the height to exactly 100% of the browser viewport */
+    background-color: #357844; /* Warehouse tray green background canvas fill               */
+    display: flex !important;  /* Forces side-by-side tracking for the grid and sidebar    */
+    padding: 3.0vh 0.6vw !important; /* Reclaimed side space drops horizontal padding to a narrow 0.6vw */
+    box-sizing: border-box !important;
+    overflow: hidden !important;   /* Defensively chokes off all accidental scroll bars   */
+    z-index: 9999 !important;  /* Sits firmly on top of hidden layout panels or text bits  */
+}
+
+/* Category Grid Canvas: Expanded to give the maximum screen width to the buttons */
+#home-category-grid {
+    width: 94.2% !important;   /* Expanded from 93.5% to stretch buttons closer to the edges */
+    height: 100% !important;   /* Stretches fully from top padding to bottom padding     */
+    display: grid !important;  /* Activates two-dimensional matrix distribution tracks   */
+    grid-template-columns: repeat(7, 1fr) !important; /* 7 columns wide uniform fraction blocks */
+    grid-template-rows: repeat(5, 1fr) !important;    /* 5 rows deep uniform fraction blocks    */
+    
+    /* GAPS TUNED: Reduced vertical space between columns by 30% (from 0.8vw down to 0.55vw) */
+    gap: 2.4vh 0.55vw !important; 
+    
+    padding-right: 0.8vw !important; /* Tight horizontal gap directly before the sidebar begins */
+    box-sizing: border-box !important;
+}
+
+/* Narrow Sidebar Canvas: Fitted snugly against the right edge of the screen */
+#home-narrow-sidebar {
+    width: 5.8% !important;    /* Streamlined from 6.5% to reclaim maximum button width */
+    height: 100% !important;   /* Stretches full-height to match rows 1-5 perfectly      */
+    background-color: #C3C3C3; /* Mid-grey industrial container background fill          */
+    border: 0.4vh solid #000000 !important; /* Crisp dark framing edge boundary ink line */
+    border-radius: 1.5vh !important; /* Distinctive smooth rounded corner styling profile*/
+    box-sizing: border-box !important;
+}
+
+/* Standalone Category Selection Buttons */
+.home-cat-btn {
+    width: 100%;               /* Expands fully to occupy its assigned grid track  */
+    height: 100%;              /* Expands fully to occupy its assigned grid track  */
+    background-color: #FFF4C2 !important; /* Pale butter cream background tint      */
+    border: 0.4vh solid #000000 !important; /* Hard ink boundary framing line       */
+    
+    /* CORNER RADIUS TUNED: Sharpened down a fraction more from 2.2vh to a crisp 1.6vh profile */
+    border-radius: 1.6vh !important;        
+    
+    color: #000000 !important; /* Crisp black for internal numbering identifiers   */
+    font-size: 4.5vh !important; /* Boldly scales temporary tracking numbers up      */
+    font-weight: bold !important;
+    box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; /* Heavy black 3D base shadow offset   */
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+}
