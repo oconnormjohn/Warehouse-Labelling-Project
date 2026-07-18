@@ -27,11 +27,14 @@ body {
 /* Master Layout Grid */
 .dashboard-wrapper {
     display: grid;
-    grid-template-columns: 87% 11%;
+    grid-template-columns: 94.2% 5.8%; /* Math locked to exactly 100% to stop layout shifting */
     justify-content: space-between;
-    width: 100%;
-    height: 100%;
-    padding: 2.5vh 1.8vw;
+    width: 100vw;
+    height: 100vh;
+    background-color: #357844; 
+    padding: 3.0vh 0.6vw;      /* Perfectly symmetric 0.6vw padding on both left and right edges */
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* Left Side Workspace Layout */
@@ -139,7 +142,6 @@ body {
     margin-left: 1.5vw !important; /* Forces a crisp horizontal separation gap between them */
 }
 
-
 .months-text {
     display: flex;
     justify-content: space-between;
@@ -159,11 +161,20 @@ body {
     box-sizing: border-box;  /* Protects the button dimensions from changing */
 }
 
-/* Right Structural Container Column: Uses a grid matching the grid-container */
-.sidebar-container {
-    height: 100%;
-    display: grid;
-    grid-template-rows: auto 1fr; /* Separates the header spacing from the grid footprint */
+/* Grey Sidebar: Locked inside the grid row footprint to perfectly align top and bottom edges */
+.sidebar {
+    grid-row: 2; 
+    width: calc(100% - 0.8vw); /* Renders slightly narrower than its slot to pull away from the bezel */
+    margin-right: auto;        /* Aligns the sidebar to the left of its track, forcing the gap to the right side */
+    height: 100%; 
+    background-color: var(--gray-sidebar);
+    border: 0.4vh solid #000;
+    border-radius: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.5vh 0.4vw;
+    justify-content: space-between;
 }
 
 /* Grey Sidebar: Locked inside the grid row footprint to perfectly align top and bottom edges */
@@ -224,16 +235,56 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 1.2vh;
+    margin-top: auto; /* Forces the status module to lock firmly to the bottom of the sidebar */
 }
 
 .status-title {
-    font-size: 2.3vh;
-    font-weight: bold;
-    text-align: center;
-    line-height: 1.1;
+    font-family: 'Arial Black', Impact, sans-serif; /* Heavy, thick industrial font */
+    font-size: 1.1vh;              /* Scaled down slightly to fit the narrow grey sidebar */
+    font-weight: 900;
+    text-align: center;            /* Mandates perfect horizontal centering */
+    line-height: 1.0;
+    margin-top: 2vh;
     margin-bottom: 1.5vh;
-    letter-spacing: 1.5px;
-    width: 100%;
+    letter-spacing: 0px;           /* Stripped out to pack characters tightly without spilling */
+    color: #000000;
+    width: 100%;                   /* Uniformly forces centering relative to container width */
+}
+
+/* Action button scaling for BACK & MONTHS */
+.side-btn {
+    background: white;
+    border: 0.4vh solid #000;
+    border-radius: 1.5vh;
+    width: 95%;        /* Spans wider within the thin container */
+    height: 10vh;       /* Reduced slightly to save vertical space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2vh;   /* Scaled down to prevent clipping text */
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 0.5vh 0px #000;
+    position: relative;
+    top: 0;
+}
+
+.side-btn svg {
+    width: 3.5vh;       /* Scaled icons down to fit nicely */
+    height: 3.5vh;
+    margin-bottom: 0.5vh;
+}
+
+/* Status Text Box scaling for PLAIN & DISPATCH */
+.color-box.text-box {
+    background: white;
+    font-size: 0.6vh;              /* Reduced perfectly so PLAIN and DISP stay inside the lines */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
 }
 
 .status-row {
@@ -294,31 +345,19 @@ body {
 
 /* Outer full-screen layout context box for Screen 1 */
 #home-screen-workspace {
-    position: absolute;        /* Rips the home canvas clean out of global body constraints */
-    top: 0 !important;         /* Forces the box to lock flush with the top glass bezel    */
-    left: 0 !important;        /* Forces the box to lock flush with the left glass bezel   */
-    width: 100vw !important;   /* Locks the width to exactly 100% of the browser window    */
-    height: 100vh !important;  /* Locks the height to exactly 100% of the browser viewport */
-    background-color: #357844; /* Warehouse tray green background canvas fill               */
-    display: flex !important;  /* Forces side-by-side tracking for the grid and sidebar    */
-    padding: 3.0vh 0.6vw !important; /* Reclaimed side space drops horizontal padding to a narrow 0.6vw */
-    box-sizing: border-box !important;
-    overflow: hidden !important;   /* Defensively chokes off all accidental scroll bars   */
-    z-index: 9999 !important;  /* Sits firmly on top of hidden layout panels or text bits  */
+    display: contents !important; /* Strips away absolute constraints so elements align inline */
 }
 
 /* Category Grid Canvas: Expanded to give the maximum screen width to the buttons */
 #home-category-grid {
-    width: 94.2% !important;   /* Expanded from 93.5% to stretch buttons closer to the edges */
-    height: 100% !important;   /* Stretches fully from top padding to bottom padding     */
-    display: grid !important;  /* Activates two-dimensional matrix distribution tracks   */
-    grid-template-columns: repeat(7, 1fr) !important; /* 7 columns wide uniform fraction blocks */
-    grid-template-rows: repeat(5, 1fr) !important;    /* 5 rows deep uniform fraction blocks    */
-    
-    /* GAPS TUNED: Reduced vertical space between columns by 30% (from 0.8vw down to 0.55vw) */
+    width: 100% !important;   /* Expands fully to meet the sidebar edge */
+    height: 100% !important;   
+    max-height: 94vh !important; /* Prevents the matrix rows from stretching too tall vertically */
+    display: grid !important;  
+    grid-template-columns: repeat(7, 1fr) !important; 
+    grid-template-rows: repeat(5, 1fr) !important;    
     gap: 2.4vh 0.55vw !important; 
-    
-    padding-right: 0.8vw !important; /* Tight horizontal gap directly before the sidebar begins */
+    padding-right: 0.8vw !important; 
     box-sizing: border-box !important;
 }
 
@@ -348,4 +387,9 @@ body {
     box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; /* Heavy black 3D base shadow offset   */
     cursor: pointer !important;
     box-sizing: border-box !important;
+}
+
+/* Temporarily hide screen 2 navigation buttons on the home screen layout */
+#sidebar-actions {
+    display: none !important;
 }

@@ -15,7 +15,6 @@
                    <!-- ======================================================================= -->
             <!-- STAGE 1: NEW HOME SCREEN / CATEGORY SELECTION MATRIX WORKSPACE          -->
             <!-- ======================================================================= -->
-            <div id="home-screen-workspace">
                 
                 <!-- Main Category Grid Canvas: Occupies 91.5% of the viewport width    -->
                 <div id="home-category-grid">
@@ -61,12 +60,7 @@
                     <button class="home-cat-btn">35</button>
                 </div>
 
-                <!-- Narrow Narrow Sidebar Canvas: Occupies remaining 8.5% width       -->
-                <div id="home-narrow-sidebar">
-                    <!-- Administrative tracking items and icons will build inside here -->
-                </div>
-
-            </div>
+            
             <!-- ======================================================================= -->
 
             <!-- Left Workspace View Panel Component Area (ORIGINAL EXPIRY GRID - HIDDEN BY DEFAULT) -->
@@ -78,10 +72,14 @@
                     <!-- Automatically built by the dynamic JavaScript engine -->
                 </div>
             </div>
-
+        <!-- ======================================================================= -->
+        <!-- UNIVERSAL GLOBAL SIDEBAR (Occupies 5.8% width on all screens)          -->
+        <!-- ======================================================================= -->
         <div class="sidebar-container">
             <div class="sidebar">
-                <div class="nav-group">
+                
+                <!-- Navigation Buttons: Handled via JavaScript (id added here) -->
+                <div class="nav-group" id="sidebar-actions">
                     <button class="side-btn" onclick="sidebarAction('BACK')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#0091ea" stroke-width="3.5"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>BACK
                     </button>
@@ -89,6 +87,8 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>MONTHS
                     </button>
                 </div>
+
+                <!-- Printer Status Module: Stays permanently visible at the bottom -->
                 <div class="status-container">
                     <div class="status-title">PRINTER<br>STATUS</div>
                     <div class="status-row"><div class="color-box pink"></div><div class="led-dot"></div></div>
@@ -96,10 +96,12 @@
                     <div class="status-row"><div class="color-box yellow"></div><div class="led-dot"></div></div>
                     <div class="status-row"><div class="color-box blue"></div><div class="led-dot"></div></div>
                     <div class="status-row"><div class="color-box text-box">PLAIN</div><div class="led-dot"></div></div>
-                    <div class="status-row"><div class="color-box text-box">DISPATCH</div><div class="led-dot"></div></div>
+                    <div class="status-row"><div class="color-box text-box">DISP.</div><div class="led-dot"></div></div>
                 </div>
             </div>
         </div>
+
+
     </div>
     <script src="app.js"></script>
 </body>
