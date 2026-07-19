@@ -161,37 +161,6 @@ body {
     box-sizing: border-box;  /* Protects the button dimensions from changing */
 }
 
-/* Grey Sidebar: Locked inside the grid row footprint to perfectly align top and bottom edges */
-.sidebar {
-    grid-row: 2; 
-    width: calc(100% - 0.8vw); /* Renders slightly narrower than its slot to pull away from the bezel */
-    margin-right: auto;        /* Aligns the sidebar to the left of its track, forcing the gap to the right side */
-    height: 100%; 
-    background-color: var(--gray-sidebar);
-    border: 0.4vh solid #000;
-    border-radius: 1.5vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2.5vh 0.4vw;
-    justify-content: space-between;
-}
-
-/* Grey Sidebar: Locked inside the grid row footprint to perfectly align top and bottom edges */
-.sidebar {
-    grid-row: 2; /* Forces the box to occupy the exact same vertical space span as the label grid */
-    width: 100%;
-    height: 100%; /* Dynamically expands to the precise boundaries of the row limits */
-    background-color: var(--gray-sidebar);
-    border: 0.4vh solid #000;
-    border-radius: 1.5vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2.5vh 0.4vw;
-    justify-content: space-between;
-}
-
 .nav-group {
     display: flex;
     flex-direction: column;
@@ -340,56 +309,177 @@ body {
 }
 
 /* ======================================================================= */
-/* STAGE 1: FINAL FINESSED FULL-WIDTH MATRIX WITH CRISP CORNERS            */
+/* BUTTON VISIBILITY MANAGEMENT STYLES                                    */
 /* ======================================================================= */
 
-/* Outer full-screen layout context box for Screen 1 */
-#home-screen-workspace {
-    display: contents !important; /* Strips away absolute constraints so elements align inline */
+/* The Visibility Switch: Anything with this class vanishes completely */
+.screen-hide {
+    display: none !important;
 }
 
-/* Category Grid Canvas: Expanded to give the maximum screen width to the buttons */
+/* Screen 1 Active Action Button Housing Deck */
+#deck-home-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    align-items: center !important;
+}
+
+/* Composite box grouping individual button and legend text together */
+.action-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* CRISP SEPARATION DECK: Generates your fat-finger protection gap between distinct blocks */
+#deck-home-actions .action-block:not(:last-child) {
+    margin-bottom: 4.2vh !important; /* Fixed physical space between separate option groups */
+}
+
+/* Individual Action Button Rules - Fixed to your preferred neat size */
+.side-btn {
+    border: 0.4vh solid #000000;
+    border-radius: 1.5vh;
+    width: 92%;
+    height: 8.5vh; /* Locked tidy size */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0px 0.5vh 0px #000000;
+    position: relative;
+    top: 0;
+    box-sizing: border-box; 
+}
+
+.side-btn:active {
+    top: 0.3vh;
+    box-shadow: 0px 0.2vh 0px #000000;
+}
+
+/* Clean SVG Icon Sizing Layout centering inside the textless buttons */
+.side-btn svg {
+    width: auto !important;
+    height: 4.2vh !important;     
+    max-width: 80% !important;   
+    margin-bottom: 0 !important; /* Strips internal margins to keep icon centered */
+}
+
+/* Muted Industrial Matte Color Palette Profiles */
+.btn-settings { background-color: #C64B4B; color: #FFFFFF; }
+.btn-plain    { background-color: #E3A83F; color: #000000; }
+.btn-dispatch { background-color: #4A8B5B; color: #FFFFFF; }
+
+/* Legacy Screen 2 White Background Button Style */
+.btn-legacy {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-size: 1.6vh; 
+}
+
+/* ======================================================================= */
+/* UNIFIED TYPOGRAPHY SPECIFICATION (Industrial Heavy Match)             */
+/* ======================================================================= */
+.sidebar-legend-text, 
+.status-title {
+    font-family: 'Arial Black', Impact, sans-serif !important;
+    font-size: 0.9vh !important;  
+    font-weight: 900 !important;
+    text-align: center !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0px !important;
+    width: 100%;
+}
+
+/* Force the legend text to sit cleanly below its button with perfect breathing room */
+.sidebar-legend-text {
+    margin-top: 1.4vh !important;   /* Increased from 0.5vh to fix the cramped look */
+    margin-bottom: 0vh !important;   
+    height: 2.2vh !important;        
+    color: #000000 !important;
+}
+
+/* Contextual margin padding specifically for the lower Printer status header */
+.status-title {
+    margin-top: 0vh;
+    margin-bottom: 1.5vh;
+    color: #000000 !important;
+}
+
+/* ======================================================================= */
+/* UNIVERSAL SIDEBAR CONTROL MODULE                                       */
+/* ======================================================================= */
+
+/* Outer structure controlling layout tracks and right-hand edge defense */
+.sidebar-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Grey Canvas Sidebar Box Structure */
+.sidebar {
+    grid-row: 2; 
+    width: calc(100% - 0.8vw);   /* Renders narrower to create the visual gap */
+    margin-right: auto;          /* Pushes the empty gap to the far-right screen bezel */
+    height: 100%; 
+    background-color: #c2c2c2;
+    border: 0.4vh solid #000000;
+    border-radius: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3.0vh 0.4vw;        /* Balanced internal framing padding */
+    box-sizing: border-box;
+}
+
+/* Bottom Status Light Module: Firmly anchored to the absolute base of the sidebar */
+.status-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2vh;
+    margin-top: auto; /* Claims all remaining vertical space to lock to the floor */
+}
+
+/* ======================================================================= */
+/* HOME MATRIX GRID RESET                                                 */
+/* ======================================================================= */
+
+/* Restores the 7 across x 5 down layout arrangement for the 35 buttons */
 #home-category-grid {
-    width: 100% !important;   /* Expands fully to meet the sidebar edge */
+    width: 100% !important;   
     height: 100% !important;   
-    max-height: 94vh !important; /* Prevents the matrix rows from stretching too tall vertically */
+    max-height: 94vh !important; 
     display: grid !important;  
-    grid-template-columns: repeat(7, 1fr) !important; 
-    grid-template-rows: repeat(5, 1fr) !important;    
-    gap: 2.4vh 0.55vw !important; 
+    grid-template-columns: repeat(7, 1fr) !important; /* 7 balanced columns */
+    grid-template-rows: repeat(5, 1fr) !important;    /* 5 balanced rows */
+    gap: 2.4vh 0.55vw !important;                      /* Generous industrial spacing gaps */
     padding-right: 0.8vw !important; 
     box-sizing: border-box !important;
 }
 
-/* Narrow Sidebar Canvas: Fitted snugly against the right edge of the screen */
-#home-narrow-sidebar {
-    width: 5.8% !important;    /* Streamlined from 6.5% to reclaim maximum button width */
-    height: 100% !important;   /* Stretches full-height to match rows 1-5 perfectly      */
-    background-color: #C3C3C3; /* Mid-grey industrial container background fill          */
-    border: 0.4vh solid #000000 !important; /* Crisp dark framing edge boundary ink line */
-    border-radius: 1.5vh !important; /* Distinctive smooth rounded corner styling profile*/
-    box-sizing: border-box !important;
-}
-
-/* Standalone Category Selection Buttons */
+/* ======================================================================= */
+/* HOME SELECTION MATRIX BUTTON VISUAL PROPERTIES                         */
+/* ======================================================================= */
 .home-cat-btn {
-    width: 100%;               /* Expands fully to occupy its assigned grid track  */
-    height: 100%;              /* Expands fully to occupy its assigned grid track  */
-    background-color: #FFF4C2 !important; /* Pale butter cream background tint      */
-    border: 0.4vh solid #000000 !important; /* Hard ink boundary framing line       */
-    
-    /* CORNER RADIUS TUNED: Sharpened down a fraction more from 2.2vh to a crisp 1.6vh profile */
-    border-radius: 1.6vh !important;        
-    
-    color: #000000 !important; /* Crisp black for internal numbering identifiers   */
-    font-size: 4.5vh !important; /* Boldly scales temporary tracking numbers up      */
-    font-weight: bold !important;
-    box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; /* Heavy black 3D base shadow offset   */
+    width: 100%;                  /* Expands fully to occupy its assigned grid track slot */
+    height: 100%;                 /* Expands fully to occupy its assigned grid track slot */
+    background-color: #FFF4C2 !important; /* Restores the crisp pale butter cream background tint */
+    border: 0.4vh solid #000000 !important; /* Hard black ink boundary framing line */
+    border-radius: 1.6vh !important;        /* Crisp, finessed 1.6vh rounded corner profile */
+    color: #000000 !important;    /* Solid black paint for prominent number readouts */
+    font-size: 4.5vh !important;  /* Sharp, heavily scaled temporary tracking numbers */
+    font-weight: bold !important; /* Thick, high-visibility weight profile */
+    box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; /* Heavy 3D tactile base shadow offset */
     cursor: pointer !important;
     box-sizing: border-box !important;
-}
-
-/* Temporarily hide screen 2 navigation buttons on the home screen layout */
-#sidebar-actions {
-    display: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
