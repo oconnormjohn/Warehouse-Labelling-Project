@@ -470,11 +470,11 @@ body {
 .home-cat-btn {
     width: 100%;                  /* Expands fully to occupy its assigned grid track slot */
     height: 100%;                 /* Expands fully to occupy its assigned grid track slot */
-    background-color: #FFF4C2 !important; /* Restores the crisp pale butter cream background tint */
+    background-color: #FFF4C2 !important; /* Crisp pale butter cream background tint */
     border: 0.4vh solid #000000 !important; /* Hard black ink boundary framing line */
     border-radius: 1.6vh !important;        /* Crisp, finessed 1.6vh rounded corner profile */
     color: #000000 !important;    /* Solid black paint for prominent number readouts */
-    font-size: 4.5vh !important;  /* Sharp, heavily scaled temporary tracking numbers */
+    font-size: 2.5vh !important;  /* 2.5 is maximum font size usable to avoid re-sizing of buttons*/
     font-weight: bold !important; /* Thick, high-visibility weight profile */
     box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; /* Heavy 3D tactile base shadow offset */
     cursor: pointer !important;
