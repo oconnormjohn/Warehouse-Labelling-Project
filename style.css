@@ -480,6 +480,8 @@ body {
     cursor: pointer !important;
     box-sizing: border-box !important;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: center; /* Centres content horizontally */
+    align-items: flex-start; /* Aligned category text at the top of the button (start of cross-axis)  */
+    padding-top: 2.5vh;  /* Putting some space above the category text at the top */
+    text-align: center; /* Ensues multi-line text stays centred horizontally */  
 }
