@@ -468,20 +468,42 @@ body {
 /* HOME SELECTION MATRIX BUTTON VISUAL PROPERTIES                         */
 /* ======================================================================= */
 .home-cat-btn {
-    width: 100%;                  /* Expands fully to occupy its assigned grid track slot */
-    height: 100%;                 /* Expands fully to occupy its assigned grid track slot */
-    background-color: #FFF4C2 !important; /* Crisp pale butter cream background tint */
-    border: 0.4vh solid #000000 !important; /* Hard black ink boundary framing line */
-    border-radius: 1.6vh !important;        /* Crisp, finessed 1.6vh rounded corner profile */
-    color: #000000 !important;    /* Solid black paint for prominent number readouts */
-    font-size: 2.5vh !important;  /* 2.5 is maximum font size usable to avoid re-sizing of buttons*/
-    font-weight: bold !important; /* Thick, high-visibility weight profile */
-    box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; /* Heavy 3D tactile base shadow offset */
+    width: 100%;                  
+    height: 100%;                 
+    background-color: #FFF4C2 !important; 
+    border: 0.4vh solid #000000 !important; 
+    border-radius: 1.6vh !important;        
+    color: #000000 !important;    
+    font-size: 2.5vh !important;  
+    font-weight: bold !important; 
+    box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; 
     cursor: pointer !important;
     box-sizing: border-box !important;
+    
     display: flex;
-    justify-content: center; /* Centres content horizontally */
-    align-items: flex-start; /* Aligned category text at the top of the button (start of cross-axis)  */
-    padding-top: 2.5vh;  /* Putting some space above the category text at the top */
-    text-align: center; /* Ensues multi-line text stays centred horizontally */  
+    flex-direction: column;     
+    align-items: center;         
+    justify-content: flex-start; 
+    padding-top: 1.5vh;         /* Keeping the space at the top */
+    text-align: center; 
+    
+    /* --- NEW DEFENSIVE LOCK --- */
+    overflow: hidden !important; /* Prevents internal content from physically stretching the button */
+}
+
+/* --- Fine-Tuned Text Box --- */
+.home-cat-btn .btn-text {
+    width: 100%;
+    line-height: 1.1;            /* Slightly tighter line height to save vertical pixels */
+    margin-bottom: auto;         
+    flex-shrink: 0;              /* Prevents the text box itself from collapsing */
+}
+
+/* --- Fine-Tuned Image Box --- */
+.home-cat-btn .btn-icon {
+    max-height: 50% !important;  /* Leave explicit room for the bottom padding and shadows */
+    max-width: 85%;             
+    object-fit: contain;        
+    margin-bottom: 1vh;        /* Keeps a clean safety gap above the bottom border */
+    flex-shrink: 1;              /* Forces the image to shrink first if space runs tight */
 }
