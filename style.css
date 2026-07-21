@@ -37,11 +37,12 @@ body {
     overflow: hidden;
 }
 
-/* Left Side Workspace Layout */
 .main-container {
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding-right: 0.6vw !important; /* DIRECT FIX: Uniform screen cushion mirroring the left bezel */
+    box-sizing: border-box;
 }
 
 .header-title {
@@ -71,12 +72,14 @@ body {
     grid-template-rows: repeat(4, 1fr);
     gap: 2.5vh;
     width: 100%;
+    margin-right: 0.6vw !important; /* DIRECT FIX: Generates a right-hand cushion identical to the left edge */
+    box-sizing: border-box;
     flex: 1;
 }
 
 .grid-row {
     display: grid;
-    grid-template-columns: repeat(4, 1.15fr) 0.85fr;
+    grid-template-columns: repeat(5, 1fr); /* Direct Fix: 5 identical, perfectly equal tracks */
     gap: 1.8vw;
     height: 100%;
 }
@@ -152,13 +155,15 @@ body {
 }
 
 .year-card {
-    justify-content: center; /* Keeps text horizontally centered */
-    align-items: flex-end;   /* Direct fix: pushes the text line straight to the bottom */
+    display: flex !important;
+    flex-direction: row !important;      /* Sets the horizontal line axis */
+    justify-content: center !important;   /* Centers text perfectly horizontally */
+    align-items: flex-end !important;    /* Prepares it for the lower-third position */
+    text-align: center !important;       /* Secondary alignment safety wrap */
     font-size: 6.2vh;
     font-weight: bold;
-    padding: 0;
-    padding-bottom: 1.2vh;   /* Gives it clean breathing room in the lower third */
-    box-sizing: border-box;  /* Protects the button dimensions from changing */
+    padding: 0 0 1.2vh 0 !important;     /* Strips side padding completely to prevent right-drift */
+    box-sizing: border-box !important;  
 }
 
 .nav-group {

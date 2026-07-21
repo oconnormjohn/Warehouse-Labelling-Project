@@ -126,14 +126,18 @@ window.addEventListener('DOMContentLoaded', () => {
 /**
  * Core Touch Event Processors & Layout Resets
  */
-function handleCardClick(year, period) {
-    const slot1 = document.getElementById('cat-word1');
-    const slot2 = document.getElementById('cat-word2');
-    const activeWord1 = slot1 ? slot1.textContent : '';
-    const activeWord2 = slot2 ? slot2.textContent : '';
-    const absoluteCategoryString = activeWord2 ? `${activeWord1} ${activeWord2}` : activeWord1;
-    
-    alert(`PRINTING LABEL:\n${absoluteCategoryString}\n${period} ${year}`);
+function handleCardClick(year, period) { 
+ const slot1 = document.getElementById('cat-word1');
+ const slot2 = document.getElementById('cat-word2');
+ const activeWord1 = slot1 ? slot1.textContent : '';
+ const activeWord2 = slot2 ? slot2.textContent : '';
+ const absoluteCategoryString = activeWord2 ? `${activeWord1} ${activeWord2}` : activeWord1;
+ 
+ // 1. Display the print confirmation alert (Blocks execution)
+ alert(`PRINTING LABEL:\n${absoluteCategoryString}\n${period} ${year}`);
+ 
+ // 2. Executes automatically AFTER the user clicks "OK"
+ sidebarAction('BACK');
 }
 
 // --- REPLACED SIDEBARACTION FUNCTION AT THE BASE OF APP.JS ---
