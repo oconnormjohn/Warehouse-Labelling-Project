@@ -1,12 +1,10 @@
-/**
- * Food Bank Kiosk - Automated Calendar & Fixed Colour Mapping
- * Integrated Screen-Flipping View Engine
- */
-
 // 1. Establish the base starting calendar year dynamically using the PC system clock
 let currentYear = new Date().getFullYear();
 
-// 2. Define the static colour rotation loop index sequence
+// Global control variable for superuser release state
+let isFourthYearReleased = false; 
+
+// RESTORED: Keeping your structural row class names exactly as they were written
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
 
 // Build the matrix template grid with proper rolling years and matching colours
@@ -21,37 +19,52 @@ function generateDynamicGrid() {
         const remainder = targetYear % 4;
         let colorIndex;
         
+        // Dynamic modulo matching to decouple colors from absolute historical calendar dates
         if (remainder === 2) colorIndex = 0;      // Pink family
         else if (remainder === 3) colorIndex = 1; // Green family
         else if (remainder === 0) colorIndex = 2; // Yellow family
         else if (remainder === 1) colorIndex = 3; // Blue family
         
         const colorClass = colorCycle[colorIndex];
+        
+        // Enforce physical containment logic purely on the 4th row slot (Index position 3)
+        const isFourthRow = (i === 3);
+        const isInactive = isFourthRow && !isFourthYearReleased;
+        
+        const rowStatusClass = isInactive ? 'inactive-row' : '';
+        
+        // Define click templates conditionally to prevent touch events on inactive rows
+        const clickQ1 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q1')"`;
+        const clickQ2 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q2')"`;
+        const clickQ3 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q3')"`;
+        const clickQ4 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q4')"`;
+        const clickYear = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Full Year')"`;
 
         gridHTML += `
-        <div class="grid-row ${colorClass}">
-            <div class="card-btn" onclick="handleCardClick('${targetYear}', 'Q1')">
+        <div class="grid-row ${colorClass} ${rowStatusClass}">
+            <div class="card-btn" ${clickQ1}>
                 <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 1</div><div class="year-subtext">${targetYear}</div></div>
                 <div class="months-text"><span>Jan</span><span>Feb</span><span>Mar</span></div>
             </div>
-            <div class="card-btn" onclick="handleCardClick('${targetYear}', 'Q2')">
+            <div class="card-btn" ${clickQ2}>
                 <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 2</div><div class="year-subtext">${targetYear}</div></div>
                 <div class="months-text"><span>Apr</span><span>May</span><span>Jun</span></div>
             </div>
-            <div class="card-btn" onclick="handleCardClick('${targetYear}', 'Q3')">
+            <div class="card-btn" ${clickQ3}>
                 <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 3</div><div class="year-subtext">${targetYear}</div></div>
                 <div class="months-text"><span>Jul</span><span>Aug</span><span>Sep</span></div>
             </div>
-            <div class="card-btn" onclick="handleCardClick('${targetYear}', 'Q4')">
+            <div class="card-btn" ${clickQ4}>
                 <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 4</div><div class="year-subtext">${targetYear}</div></div>
                 <div class="months-text"><span>Oct</span><span>Nov</span><span>Dec</span></div>
             </div>
-            <div class="card-btn year-card" onclick="handleCardClick('${targetYear}', 'Full Year')">${targetYear}</div>
+            <div class="card-btn year-card" ${clickYear}>${targetYear}</div>
         </div>`;
     }
     
     gridContainer.innerHTML = gridHTML;
 }
+
 
 // Direct click handler function linked to the static HTML button
 function triggerManualRollOver() {
