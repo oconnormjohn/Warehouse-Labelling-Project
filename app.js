@@ -4,6 +4,9 @@ let currentYear = new Date().getFullYear();
 // Global control variable for superuser release state
 let isFourthYearReleased = false; 
 
+// NEW: Control variable for Short Date look-ahead buffer (e.g., 1 = current month + 1 future month)
+let shortDatePeriod = 1;
+
 // Structural row class names matching your layout palette
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
 
@@ -19,7 +22,7 @@ function generateDynamicGrid() {
     
     let gridHTML = '';
 
-    // FIXED: Filled in the missing numeric index arrays completely
+    // Fixed tracking arrays
     const quarterMonthsMap = [
         { qName: 'Q1', months: ['Jan', 'Feb', 'Mar'], indices: [0, 1, 2] },
         { qName: 'Q2', months: ['Apr', 'May', 'Jun'], indices: [3, 4, 5] },
@@ -49,14 +52,17 @@ function generateDynamicGrid() {
 
         // Generate the 4 Quarter Buttons for this row loop dynamically
         quarterMonthsMap.forEach(qBlock => {
-            let expiredMonthsCount = 0;
+            let disabledMonthsCount = 0;
             let monthsMarkup = '';
             let zplPrintMonths = [];
 
             qBlock.indices.forEach((mIdx, pos) => {
                 const mName = qBlock.months[pos];
+                
                 let isMonthExpired = false;
+                let isMonthShortDate = false;
 
+                // A. Check for historical expiration (Past Months)
                 if (targetYear < systemYear) {
                     isMonthExpired = true;
                 } else if (targetYear === systemYear) {
@@ -65,21 +71,38 @@ function generateDynamicGrid() {
                     }
                 }
 
+                // B. Check for future "Short Date" exclusion (Current month up to shortDatePeriod limit)
+                if (!isMonthExpired) {
+                    // Convert target button date to an absolute distance in months from now
+                    const yearDiff = targetYear - systemYear;
+                    const absoluteMonthOffset = (yearDiff * 12) + mIdx - systemMonthIndex;
+
+                    // If it falls within the current month (0) up to the look-ahead boundary, flag it
+                    if (absoluteMonthOffset >= 0 && absoluteMonthOffset <= shortDatePeriod) {
+                        isMonthShortDate = true;
+                    }
+                }
+
+                // C. Render markup and construct payload based on status flags
                 if (isMonthExpired) {
-                    expiredMonthsCount++;
+                    disabledMonthsCount++;
                     monthsMarkup += `<span class="expired-month">${mName}</span>`;
-                    zplPrintMonths.push('x'); 
+                    zplPrintMonths.push('x'); // Expired payload placeholder
+                } else if (isMonthShortDate) {
+                    disabledMonthsCount++;
+                    monthsMarkup += `<span class="short-date-month">${mName}</span>`;
+                    zplPrintMonths.push('x'); // Short date payload placeholder (prevents template print)
                 } else {
                     monthsMarkup += `<span>${mName}</span>`;
-                    zplPrintMonths.push(mName);
+                    zplPrintMonths.push(mName); // Valid active month name
                 }
             });
 
-            // Button components are completely inactive if forced by row 4 rules OR if all 3 constituent months have expired
-            const isButtonFullyExpired = (expiredMonthsCount === 3);
-            const isButtonDisabled = isRowFourInactive || isButtonFullyExpired;
+            // Button components are completely inactive if forced by row 4 rules OR if all 3 constituent months are blocked
+            const isButtonFullyDisabled = (disabledMonthsCount === 3);
+            const isButtonDisabled = isRowFourInactive || isButtonFullyDisabled;
 
-            const buttonStatusClass = isButtonFullyExpired ? 'btn-expired-out' : '';
+            const buttonStatusClass = isButtonFullyDisabled ? 'btn-expired-out' : '';
             
             // Join array as a single-quoted string literal to guarantee absolute safety inside onclick wrapper
             const payloadArrayString = zplPrintMonths.map(m => `'${m}'`).join(',');

@@ -544,11 +544,12 @@ body {
 }
 
 /* ======================================================================= */
-/* MONTHLY EXPIRATION LAYOUT STYLES                                       */
+/* MONTHLY EXPIRATION & SHORT DATE LAYOUT STYLES                          */
 /* ======================================================================= */
 
-/* Gray out single expired month characters cleanly inside an otherwise active layout */
-.months-text .expired-month {
+/* Gray out both historically expired and future short-date month spans cleanly */
+.months-text .expired-month,
+.months-text .short-date-month {
     color: #8E8E8E !important;
 }
 
