@@ -4,22 +4,34 @@ let currentYear = new Date().getFullYear();
 // Global control variable for superuser release state
 let isFourthYearReleased = false; 
 
-// RESTORED: Keeping your structural row class names exactly as they were written
+// Structural row class names matching your layout palette
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
 
-// Build the matrix template grid with proper rolling years and matching colours
+// Build the matrix template grid with proper rolling years, matching colours, and monthly expiry structures
 function generateDynamicGrid() {
     const gridContainer = document.getElementById('master-grid');
     if (!gridContainer) return;
     
+    // Get the current system month (0 = Jan, 1 = Feb, ..., 11 = Dec)
+    const systemDate = new Date();
+    const systemYear = systemDate.getFullYear();
+    const systemMonthIndex = systemDate.getMonth(); 
+    
     let gridHTML = '';
+
+    // FIXED: Filled in the missing numeric index arrays completely
+    const quarterMonthsMap = [
+        { qName: 'Q1', months: ['Jan', 'Feb', 'Mar'], indices: [0, 1, 2] },
+        { qName: 'Q2', months: ['Apr', 'May', 'Jun'], indices: [3, 4, 5] },
+        { qName: 'Q3', months: ['Jul', 'Aug', 'Sep'], indices: [6, 7, 8] },
+        { qName: 'Q4', months: ['Oct', 'Nov', 'Dec'], indices: [9, 10, 11] }
+    ];
 
     for (let i = 0; i < 4; i++) {
         const targetYear = currentYear + i;
         const remainder = targetYear % 4;
         let colorIndex;
         
-        // Dynamic modulo matching to decouple colors from absolute historical calendar dates
         if (remainder === 2) colorIndex = 0;      // Pink family
         else if (remainder === 3) colorIndex = 1; // Green family
         else if (remainder === 0) colorIndex = 2; // Yellow family
@@ -27,44 +39,70 @@ function generateDynamicGrid() {
         
         const colorClass = colorCycle[colorIndex];
         
-        // Enforce physical containment logic purely on the 4th row slot (Index position 3)
+        // Enforce structural restriction on the 4th physical row slot
         const isFourthRow = (i === 3);
-        const isInactive = isFourthRow && !isFourthYearReleased;
+        const isRowFourInactive = isFourthRow && !isFourthYearReleased;
         
-        const rowStatusClass = isInactive ? 'inactive-row' : '';
-        
-        // Define click templates conditionally to prevent touch events on inactive rows
-        const clickQ1 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q1')"`;
-        const clickQ2 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q2')"`;
-        const clickQ3 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q3')"`;
-        const clickQ4 = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Q4')"`;
-        const clickYear = isInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Full Year')"`;
+        const rowStatusClass = isRowFourInactive ? 'inactive-row' : '';
 
-        gridHTML += `
-        <div class="grid-row ${colorClass} ${rowStatusClass}">
-            <div class="card-btn" ${clickQ1}>
-                <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 1</div><div class="year-subtext">${targetYear}</div></div>
-                <div class="months-text"><span>Jan</span><span>Feb</span><span>Mar</span></div>
-            </div>
-            <div class="card-btn" ${clickQ2}>
-                <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 2</div><div class="year-subtext">${targetYear}</div></div>
-                <div class="months-text"><span>Apr</span><span>May</span><span>Jun</span></div>
-            </div>
-            <div class="card-btn" ${clickQ3}>
-                <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 3</div><div class="year-subtext">${targetYear}</div></div>
-                <div class="months-text"><span>Jul</span><span>Aug</span><span>Sep</span></div>
-            </div>
-            <div class="card-btn" ${clickQ4}>
-                <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> 4</div><div class="year-subtext">${targetYear}</div></div>
-                <div class="months-text"><span>Oct</span><span>Nov</span><span>Dec</span></div>
-            </div>
-            <div class="card-btn year-card" ${clickYear}>${targetYear}</div>
+        let rowHTML = `<div class="grid-row ${colorClass} ${rowStatusClass}">`;
+
+        // Generate the 4 Quarter Buttons for this row loop dynamically
+        quarterMonthsMap.forEach(qBlock => {
+            let expiredMonthsCount = 0;
+            let monthsMarkup = '';
+            let zplPrintMonths = [];
+
+            qBlock.indices.forEach((mIdx, pos) => {
+                const mName = qBlock.months[pos];
+                let isMonthExpired = false;
+
+                if (targetYear < systemYear) {
+                    isMonthExpired = true;
+                } else if (targetYear === systemYear) {
+                    if (mIdx < systemMonthIndex) {
+                        isMonthExpired = true;
+                    }
+                }
+
+                if (isMonthExpired) {
+                    expiredMonthsCount++;
+                    monthsMarkup += `<span class="expired-month">${mName}</span>`;
+                    zplPrintMonths.push('x'); 
+                } else {
+                    monthsMarkup += `<span>${mName}</span>`;
+                    zplPrintMonths.push(mName);
+                }
+            });
+
+            // Button components are completely inactive if forced by row 4 rules OR if all 3 constituent months have expired
+            const isButtonFullyExpired = (expiredMonthsCount === 3);
+            const isButtonDisabled = isRowFourInactive || isButtonFullyExpired;
+
+            const buttonStatusClass = isButtonFullyExpired ? 'btn-expired-out' : '';
+            
+            // Join array as a single-quoted string literal to guarantee absolute safety inside onclick wrapper
+            const payloadArrayString = zplPrintMonths.map(m => `'${m}'`).join(',');
+            const clickPayload = isButtonDisabled ? '' : `onclick="handleCardClick('${targetYear}', '${qBlock.qName}', [${payloadArrayString}])"`;
+
+            rowHTML += `
+            <div class="card-btn ${buttonStatusClass}" ${clickPayload}>
+                <div class="q-text"><div class="q-prefix">Q<span class="small-tr">tr</span> ${qBlock.qName.charAt(1)}</div><div class="year-subtext">${targetYear}</div></div>
+                <div class="months-text">${monthsMarkup}</div>
+            </div>`;
+        });
+
+        // Append the final 5th Year Card block column safely to complete the row segment
+        const clickYearPayload = isRowFourInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Full Year', ['All'])"`;
+        rowHTML += `
+            <div class="card-btn year-card" ${clickYearPayload}>${targetYear}</div>
         </div>`;
+
+        gridHTML += rowHTML;
     }
     
     gridContainer.innerHTML = gridHTML;
 }
-
 
 // Direct click handler function linked to the static HTML button
 function triggerManualRollOver() {
@@ -139,15 +177,18 @@ window.addEventListener('DOMContentLoaded', () => {
 /**
  * Core Touch Event Processors & Layout Resets
  */
-function handleCardClick(year, period) { 
+function handleCardClick(year, period, zplMonths) { 
  const slot1 = document.getElementById('cat-word1');
  const slot2 = document.getElementById('cat-word2');
  const activeWord1 = slot1 ? slot1.textContent : '';
  const activeWord2 = slot2 ? slot2.textContent : '';
  const absoluteCategoryString = activeWord2 ? `${activeWord1} ${activeWord2}` : activeWord1;
  
- // 1. Display the print confirmation alert (Blocks execution)
- alert(`PRINTING LABEL:\n${absoluteCategoryString}\n${period} ${year}`);
+ // Format array cleanly for alert diagnostics display tracking
+ const activeMonthsString = zplMonths ? zplMonths.join(', ') : period;
+ 
+ // 1. Display the print confirmation alert payload output
+ alert(`PRINTING LABEL:\n${absoluteCategoryString}\n${period} ${year}\nZPL Payload: [${activeMonthsString}]`);
  
  // 2. Executes automatically AFTER the user clicks "OK"
  sidebarAction('BACK');

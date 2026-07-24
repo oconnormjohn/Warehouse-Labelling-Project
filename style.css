@@ -542,3 +542,32 @@ body {
 .inactive-row .card-btn {
     filter: saturate(20%) brightness(110%) !important;
 }
+
+/* ======================================================================= */
+/* MONTHLY EXPIRATION LAYOUT STYLES                                       */
+/* ======================================================================= */
+
+/* Gray out single expired month characters cleanly inside an otherwise active layout */
+.months-text .expired-month {
+    color: #8E8E8E !important;
+}
+
+/* Force complete button expiration overrides once all three options run out */
+.grid-container .card-btn.btn-expired-out {
+    cursor: default !important;
+    pointer-events: none !important;
+    filter: saturate(20%) brightness(110%) !important;
+}
+
+/* Gray out the top text structures exclusively on fully dead buttons */
+.btn-expired-out .q-prefix,
+.btn-expired-out .year-subtext,
+.btn-expired-out .months-text {
+    color: #8E8E8E !important;
+}
+
+/* Neutralise pressing movement states on dead quarter buttons */
+.btn-expired-out:active {
+    top: 0 !important;
+    box-shadow: 0px 1vh 0px #000000 !important;
+}
