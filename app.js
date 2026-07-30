@@ -198,24 +198,80 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Core Touch Event Processors & Layout Resets
+ /**
+ * Core Touch Event Processors & Network Print Router Pipeline
  */
 function handleCardClick(year, period, zplMonths) { 
- const slot1 = document.getElementById('cat-word1');
- const slot2 = document.getElementById('cat-word2');
- const activeWord1 = slot1 ? slot1.textContent : '';
- const activeWord2 = slot2 ? slot2.textContent : '';
- const absoluteCategoryString = activeWord2 ? `${activeWord1} ${activeWord2}` : activeWord1;
- 
- // Format array cleanly for alert diagnostics display tracking
- const activeMonthsString = zplMonths ? zplMonths.join(', ') : period;
- 
- // 1. Display the print confirmation alert payload output
- alert(`PRINTING LABEL:\n${absoluteCategoryString}\n${period} ${year}\nZPL Payload: [${activeMonthsString}]`);
- 
- // 2. Executes automatically AFTER the user clicks "OK"
- sidebarAction('BACK');
+    // A. Gather active text labels from Screen 2 heading slots
+    const slot1 = document.getElementById('cat-word1');
+    const slot2 = document.getElementById('cat-word2');
+    const activeWord1 = slot1 ? slot1.textContent.trim() : '';
+    const activeWord2 = slot2 ? slot2.textContent.trim() : '';
+
+    // B. FIXED: Track target color by matching row configuration indexes safely
+    const currentEvt = window.event || arguments.callee.caller.arguments[0];
+    const activeBtn = currentEvt ? currentEvt.currentTarget || currentEvt.target : null;
+    const parentRow = activeBtn ? activeBtn.closest('.grid-row') : null;
+    let detectedColor = 'green'; // Safe fallback queue default
+
+    if (parentRow) {
+        // Scrape whatever row identifier class name is active on the element
+        const matchClasses = Array.from(parentRow.classList);
+        if (matchClasses.includes('row-2026')) detectedColor = 'pink';
+        else if (matchClasses.includes('row-2027')) detectedColor = 'green';
+        else if (matchClasses.includes('row-2028')) detectedColor = 'yellow';
+        else if (matchClasses.includes('row-2029')) detectedColor = 'blue';
+    }
+
+    // C. Extract individual month variables safely out of the array payload
+    let month1 = ' ';
+    let month2 = ' ';
+    let month3 = ' ';
+
+    if (zplMonths && zplMonths.length === 3) {
+        month1 = zplMonths[0];
+        month2 = zplMonths[1];
+        month3 = zplMonths[2];
+    }
+
+    // D. Package everything into a clean JSON data token profile
+    const printPayload = {
+        color: detectedColor,
+        cwrd1: activeWord1,
+        cwrd2: activeWord2,
+        q: period === 'Full Year' ? 'FY' : period.charAt(1),
+        year: year,
+        m1: month1,
+        m2: month2,
+        m3: month3
+    };
+
+    // E. Execute asynchronous non-blocking network transmission to local Python daemon
+    fetch('http://localhost:8080', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(printPayload)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP network error code status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('🎉 Print job successfully pushed to CUPS spooler:', data);
+    })
+    .catch(error => {
+        console.error('❌ Direct printing error tracking log failure:', error);
+        alert(`PRINT ROUTER ERROR:\nCould not reach the printer gateway.\nEnsure python print_router.py is running!`);
+    });
+
+    // F. Return operator seamlessly back to Home Matrix Selection Canvas instantly
+    sidebarAction('BACK');
 }
+
 
 // --- REPLACED SIDEBARACTION FUNCTION AT THE BASE OF APP.JS ---
 
