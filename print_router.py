@@ -97,7 +97,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             else:
                 template_name = 'twoWordCategoryLabel.zpl' if is_two_word else 'oneWordCategoryLabel.zpl'
 
-            template_path = os.path.join(os.path.dirname(__file__), template_name)
+            template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
             
             if not os.path.exists(template_path):
                 raise FileNotFoundError(f"Missing master ZPL template file: {template_name}")
