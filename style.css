@@ -572,3 +572,102 @@ body {
     top: 0 !important;
     box-shadow: 0px 1vh 0px #000000 !important;
 }
+
+/* Transparent screen-wide safety lock (Lets the user see the grid behind it) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.4); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+/* THE INDUSTRIAL ENVELOPE BORDER BOX: Houses your card and message together cleanly */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3vh;
+    background-color: #FFFFFF; 
+    padding: 4vh 4vw;
+    border: 0.8vh solid #000000; /* Heavier border for high impact */
+    border-radius: 2.5vh;
+    box-shadow: 0 2vh 5vh rgba(0, 0, 0, 0.5); 
+}
+
+/* HIGH VISIBILITY SCALING: Compact representation of your 4" x 3" physical label */
+.preview-label {
+    width: 42vw;  /* Scaled up wider on screen to allow larger typography */
+    height: 48vh; /* Scaled up taller to expand vertical breathing room */
+    border: 0.6vh solid #000000;
+    border-radius: 1.5vh;
+    padding: 3vh 2.5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 1.5vh rgba(0,0,0,0.15); 
+}
+
+/* MASSIVE STATIC CAPTION: Black text on crisp white background */
+.modal-caption {
+    color: #000000 !important;
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-size: 5.5vh; /* Blown up significantly to dominate the confirmation panel */
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+    padding-top: 1vh;
+}
+
+/* Visibility Control Utility class */
+.modal-hide { display: none !important; }
+
+/* ======================================================================= */
+/* EXTREME CONFIRMATION TYPOGRAPHY (Blown up for instant recognition)       */
+/* ======================================================================= */
+.p-title1, .p-title2 { 
+    font-size: 6.2vh; /* Expanded for maximum word clarity */
+    font-weight: bold; 
+    text-align: center; 
+    color: #000000; 
+    text-transform: uppercase; 
+    line-height: 1.05; 
+}
+
+/* FIX: Pulls elements right to the absolute horizontal center line */
+.p-middle { 
+    display: flex; 
+    justify-content: center; /* Mandates absolute dead-centering for the whole block */
+    align-items: center;     
+    gap: 3vw;                /* Horizontal separation gap only used on Quarter labels */
+    width: 100%;             /* Spans the full width of the label canvas */
+    margin: auto 0; 
+}
+
+/* Removes the months and their border block completely from the screen preview */
+.p-months-box { 
+    display: none !important; 
+}
+
+/* MASSIVE YEAR PROP: Forces the year text to expand and straddle the true centre line */
+#modal-preview-year {
+    font-size: 7.5vh !important; /* Blown up significantly larger to catch the eye instantly */
+    font-weight: 900;
+    color: #000000;
+    text-align: center !important; /* Guarantees the numbers straddle the midpoint perfectly */
+    display: inline-block;
+}
+
+/* Quarter text layout scaling balance */
+#modal-preview-qtr {
+    font-size: 7.5vh;
+    font-weight: bold;
+    color: #000000;
+}

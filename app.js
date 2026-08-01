@@ -246,7 +246,7 @@ function handleCardClick(year, period, zplMonths) {
         m3: month3
     };
 
-    // E. Execute asynchronous non-blocking network transmission to local Python daemon
+    // E. Execute asynchronous network transmission to local Python daemon
     fetch('http://localhost:8080', {
         method: 'POST',
         headers: {
@@ -262,16 +262,53 @@ function handleCardClick(year, period, zplMonths) {
     })
     .then(data => {
         console.log('🎉 Print job successfully pushed to CUPS spooler:', data);
+        
+        // 1. Grab the confirmation screen overlay elements
+        const modal = document.getElementById('print-modal');
+        const preview = document.getElementById('modal-label-preview');
+        
+        // 2. Inject the active text strings directly into the onscreen label preview
+        document.getElementById('modal-preview-title1').textContent = printPayload.cwrd1;
+        document.getElementById('modal-preview-title2').textContent = printPayload.cwrd2;
+        document.getElementById('modal-preview-year').textContent = printPayload.year;
+        
+        // REPLACED BLOCK: If Full Year, clear out the quarter string entirely for perfect centering
+        const qtrElement = document.getElementById('modal-preview-qtr');
+        if (printPayload.q === 'FY') {
+            qtrElement.textContent = ''; // Strips "Full Year" text out completely
+        } else {
+            qtrElement.textContent = `Qtr ${printPayload.q}`;
+        }
+   
+        // Clear out blocked month flags cleanly so 'x' tokens don't display on screen
+        document.getElementById('modal-preview-m1').textContent = printPayload.m1 === 'x' ? ' ' : printPayload.m1;
+        document.getElementById('modal-preview-m2').textContent = printPayload.m2 === 'x' ? ' ' : printPayload.m2;
+        document.getElementById('modal-preview-m3').textContent = printPayload.m3 === 'x' ? ' ' : printPayload.m3;
+
+        // 3. Map the active background color using your exact CSS variables
+        let hexColor = '#ffcdd2'; // default pink fallback
+        if (printPayload.color === 'green') hexColor = '#a5d6a7';
+        else if (printPayload.color === 'yellow') hexColor = '#fff59d';
+        else if (printPayload.color === 'blue') hexColor = '#81d4fa';
+        
+        preview.style.backgroundColor = hexColor;
+
+        // 4. Reveal the floating confirmation panel over the active screen
+        modal.classList.remove('modal-hide');
+
+        // 5. EXTENDED TIMER: Wait 3 seconds, then drop the overlay and return home together cleanly
+        setTimeout(() => {
+            modal.classList.add('modal-hide'); // Hide confirmation overlay
+            sidebarAction('BACK');               // Move back seamlessly to category matrix screen
+        }, 3000); // 3000 milliseconds = Exactly 3 seconds
     })
     .catch(error => {
         console.error('❌ Direct printing error tracking log failure:', error);
         alert(`PRINT ROUTER ERROR:\nCould not reach the printer gateway.\nEnsure python print_router.py is running!`);
     });
 
-    // F. Return operator seamlessly back to Home Matrix Selection Canvas instantly
-    sidebarAction('BACK');
+    // --- REMOVED THE DUPLICATE SIDEBARACTION('BACK') FROM HERE ---
 }
-
 
 // --- REPLACED SIDEBARACTION FUNCTION AT THE BASE OF APP.JS ---
 

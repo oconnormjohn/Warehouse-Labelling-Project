@@ -250,5 +250,28 @@
         </div>
 <!-- Cleaned out old layout script to prevent session crashes -->
     <script src="app.js?v=1"></script>
+
+<!-- PRINT CONFIRMATION MODAL OVERLAY -->
+<div id="print-modal" class="modal-overlay modal-hide">
+    <div class="modal-content">
+            <!-- The Dynamic Visual Label Display Box -->
+            <div id="modal-label-preview" class="preview-label">
+                <div id="modal-preview-title1" class="p-title1"></div>
+                <div id="modal-preview-title2" class="p-title2"></div>
+                <div class="p-middle">
+                    <span id="modal-preview-qtr"></span>
+                    <span id="modal-preview-year"></span>
+                </div>
+                <div id="modal-preview-months-box" class="p-months-box">
+                    <span id="modal-preview-m1"></span>
+                    <span id="modal-preview-m2"></span>
+                    <span id="modal-preview-m3"></span>
+                </div>
+            </div> <!-- Ensure this closing tag is clean and has no loose text directly under it -->
+            <!-- The Instruction Caption Below -->
+            <h1 class="modal-caption">Please take your label</h1>
+    </div>
+</div>
+
 </body>
 </html>
