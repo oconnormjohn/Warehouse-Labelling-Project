@@ -1,23 +1,31 @@
 ^XA
 
-^FX ==== ONE WORD CATEGORY LABEL TEMPLATE ====
+^FX ==== ONE WORD CATEGORY QUARTER LABEL TEMPLATE ====
+
 ^FX ==== Top section - Category name ====
-^FO0,40
-^CF0,150
+^FO0,50
+^CF0,125
+^FX ==== NB Standard Printer Font 0 is the only scalable font ====
+^FX ==== ^CF0,125 is the highest permissible size for the category line ====
 ^FB812,1,0,C,0
 ^FD{{CWRD1}}\&^FS
 
 ^FX ==== Middle section - Quarter and Year ====
 ^CF0,135
-^FO35,250^FDQtr^FS
-^FO250,250^FD{{Q}}^FS
-^FO500,250^FD{{YR}}^FS
+^FO250,230
+^FDQtr^FS
+^CF0,140
+^FO450,225
+^FD{{Q}}^FS
+^FO600,258
+^CF0,100
+^FD{{YR}}^FS
 
 ^FX ==== Bottom section - Month(s) ====
-^CF0,125
-^FO60,435^FD{{M1}}^FS
-^FO310,435^FD{{M2}}^FS
-^FO550,435^FD{{M3}}^FS
+^CF0,110
+^FO60,445^FD{{M1}}^FS
+^FO310,445^FD{{M2}}^FS
+^FO580,445^FD{{M3}}^FS
 
 ^FX ==== Graphic Boxes around Months ====
 ^FO35,400^GB750,180,3^FS
