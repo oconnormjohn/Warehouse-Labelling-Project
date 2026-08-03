@@ -1,17 +1,17 @@
 // 1. Establish the base starting calendar year dynamically using the PC system clock
 let currentYear = new Date().getFullYear();
-
 // Global control variable for superuser release state
 let isFourthYearReleased = false; 
-
 // Control variable for Short Date look-ahead buffer (e.g., 1 = current month + 1 future month)
 let shortDatePeriod = 1;
-
 // Global configuration state (ready to hook into future admin JSON settings)
 let kioskConfig = {
     showPrintConfirmation: true, // Master toggle to completely turn confirmation off/on
     fourthYearHidden: false      // Your existing fourth year toggle variable
 };
+// Hardcoded core administrative default setup state credentials
+let adminSystemPassword = "DCP@drum1";
+let pendingAdminOptionKey = null; 
 
 // Structural row class names matching your layout palette
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
@@ -326,7 +326,7 @@ function sidebarAction(action) {
     } else if (action === 'MONTHS') {
         alert('SYSTEM COMMAND:\nSwitching to Monthly Breakdown View');
     }
-}
+} // <-- This brace MUST be the clean end of sidebarAction!
 
 /**
  * Universal Inform User Component
@@ -408,23 +408,148 @@ function showUserAlert(type, data = {}, duration = 3000) {
         }
     }, duration);
 }
+
+// ==========================================================================
+// ADMINISTRATIVE SECURITY AUTHENTICATION PIPELINE ENGINE
+// ==========================================================================
+
+/**
+ * Intercepts Admin Menu taps and routes into the password verification pipeline
+ */
 function handleAdminMenuSelection(optionKey) {
-    console.log(`🔒 Admin option clicked: [${optionKey}] - Awaiting password verification...`);
-    
     if (optionKey === 'EXIT') {
         const adminView = document.getElementById('admin-settings-view');
         const homeGrid = document.getElementById('home-category-grid');
         const homeDeck = document.getElementById('deck-home-actions');
         
         if (adminView && homeGrid && homeDeck) {
-            // Hide the admin layout view completely
             adminView.style.setProperty('display', 'none', 'important');
             adminView.classList.add('screen-hide');
-            
-            // Restore the main grid canvas elements beautifully
             homeGrid.style.setProperty('display', 'grid', 'important');
             homeDeck.style.setProperty('display', 'flex', 'important');
         }
         return;
     }
+
+    // Capture target operation and present the verification challenge overlay box
+    pendingAdminOptionKey = optionKey;
+    
+    const authModal = document.getElementById('admin-auth-modal');
+    const inputField = document.getElementById('admin-password-input');
+    
+    if (authModal && inputField) {
+        inputField.value = ''; // Clean old entries out securely
+        
+        // Force rendering transitions directly over layout canvas views
+        authModal.classList.remove('modal-hide');
+        authModal.style.setProperty('display', 'flex', 'important'); 
+        
+        // Force immediate terminal cursor focal tracking to invoke touch keyboard layout panel
+        setTimeout(() => inputField.focus(), 150);
+    } else {
+        console.error("Critical Error: Could not find security DOM nodes on active canvas!");
+    }
+}
+
+/**
+ * Validates syntax requirements and verifies correct credential matching
+ * Outputs rejections inline to prevent global timer component hanging loops
+ */
+function submitAdminPasswordVerification() {
+    const inputField = document.getElementById('admin-password-input');
+    const errorSlot = document.getElementById('admin-auth-error-msg');
+    if (!inputField) return;
+    
+    // Clear out any old error highlights instantly
+    if (errorSlot) {
+        errorSlot.style.display = 'none';
+        errorSlot.textContent = '';
+    }
+    
+    const pwd = inputField.value;
+
+    // Helper to safely display an error inline without freezing the application canvas
+    const triggerInlineError = (msg) => {
+        if (errorSlot) {
+            errorSlot.textContent = msg;
+            errorSlot.style.display = 'block';
+        } else {
+            // Fallback safe tracker if layout nodes are missing
+            alert(msg);
+        }
+        inputField.value = '';
+        inputField.focus();
+    };
+
+    // --- SYNTAX RULES EVALUATIONS ---
+    if (pwd.length < 8 || pwd.length > 16) {
+        triggerInlineError('REJECTED: Password must be 8-16 characters!');
+        return;
+    }
+
+    const hasUppercase = /[A-Z]/.test(pwd);
+    const hasLowercase = /[a-z]/.test(pwd);
+    const hasDigit     = /[0-9]/.test(pwd);
+    const hasAtSymbol  = pwd.includes('@');
+
+    if (!hasUppercase) {
+        triggerInlineError('REJECTED: Missing an UPPERCASE letter!');
+        return;
+    }
+    if (!hasLowercase) {
+        triggerInlineError('REJECTED: Missing a lowercase letter!');
+        return;
+    }
+    if (!hasDigit) {
+        triggerInlineError('REJECTED: Missing a number digit!');
+        return;
+    }
+    if (!hasAtSymbol) {
+        triggerInlineError('REJECTED: Missing the @ symbol!');
+        return;
+    }
+
+    const illegalCharacterMatch = /[^A-Za-z0-9@]/.test(pwd);
+    if (illegalCharacterMatch) {
+        triggerInlineError('REJECTED: Only letters, numbers, and @ allowed!');
+        return;
+    }
+
+    // --- CREDENTIAL VALUE MATCH CHECK ---
+    if (pwd !== adminSystemPassword) {
+        triggerInlineError('ACCESS DENIED: Incorrect password!');
+        return;
+    }
+
+    // --- ACCESS GRANTED ---
+    console.log(`🔓 ACCESS GRANTED for execution key payload target: [${pendingAdminOptionKey}]`);
+    
+    // Hide auth lock layer cleanly
+    const authModal = document.getElementById('admin-auth-modal');
+    if (authModal) {
+        authModal.style.setProperty('display', 'none', 'important');
+        authModal.classList.add('modal-hide');
+    }
+    
+    executeValidatedAdminAction(pendingAdminOptionKey);
+    pendingAdminOptionKey = null; 
+}
+
+/**
+ * Closes out security layer cleanly on cancel requests
+ */
+function cancelAdminPasswordVerification() {
+    const authModal = document.getElementById('admin-auth-modal');
+    if (authModal) {
+        authModal.style.setProperty('display', 'none', 'important');
+        authModal.classList.add('modal-hide');
+    }
+    pendingAdminOptionKey = null;
+}
+
+/**
+ * Master Execution Handler for fully authenticated administrative commands
+ */
+function executeValidatedAdminAction(actionKey) {
+    showUserAlert('SYSTEM_ALERT', { message: `SUCCESS: Authorized execution profile opened for [${actionKey}]` }, 3000);
 }
