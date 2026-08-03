@@ -587,87 +587,88 @@ body {
     z-index: 999999;
 }
 
-/* THE INDUSTRIAL ENVELOPE BORDER BOX: Houses your card and message together cleanly */
+/* THE INDUSTRIAL ENVELOPE BORDER BOX: Scaled down strictly to match ideal mockup size */
 .modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3vh;
+    gap: 1.5vh;
     background-color: #FFFFFF; 
-    padding: 4vh 4vw;
-    border: 0.8vh solid #000000; /* Heavier border for high impact */
-    border-radius: 2.5vh;
-    box-shadow: 0 2vh 5vh rgba(0, 0, 0, 0.5); 
-}
-
-/* HIGH VISIBILITY SCALING: Compact representation of your 4" x 3" physical label */
-.preview-label {
-    width: 42vw;  /* Scaled up wider on screen to allow larger typography */
-    height: 48vh; /* Scaled up taller to expand vertical breathing room */
-    border: 0.6vh solid #000000;
-    border-radius: 1.5vh;
-    padding: 3vh 2.5vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: 15px;
+    border: 3px solid #333333; 
+    border-radius: 8px;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+    width: 25vw;             /* Significantly reduced width to match mockup */
+    max-width: 320px;        /* Strict physical boundary cap */
     box-sizing: border-box;
-    box-shadow: inset 0 0 1.5vh rgba(0,0,0,0.15); 
 }
 
-/* MASSIVE STATIC CAPTION: Black text on crisp white background */
+/* HIGH VISIBILITY SCALING: Balanced representation of your physical label */
+.preview-label {
+    width: 100%;             
+    border: 1px solid #777777;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;  /* Stack lines 1, 2, and 3 vertically */
+    justify-content: center; /* Center the stack vertically inside the box */
+    align-items: center;     /* Center the text strings horizontally */
+    box-sizing: border-box;
+}
+
+/* BALANCED STATIC FOOTER CAPTION: Positioned neatly underneath the preview label */
 .modal-caption {
     color: #000000 !important;
-    font-family: 'Arial Black', Impact, sans-serif;
-    font-size: 5.5vh; /* Blown up significantly to dominate the confirmation panel */
-    font-weight: 900;
+    font-family: Arial, sans-serif;
+    font-size: 0.9rem;       /* Small crisp text instead of blown-up h1 style */
+    font-weight: 700;
     text-align: center;
     text-transform: uppercase;
-    margin: 0;
-    padding-top: 1vh;
+    margin: 10px 0 0 0;
+    letter-spacing: 0.5px;
 }
 
 /* Visibility Control Utility class */
 .modal-hide { display: none !important; }
 
 /* ======================================================================= */
-/* EXTREME CONFIRMATION TYPOGRAPHY (Blown up for instant recognition)       */
+/* BALANCED PREVIEW TYPOGRAPHY (Scaled to look clean inside small layout)  */
 /* ======================================================================= */
 .p-title1, .p-title2 { 
-    font-size: 6.2vh; /* Expanded for maximum word clarity */
+    font-size: 1.4rem;       /* Scaled down to match target layout title height */
     font-weight: bold; 
     text-align: center; 
     color: #000000; 
     text-transform: uppercase; 
-    line-height: 1.05; 
+    margin-bottom: 5px;
 }
 
-/* FIX: Pulls elements right to the absolute horizontal center line */
+/* Pulls elements right to the absolute horizontal center line */
 .p-middle { 
     display: flex; 
-    justify-content: center; /* Mandates absolute dead-centering for the whole block */
+    justify-content: center; 
     align-items: center;     
-    gap: 3vw;                /* Horizontal separation gap only used on Quarter labels */
-    width: 100%;             /* Spans the full width of the label canvas */
-    margin: auto 0; 
+    gap: 15px;               
+    width: 100%;             
+    margin: 5px 0 0 0; 
 }
 
-/* Removes the months and their border block completely from the screen preview */
-.p-months-box { 
-    display: none !important; 
-}
-
-/* MASSIVE YEAR PROP: Forces the year text to expand and straddle the true centre line */
+/* Forces the year text to expand neatly inside the smaller element boundaries */
 #modal-preview-year {
-    font-size: 7.5vh !important; /* Blown up significantly larger to catch the eye instantly */
-    font-weight: 900;
+    font-size: 1.8rem !important; 
+    font-weight: 800;
     color: #000000;
-    text-align: center !important; /* Guarantees the numbers straddle the midpoint perfectly */
+    text-align: center !important; 
     display: inline-block;
 }
 
 /* Quarter text layout scaling balance */
 #modal-preview-qtr {
-    font-size: 7.5vh;
-    font-weight: bold;
+    font-size: 1.8rem;
+    font-weight: 800;
     color: #000000;
 }
+
+/* System Warning Modifications to match styling boundaries */
+.modal-alert-border { border-color: #cc0000 !important; }
+.modal-alert-bg { background-color: #ffe6e6 !important; }
+.modal-alert-text { color: #cc0000 !important; font-weight: bold; }

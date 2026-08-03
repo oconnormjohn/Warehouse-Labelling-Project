@@ -4,8 +4,14 @@ let currentYear = new Date().getFullYear();
 // Global control variable for superuser release state
 let isFourthYearReleased = false; 
 
-// NEW: Control variable for Short Date look-ahead buffer (e.g., 1 = current month + 1 future month)
+// Control variable for Short Date look-ahead buffer (e.g., 1 = current month + 1 future month)
 let shortDatePeriod = 1;
+
+// Global configuration state (ready to hook into future admin JSON settings)
+let kioskConfig = {
+    showPrintConfirmation: true, // Master toggle to completely turn confirmation off/on
+    fourthYearHidden: false      // Your existing fourth year toggle variable
+};
 
 // Structural row class names matching your layout palette
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
@@ -197,7 +203,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/**
  /**
  * Core Touch Event Processors & Network Print Router Pipeline
  */
@@ -260,57 +265,35 @@ function handleCardClick(year, period, zplMonths) {
         }
         return response.json();
     })
+    
     .then(data => {
         console.log('🎉 Print job successfully pushed to CUPS spooler:', data);
         
-        // 1. Grab the confirmation screen overlay elements
-        const modal = document.getElementById('print-modal');
-        const preview = document.getElementById('modal-label-preview');
-        
-        // 2. Inject the active text strings directly into the onscreen label preview
-        document.getElementById('modal-preview-title1').textContent = printPayload.cwrd1;
-        document.getElementById('modal-preview-title2').textContent = printPayload.cwrd2;
-        document.getElementById('modal-preview-year').textContent = printPayload.year;
-        
-        // REPLACED BLOCK: If Full Year, clear out the quarter string entirely for perfect centering
-        const qtrElement = document.getElementById('modal-preview-qtr');
-        if (printPayload.q === 'FY') {
-            qtrElement.textContent = ''; // Strips "Full Year" text out completely
-        } else {
-            qtrElement.textContent = `Qtr ${printPayload.q}`;
-        }
-   
-        // Clear out blocked month flags cleanly so 'x' tokens don't display on screen
-        document.getElementById('modal-preview-m1').textContent = printPayload.m1 === 'x' ? ' ' : printPayload.m1;
-        document.getElementById('modal-preview-m2').textContent = printPayload.m2 === 'x' ? ' ' : printPayload.m2;
-        document.getElementById('modal-preview-m3').textContent = printPayload.m3 === 'x' ? ' ' : printPayload.m3;
+        // 1. Resolve row background color maps using exact system values
+        let targetHexColor = '#ffcdd2'; // default pink fallback
+        if (printPayload.color === 'green') targetHexColor = '#a5d6a7';
+        else if (printPayload.color === 'yellow') targetHexColor = '#fff59d';
+        else if (printPayload.color === 'blue') targetHexColor = '#81d4fa';
 
-        // 3. Map the active background color using your exact CSS variables
-        let hexColor = '#ffcdd2'; // default pink fallback
-        if (printPayload.color === 'green') hexColor = '#a5d6a7';
-        else if (printPayload.color === 'yellow') hexColor = '#fff59d';
-        else if (printPayload.color === 'blue') hexColor = '#81d4fa';
+        // 2. Clear out the middle period line completely if printing a Full Year card
+        const finalPeriodText = printPayload.q === 'FY' ? '' : `Qtr ${printPayload.q}`;
         
-        preview.style.backgroundColor = hexColor;
-
-        // 4. Reveal the floating confirmation panel over the active screen
-        modal.classList.remove('modal-hide');
-
-        // 5. EXTENDED TIMER: Wait 3 seconds, then drop the overlay and return home together cleanly
-        setTimeout(() => {
-            modal.classList.add('modal-hide'); // Hide confirmation overlay
-            sidebarAction('BACK');               // Move back seamlessly to category matrix screen
-        }, 3000); // 3000 milliseconds = Exactly 3 seconds
+        // 3. Fire the updated universal overlay view processor
+        showUserAlert('PRINT_CONFIRM', { 
+            categoryName: `${printPayload.cwrd1} ${printPayload.cwrd2}`.trim(), 
+            periodText: finalPeriodText, // Becomes empty string on Full Year, perfectly centering the label
+            yearText: printPayload.year, 
+            hexColor: targetHexColor 
+        }, 3000);
     })
+
     .catch(error => {
         console.error('❌ Direct printing error tracking log failure:', error);
-        alert(`PRINT ROUTER ERROR:\nCould not reach the printer gateway.\nEnsure python print_router.py is running!`);
-    });
-
-    // --- REMOVED THE DUPLICATE SIDEBARACTION('BACK') FROM HERE ---
-}
-
-// --- REPLACED SIDEBARACTION FUNCTION AT THE BASE OF APP.JS ---
+        
+        // Use the universal component fallback to show an elegant error message
+        showUserAlert('SYSTEM_ALERT', { message: 'PRINTER ROUTER CONNECTION OFFLINE' }, 5000);
+    }); // <-- Closes the .catch block
+} // <-- Closes the handleCardClick function. MAKE SURE THERE IS ONLY ONE HERE.
 
 function sidebarAction(action) {
     if (action === 'BACK') {
@@ -332,4 +315,85 @@ function sidebarAction(action) {
     } else if (action === 'MONTHS') {
         alert('SYSTEM COMMAND:\nSwitching to Monthly Breakdown View');
     }
+}
+
+/**
+ * Universal Inform User Component
+ * Handles print previews and general system alerts using a 3-line centralized layout
+ * 
+ * @param {string} type - Either 'PRINT_CONFIRM' or 'SYSTEM_ALERT'
+ * @param {Object} data - Contains categoryName, periodText (Quarter/Month), yearText, hexColor
+ * @param {number} duration - Modal display lifespan in milliseconds
+ */
+function showUserAlert(type, data = {}, duration = 3000) {
+    // 1. Core print filter evaluation: Respect the admin switch settings
+    if (type === 'PRINT_CONFIRM') {
+        if (!kioskConfig.showPrintConfirmation) {
+            sidebarAction('BACK');
+            return;
+        }
+    }
+
+    // 2. Clear out lingering stale overlay objects to prevent screen stacking
+    const oldModal = document.getElementById('kiosk-universal-overlay');
+    if (oldModal) oldModal.remove();
+
+    // 3. Assemble structural container markup based on intent
+    let modalHtml = '';
+    
+    if (type === 'PRINT_CONFIRM') {
+        // Fallback checks to prevent null pointers
+        const labelCategory = data.categoryName || '';
+        const labelPeriod   = data.periodText || ''; // Holds "Qtr 1", "Jan", or "" for Full Year
+        const labelYear     = data.yearText || '';
+
+        modalHtml = `
+            <div class="modal-overlay" id="kiosk-universal-overlay">
+                <div class="modal-content">
+                    <div class="preview-label" style="background-color: ${data.hexColor || '#ffffff'}">
+                        <!-- Line 1: Category Name -->
+                        <div class="p-title1">${labelCategory}</div>
+                        
+                        <!-- Line 2: Period (Quarter or Month). If empty, collapses cleanly to preserve layout margins -->
+                        <div class="p-title2" style="margin: 5px 0; font-size: 1.3rem; font-weight: bold; min-height: 1.5rem;">${labelPeriod}</div>
+                        
+                        <!-- Line 3: Year Tracking Display -->
+                        <div id="modal-preview-year">${labelYear}</div>
+                    </div>
+                    <div class="modal-caption">PLEASE TAKE YOUR LABEL</div>
+                </div>
+            </div>`;
+    } else if (type === 'SYSTEM_ALERT') {
+        modalHtml = `
+            <div class="modal-overlay" id="kiosk-universal-overlay">
+                <div class="modal-content modal-alert-border">
+                    <div class="preview-label modal-alert-bg">
+                        <div class="p-title1 modal-alert-text">⚠️ SYSTEM STATUS</div>
+                        <div class="p-title2 modal-alert-text" style="margin: 10px 0; font-size: 1.1rem; min-height: 1.5rem;">${data.message || 'UNKNOWN ERROR'}</div>
+                        <div id="modal-preview-year" class="modal-alert-text" style="font-size: 1.1rem !important;">ACTION REQUIRED</div>
+                    </div>
+                    <div class="modal-caption modal-alert-text">ATTENTION REQUIRED</div>
+                </div>
+            </div>`;
+    }
+
+    // 4. Inject element onto active view canvas
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Minimize baseline layout visibility noise during print phase
+    if (type === 'PRINT_CONFIRM') {
+        const monthsBox = document.querySelector('.p-months-box');
+        if (monthsBox) monthsBox.style.setProperty('display', 'none', 'important');
+    }
+
+    // 5. Managed lifespan decay pipeline execution
+    setTimeout(() => {
+        const activeModal = document.getElementById('kiosk-universal-overlay');
+        if (activeModal) {
+            activeModal.remove();
+            if (type === 'PRINT_CONFIRM') {
+                sidebarAction('BACK');
+            }
+        }
+    }, duration);
 }
