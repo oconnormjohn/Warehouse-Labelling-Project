@@ -303,14 +303,25 @@ function sidebarAction(action) {
         const screen2Deck = document.getElementById('deck-screen2-nav');
 
         if (homeGrid && workspaceView && homeDeck && screen2Deck) {
-            // Hide Screen 2 tracks completely
             workspaceView.style.setProperty('display', 'none', 'important');
             workspaceView.classList.add('screen-hide');
             screen2Deck.classList.add('screen-hide');
             
-            // Restore Screen 1 matrix tracks beautifully to full grid layout dimensions
             homeGrid.style.setProperty('display', 'grid', 'important');
             homeDeck.style.setProperty('display', 'flex', 'important');
+        }
+    } else if (action === 'SETTINGS') {
+        // Hides Screen 1 elements and maps the full screen Admin View layer cleanly
+        const homeGrid = document.getElementById('home-category-grid');
+        const homeDeck = document.getElementById('deck-home-actions');
+        const adminView = document.getElementById('admin-settings-view');
+
+        if (homeGrid && homeDeck && adminView) {
+            homeGrid.style.setProperty('display', 'none', 'important');
+            homeDeck.style.setProperty('display', 'none', 'important');
+            
+            adminView.classList.remove('screen-hide');
+            adminView.style.setProperty('display', 'block', 'important');
         }
     } else if (action === 'MONTHS') {
         alert('SYSTEM COMMAND:\nSwitching to Monthly Breakdown View');
@@ -396,4 +407,24 @@ function showUserAlert(type, data = {}, duration = 3000) {
             }
         }
     }, duration);
+}
+function handleAdminMenuSelection(optionKey) {
+    console.log(`🔒 Admin option clicked: [${optionKey}] - Awaiting password verification...`);
+    
+    if (optionKey === 'EXIT') {
+        const adminView = document.getElementById('admin-settings-view');
+        const homeGrid = document.getElementById('home-category-grid');
+        const homeDeck = document.getElementById('deck-home-actions');
+        
+        if (adminView && homeGrid && homeDeck) {
+            // Hide the admin layout view completely
+            adminView.style.setProperty('display', 'none', 'important');
+            adminView.classList.add('screen-hide');
+            
+            // Restore the main grid canvas elements beautifully
+            homeGrid.style.setProperty('display', 'grid', 'important');
+            homeDeck.style.setProperty('display', 'flex', 'important');
+        }
+        return;
+    }
 }

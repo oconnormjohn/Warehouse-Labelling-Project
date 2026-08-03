@@ -171,7 +171,7 @@
             <!-- Left Workspace View Panel Component Area (ORIGINAL EXPIRY GRID - HIDDEN BY DEFAULT) -->
             <div class="main-container screen-hide" id="workspace-view">
                 <div class="header-title" id="category-header">
-                    <span id="cat-word1">VEGETABLES</span><span id="cat-word2"></span>
+                    <span id="cat-word1"></span><span id="cat-word2"></span>
                 </div>
                 <div class="grid-container" id="master-grid">
                     <!-- Automatically built by the dynamic JavaScript engine -->
@@ -270,6 +270,85 @@
             </div> <!-- Ensure this closing tag is clean and has no loose text directly under it -->
             <!-- The Instruction Caption Below -->
             <h1 class="modal-caption">Please take your label</h1>
+    </div>
+</div>
+<!-- ======================================================================= -->
+<!-- STAGE 3: FULLSCREEN INDEPENDENT ADMINISTRATIVE MANAGEMENT SUITE          -->
+<!-- ======================================================================= -->
+<div id="admin-settings-view" class="screen-hide" style="display: none; background-color: #7851A9; width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; box-sizing: border-box; padding: 4vh 4vw; font-family: sans-serif; z-index: 9999999;">
+    
+    <!-- Top Centered Header Banner Box -->
+    <div style="display: flex; justify-content: center; margin-bottom: 5vh;">
+        <div style="background-color: #FFFFFF; color: #7851A9; font-weight: bold; font-size: 4vh; padding: 1.5vh 8vw; border-radius: 50px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0,0.2); letter-spacing: 1px;">
+            ADMIN/SETTINGS PAGE
+        </div>
+    </div>
+
+    <!-- Dual Column Touch Button Menu Grid -->
+    <div class="admin-menu-grid" style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 5vw; row-gap: 3.5vh; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
+        
+        <!-- ROW 1 -->
+        <button class="admin-btn" onclick="handleAdminMenuSelection('MULTIPLES')">
+            <span>Print Labels in Multiples</span>
+        </button>
+
+        <button class="admin-btn" onclick="handleAdminMenuSelection('EXIT')">
+            <span>Exit Admin / Settings Page</span>
+        </button>
+
+        <!-- ROW 2 -->
+        <button class="admin-btn" onclick="handleAdminMenuSelection('TOGGLE_ROW4')">
+            <span>Release Fourth Year Buttons</span>
+            <label class="admin-switch">
+                <input type="checkbox" id="admin-toggle-row4" disabled>
+                <span class="admin-slider"></span>
+            </label>
+        </button>
+
+        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_CATEGORY')">
+            <span>Edit Category Labels List</span>
+        </button>
+
+        <!-- ROW 3 -->
+        <button class="admin-btn" onclick="handleAdminMenuSelection('TOGGLE_CONFIRM')">
+            <span>Show Print Confirmation Messages</span>
+            <label class="admin-switch">
+                <input type="checkbox" id="admin-toggle-confirm" disabled>
+                <span class="admin-slider"></span>
+            </label>
+        </button>
+
+        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_TOILETRIES')">
+            <span>Edit Toiletries Labels List</span>
+        </button>
+
+        <!-- ROW 4 -->
+        <button class="admin-btn" onclick="handleAdminMenuSelection('DEFINE_SHORTDATE')">
+            <span>Define Short Date Period</span>
+        </button>
+
+        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_CHRISTMAS')">
+            <span>Edit Christmas Labels List</span>
+        </button>
+
+        <!-- ROW 5 -->
+        <button class="admin-btn" onclick="handleAdminMenuSelection('RESET_PASSWORD')">
+            <span>Reset Admin Password</span>
+        </button>
+
+        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_MISC')">
+            <span>Edit Miscellaneous Labels List</span>
+        </button>
+
+        <!-- ROW 6 -->
+        <button class="admin-btn" onclick="handleAdminMenuSelection('CLOSE_PROGRAM')">
+            <span>Close Program</span>
+        </button>
+
+        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_DISPATCH')">
+            <span>Edit Dispatch Labels List</span>
+        </button>
+
     </div>
 </div>
 

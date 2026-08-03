@@ -672,3 +672,80 @@ body {
 .modal-alert-border { border-color: #cc0000 !important; }
 .modal-alert-bg { background-color: #ffe6e6 !important; }
 .modal-alert-text { color: #cc0000 !important; font-weight: bold; }
+
+/* ==========================================================================
+   ADMIN KIOSK INTERFACE INTERACTIVE STYLES
+   ========================================================================== */
+
+/* Kiosk white touch buttons - EXPANDED SCREEN GAP LAYOUT */
+.admin-btn {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: none;
+    border-radius: 15px;
+    padding: 3.5vh 2.5vw;    /* Adds deep vertical cushioning inside the box */
+    font-size: 2.4vh;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    text-align: left;
+    outline: none;
+    transition: transform 0.1s ease, background-color 0.2s;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 9.5vh;       /* Enforces taller buttons to stretch out vertically */
+}
+
+/* Tactile push action feedback on click */
+.admin-btn:active {
+    transform: scale(0.98);
+    background-color: #f0f0f0;
+}
+
+/* HIGH FIDELITY TOGGLE SLIDER SWITCH CONFIGURATIONS */
+.admin-switch {
+    position: relative;
+    display: inline-block;
+    width: 65px;
+    height: 36px;
+    pointer-events: none;    /* Ensures touch events pass into button parent container */
+}
+
+.admin-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.admin-slider {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .3s;
+    border-radius: 34px;
+}
+
+.admin-slider:before {
+    position: absolute;
+    content: "";
+    height: 28px;
+    width: 28px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Apple/iOS standard green check state track color */
+input:checked + .admin-slider {
+    background-color: #4cd964;
+}
+
+input:checked + .admin-slider:before {
+    transform: translateX(29px);
+}
