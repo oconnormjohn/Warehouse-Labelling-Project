@@ -749,3 +749,58 @@ input:checked + .admin-slider {
 input:checked + .admin-slider:before {
     transform: translateX(29px);
 }
+
+/* ==========================================================================
+   KIOSK EMBEDDED SOFTWARE KEYBOARD LAYOUT
+   ========================================================================== */
+#kiosk-embedded-keyboard {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    background-color: #e0e0e0;
+    padding: 1.5vh 1vw;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.kbd-row {
+    display: flex;
+    gap: 0.8vw;
+    justify-content: center;
+    width: 100%;
+}
+
+.kbd-key {
+    flex: 1;
+    height: 6vh;
+    min-height: 45px;
+    font-size: 2.2vh;
+    font-weight: bold;
+    background: #ffffff;
+    color: #000000;
+    border: 2px solid #b0bec5;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.kbd-key:active {
+    background: #cfd8dc;
+    transform: scale(0.97);
+}
+
+.utility-key {
+    color: #ffffff;
+    font-size: 1.8vh;
+}
+
+.utility-key:active {
+    filter: brightness(0.85);
+}

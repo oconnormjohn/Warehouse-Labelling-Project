@@ -1,16 +1,23 @@
 // 1. Establish the base starting calendar year dynamically using the PC system clock
 let currentYear = new Date().getFullYear();
+
 // Global control variable for superuser release state
 let isFourthYearReleased = false; 
+
 // Control variable for Short Date look-ahead buffer (e.g., 1 = current month + 1 future month)
 let shortDatePeriod = 1;
+
+// Single state tracker variable for Virtual Keyboard
+let isKioskShiftActive = false; // Tracks uppercase caps toggle for software keyboard
+
 // Global configuration state (ready to hook into future admin JSON settings)
 let kioskConfig = {
     showPrintConfirmation: true, // Master toggle to completely turn confirmation off/on
     fourthYearHidden: false      // Your existing fourth year toggle variable
 };
+
 // Hardcoded core administrative default setup state credentials
-let adminSystemPassword = "DCP@drum1";
+let adminSystemPassword = "DCPdrum1";
 let pendingAdminOptionKey = null; 
 
 // Structural row class names matching your layout palette
@@ -436,16 +443,21 @@ function handleAdminMenuSelection(optionKey) {
     
     const authModal = document.getElementById('admin-auth-modal');
     const inputField = document.getElementById('admin-password-input');
+    const errorSlot = document.getElementById('admin-auth-error-msg');
     
     if (authModal && inputField) {
-        inputField.value = ''; // Clean old entries out securely
+        inputField.value = ''; 
+        if (errorSlot) {
+            errorSlot.style.display = 'none';
+            errorSlot.textContent = '';
+        }
         
-        // Force rendering transitions directly over layout canvas views
+        // Reset shift state to lowercase system defaults on fresh opens
+        isKioskShiftActive = true; 
+        toggleKioskShift(); 
+        
         authModal.classList.remove('modal-hide');
         authModal.style.setProperty('display', 'flex', 'important'); 
-        
-        // Force immediate terminal cursor focal tracking to invoke touch keyboard layout panel
-        setTimeout(() => inputField.focus(), 150);
     } else {
         console.error("Critical Error: Could not find security DOM nodes on active canvas!");
     }
@@ -482,6 +494,7 @@ function submitAdminPasswordVerification() {
     };
 
     // --- SYNTAX RULES EVALUATIONS ---
+    // --- SIMPLIFIED SYNTAX RULES EVALUATIONS ---
     if (pwd.length < 8 || pwd.length > 16) {
         triggerInlineError('REJECTED: Password must be 8-16 characters!');
         return;
@@ -490,7 +503,6 @@ function submitAdminPasswordVerification() {
     const hasUppercase = /[A-Z]/.test(pwd);
     const hasLowercase = /[a-z]/.test(pwd);
     const hasDigit     = /[0-9]/.test(pwd);
-    const hasAtSymbol  = pwd.includes('@');
 
     if (!hasUppercase) {
         triggerInlineError('REJECTED: Missing an UPPERCASE letter!');
@@ -504,14 +516,11 @@ function submitAdminPasswordVerification() {
         triggerInlineError('REJECTED: Missing a number digit!');
         return;
     }
-    if (!hasAtSymbol) {
-        triggerInlineError('REJECTED: Missing the @ symbol!');
-        return;
-    }
 
-    const illegalCharacterMatch = /[^A-Za-z0-9@]/.test(pwd);
+    // Strict Character Whitelist: Letters and numbers only (No spaces or special characters)
+    const illegalCharacterMatch = /[^A-Za-z0-9]/.test(pwd);
     if (illegalCharacterMatch) {
-        triggerInlineError('REJECTED: Only letters, numbers, and @ allowed!');
+        triggerInlineError('REJECTED: Special characters or spaces not allowed!');
         return;
     }
 
@@ -549,7 +558,94 @@ function cancelAdminPasswordVerification() {
 
 /**
  * Master Execution Handler for fully authenticated administrative commands
+ * Runs immediately upon passing the on-screen password challenge screen
+ * 
+ * @param {string} actionKey - The key corresponding to the selected menu item
+ */
+/**
+ * Master Execution Handler for fully authenticated administrative commands
+ * Runs immediately upon passing the on-screen password challenge screen
+ * 
+ * @param {string} actionKey - The key corresponding to the selected menu item
  */
 function executeValidatedAdminAction(actionKey) {
-    showUserAlert('SYSTEM_ALERT', { message: `SUCCESS: Authorized execution profile opened for [${actionKey}]` }, 3000);
+    if (actionKey === 'CLOSE_PROGRAM') {
+        console.log("🛑 Administrative 'CLOSE_PROGRAM' command authorized. Initiating terminal window closure...");
+        setTimeout(() => {
+            window.open('', '_self', ''); 
+            window.close();
+            window.location.href = 'about:blank';
+        }, 500);
+        return;
+    }
+    
+    if (actionKey === 'TOGGLE_ROW4') {
+        // 1. Flip your global operational tracking variable state
+        isFourthYearReleased = !isFourthYearReleased;
+        
+        // 2. Instantly force the dynamic calendar engine to re-render row 4 button classes
+        generateDynamicGrid(); 
+        
+        // 3. Sync the visual slide-switch check state on the admin panel menu button
+        const row4Checkbox = document.getElementById('admin-toggle-row4');
+        if (row4Checkbox) {
+            row4Checkbox.checked = isFourthYearReleased;
+        }
+
+        // 4. Alert the supervisor of the updated rule context using our small alert modal box
+        showUserAlert('SYSTEM_ALERT', { 
+            message: `SUCCESS: FOURTH YEAR ROWS ARE NOW ${isFourthYearReleased ? 'FULLY ACTIVE' : 'DISABLED'}` 
+        }, 2500);
+        return;
+    }
+
+    // Default logging fallback profile trace tracks for remaining features
+    showUserAlert('SYSTEM_ALERT', { message: `SUCCESS: AUTHORIZED VALUE APPLIED FOR [${actionKey}]` }, 2500);
+}
+
+/**
+ * Injects tapped key values into the administrative password input field
+ * @param {string} keyCharacter - The lowercase base character tapped
+ */
+function pressKioskKey(keyCharacter) {
+    const inputField = document.getElementById('admin-password-input');
+    if (!inputField) return;
+
+    // Evaluate casing state
+    let targetChar = isKioskShiftActive ? keyCharacter.toUpperCase() : keyCharacter.toLowerCase();
+    
+    // Check max character cap bounds
+    if (inputField.value.length < 16) {
+        inputField.value += targetChar;
+    }
+}
+
+/**
+ * Handles backspace deletion operations on our read-only terminal field
+ */
+function backspaceKioskKey() {
+    const inputField = document.getElementById('admin-password-input');
+    if (inputField && inputField.value.length > 0) {
+        inputField.value = inputField.value.slice(0, -1);
+    }
+}
+
+/**
+ * Toggles capitalization casing state across the visual layout matrix buttons
+ */
+function toggleKioskShift() {
+    isKioskShiftActive = !isKioskShiftActive;
+    
+    const shiftBtn = document.getElementById('kbd-shift-btn');
+    const letterKeys = document.querySelectorAll('.letter-key');
+    
+    if (shiftBtn) {
+        shiftBtn.style.backgroundColor = isKioskShiftActive ? '#4cd964' : '#90caf9';
+    }
+
+    // Live update button text strings instantly to show visual capitalization cues
+    letterKeys.forEach(key => {
+        const text = key.textContent;
+        key.textContent = isKioskShiftActive ? text.toUpperCase() : text.toLowerCase();
+    });
 }
