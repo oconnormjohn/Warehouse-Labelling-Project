@@ -580,21 +580,34 @@ function executeValidatedAdminAction(actionKey) {
     }
     
     if (actionKey === 'TOGGLE_ROW4') {
-        // 1. Flip your global operational tracking variable state
         isFourthYearReleased = !isFourthYearReleased;
-        
-        // 2. Instantly force the dynamic calendar engine to re-render row 4 button classes
         generateDynamicGrid(); 
         
-        // 3. Sync the visual slide-switch check state on the admin panel menu button
         const row4Checkbox = document.getElementById('admin-toggle-row4');
         if (row4Checkbox) {
             row4Checkbox.checked = isFourthYearReleased;
         }
 
-        // 4. Alert the supervisor of the updated rule context using our small alert modal box
         showUserAlert('SYSTEM_ALERT', { 
             message: `SUCCESS: FOURTH YEAR ROWS ARE NOW ${isFourthYearReleased ? 'FULLY ACTIVE' : 'DISABLED'}` 
+        }, 2500);
+        return;
+    }
+    
+    // === NEW ADDITION: SHOW PRINT CONFIRMATION MESSAGES TOGGLE ===
+    if (actionKey === 'TOGGLE_CONFIRM') {
+        // 1. Flip your global kiosk config property state
+        kioskConfig.showPrintConfirmation = !kioskConfig.showPrintConfirmation;
+        
+        // 2. Sync the visual slide-switch check state on the admin panel menu button
+        const confirmCheckbox = document.getElementById('admin-toggle-confirm');
+        if (confirmCheckbox) {
+            confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
+        }
+
+        // 3. Alert the supervisor of the updated system rules context
+        showUserAlert('SYSTEM_ALERT', { 
+            message: `CONFIRMATION MODALS ARE NOW ${kioskConfig.showPrintConfirmation ? 'ENABLED (3s OVERLAY)' : 'DISABLED (INSTANT ROUTE)'}` 
         }, 2500);
         return;
     }
