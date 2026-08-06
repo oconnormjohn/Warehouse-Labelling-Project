@@ -5,6 +5,7 @@
     --yellow: #fff59d;
     --blue: #81d4fa;
     --gray-sidebar: #c2c2c2;
+    --admin-purple: #7851A9;
 }
 
 * {
@@ -22,6 +23,7 @@ body {
     width: 100vw;
     overflow: hidden;
     display: flex;
+    transition: background-color 0.4s ease;
 }
 
 /* Master Layout Grid */
@@ -35,6 +37,7 @@ body {
     padding: 3.0vh 0.6vw;      /* Perfectly symmetric 0.6vw padding on both left and right edges */
     box-sizing: border-box;
     overflow: hidden;
+    transition: background 0.4s ease;
 }
 
 .main-container {
@@ -65,7 +68,6 @@ body {
     border: 0.4vh solid #000;
     flex-shrink: 0;
 }
-
 /* Central Card Rows Grid Layout */
 .grid-container {
     display: grid;
@@ -103,7 +105,6 @@ body {
     box-shadow: 0px 0.5vh 0px #000;
 }
 
-/* RESTORED: Keep these matching the original classes */
 .row-2026 .card-btn { background-color: var(--pink); }
 .row-2027 .card-btn { background-color: var(--light-green); }
 .row-2028 .card-btn { background-color: var(--yellow); }
@@ -118,7 +119,6 @@ body {
     margin-top: auto;
     margin-bottom: 2.2vh;
 }
-
 /* Keeps the 'Q' and quarter number large and bold */
 .q-prefix {
     font-size: 4.0vh !important;
@@ -138,12 +138,12 @@ body {
 
 /* Scales the YYYY text down and pushes it right to create a separation gap */
 .year-subtext {
-    font-size: 3.0vh !important; /* Scaled down slightly to separate visually from the quarter number */
+    font-size: 3.0vh !important;
     display: inline-block !important;
     vertical-align: baseline !important;
     color: #000000;
     font-weight: bold;
-    margin-left: 1.5vw !important; /* Forces a crisp horizontal separation gap between them */
+    margin-left: 1.5vw !important;
 }
 
 .months-text {
@@ -157,13 +157,13 @@ body {
 
 .year-card {
     display: flex !important;
-    flex-direction: row !important;      /* Sets the horizontal line axis */
-    justify-content: center !important;   /* Centers text perfectly horizontally */
-    align-items: flex-end !important;    /* Prepares it for the lower-third position */
-    text-align: center !important;       /* Secondary alignment safety wrap */
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+    text-align: center !important;
     font-size: 6.2vh;
     font-weight: bold;
-    padding: 0 0 1.2vh 0 !important;     /* Strips side padding completely to prevent right-drift */
+    padding: 0 0 1.2vh 0 !important;
     box-sizing: border-box !important;  
 }
 
@@ -174,18 +174,40 @@ body {
     width: 100%;
     align-items: center;
 }
+.status-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2vh;
+    margin-top: auto; /* Forces the status module to lock firmly to the bottom of the sidebar */
+}
 
+.status-title {
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-size: 1.1vh;
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.0;
+    margin-top: 2vh;
+    margin-bottom: 1.5vh;
+    letter-spacing: 0px;
+    color: #000000;
+    width: 100%;
+}
+
+/* Action button scaling for BACK & MONTHS */
 .side-btn {
     background: white;
     border: 0.4vh solid #000;
     border-radius: 1.5vh;
-    width: 92%;
-    height: 13vh;
+    width: 95%;
+    height: 10vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 1.6vh;
+    font-size: 1.2vh;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0px 0.5vh 0px #000;
@@ -199,54 +221,7 @@ body {
 }
 
 .side-btn svg {
-    width: 5.5vh;
-    height: 5.5vh;
-    margin-bottom: 0.5vh;
-}
-
-.status-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2vh;
-    margin-top: auto; /* Forces the status module to lock firmly to the bottom of the sidebar */
-}
-
-.status-title {
-    font-family: 'Arial Black', Impact, sans-serif; /* Heavy, thick industrial font */
-    font-size: 1.1vh;              /* Scaled down slightly to fit the narrow grey sidebar */
-    font-weight: 900;
-    text-align: center;            /* Mandates perfect horizontal centering */
-    line-height: 1.0;
-    margin-top: 2vh;
-    margin-bottom: 1.5vh;
-    letter-spacing: 0px;           /* Stripped out to pack characters tightly without spilling */
-    color: #000000;
-    width: 100%;                   /* Uniformly forces centering relative to container width */
-}
-
-/* Action button scaling for BACK & MONTHS */
-.side-btn {
-    background: white;
-    border: 0.4vh solid #000;
-    border-radius: 1.5vh;
-    width: 95%;        /* Spans wider within the thin container */
-    height: 10vh;       /* Reduced slightly to save vertical space */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2vh;   /* Scaled down to prevent clipping text */
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0px 0.5vh 0px #000;
-    position: relative;
-    top: 0;
-}
-
-.side-btn svg {
-    width: 3.5vh;       /* Scaled icons down to fit nicely */
+    width: 3.5vh;
     height: 3.5vh;
     margin-bottom: 0.5vh;
 }
@@ -254,7 +229,7 @@ body {
 /* Status Text Box scaling for PLAIN & DISPATCH */
 .color-box.text-box {
     background: white;
-    font-size: 0.6vh;              /* Reduced perfectly so PLAIN and DISP stay inside the lines */
+    font-size: 0.6vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -280,15 +255,6 @@ body {
 .color-box.green { background-color: var(--light-green); }
 .color-box.yellow { background-color: var(--yellow); }
 .color-box.blue { background-color: var(--blue); }
-.color-box.text-box {
-    background: white;
-    font-size: 1vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
 .led-dot {
     width: 1.6vh;
     height: 1.6vh;
@@ -298,32 +264,14 @@ body {
     box-shadow: 0 0 0.6vh #00ff00;
 }
 
-#manual-sim-btn {
-    position: absolute;
-    top: 2.5vh;
-    left: 1.8vw;
-    padding: 1vh 1.5vw;
-    background-color: #ff9800;
-    color: #000;
-    border: 0.3vh solid #000;
-    border-radius: 1vh;
-    font-weight: bold;
-    font-size: 1.6vh;
-    cursor: pointer;
-    box-shadow: 0px 0.4vh 0px #000;
-    z-index: 99999;
-}
-
 /* ======================================================================= */
 /* BUTTON VISIBILITY MANAGEMENT STYLES                                    */
 /* ======================================================================= */
 
-/* The Visibility Switch: Anything with this class vanishes completely */
 .screen-hide {
     display: none !important;
 }
 
-/* Screen 1 Active Action Button Housing Deck */
 #deck-home-actions {
     display: flex !important;
     flex-direction: column !important;
@@ -331,7 +279,6 @@ body {
     align-items: center !important;
 }
 
-/* Composite box grouping individual button and legend text together */
 .action-block {
     display: flex;
     flex-direction: column;
@@ -339,17 +286,15 @@ body {
     width: 100%;
 }
 
-/* CRISP SEPARATION DECK: Generates your fat-finger protection gap between distinct blocks */
 #deck-home-actions .action-block:not(:last-child) {
-    margin-bottom: 4.2vh !important; /* Fixed physical space between separate option groups */
+    margin-bottom: 4.2vh !important;
 }
 
-/* Individual Action Button Rules - Fixed to your preferred neat size */
 .side-btn {
     border: 0.4vh solid #000000;
     border-radius: 1.5vh;
     width: 92%;
-    height: 8.5vh; /* Locked tidy size */
+    height: 8.5vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -366,29 +311,22 @@ body {
     box-shadow: 0px 0.2vh 0px #000000;
 }
 
-/* Clean SVG Icon Sizing Layout centering inside the textless buttons */
 .side-btn svg {
     width: auto !important;
     height: 4.2vh !important;     
     max-width: 80% !important;   
-    margin-bottom: 0 !important; /* Strips internal margins to keep icon centered */
+    margin-bottom: 0 !important;
 }
 
-/* Muted Industrial Matte Color Palette Profiles */
 .btn-settings { background-color: #C64B4B; color: #FFFFFF; }
 .btn-plain    { background-color: #E3A83F; color: #000000; }
 .btn-dispatch { background-color: #4A8B5B; color: #FFFFFF; }
 
-/* Legacy Screen 2 White Background Button Style */
 .btn-legacy {
     background-color: #FFFFFF;
     color: #000000;
     font-size: 1.6vh; 
 }
-
-/* ======================================================================= */
-/* UNIFIED TYPOGRAPHY SPECIFICATION (Industrial Heavy Match)             */
-/* ======================================================================= */
 .sidebar-legend-text, 
 .status-title {
     font-family: 'Arial Black', Impact, sans-serif !important;
@@ -400,26 +338,19 @@ body {
     width: 100%;
 }
 
-/* Force the legend text to sit cleanly below its button with perfect breathing room */
 .sidebar-legend-text {
-    margin-top: 1.4vh !important;   /* Increased from 0.5vh to fix the cramped look */
+    margin-top: 1.4vh !important;
     margin-bottom: 0vh !important;   
     height: 2.2vh !important;        
     color: #000000 !important;
 }
 
-/* Contextual margin padding specifically for the lower Printer status header */
 .status-title {
     margin-top: 0vh;
     margin-bottom: 1.5vh;
     color: #000000 !important;
 }
 
-/* ======================================================================= */
-/* UNIVERSAL SIDEBAR CONTROL MODULE                                       */
-/* ======================================================================= */
-
-/* Outer structure controlling layout tracks and right-hand edge defense */
 .sidebar-container {
     height: 100%;
     display: flex;
@@ -427,11 +358,10 @@ body {
     justify-content: flex-start;
 }
 
-/* Grey Canvas Sidebar Box Structure */
 .sidebar {
     grid-row: 2; 
-    width: calc(100% - 0.8vw);   /* Renders narrower to create the visual gap */
-    margin-right: auto;          /* Pushes the empty gap to the far-right screen bezel */
+    width: calc(100% - 0.8vw);
+    margin-right: auto;
     height: 100%; 
     background-color: #c2c2c2;
     border: 0.4vh solid #000000;
@@ -439,40 +369,22 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 3.0vh 0.4vw;        /* Balanced internal framing padding */
+    padding: 3.0vh 0.4vw;
     box-sizing: border-box;
 }
 
-/* Bottom Status Light Module: Firmly anchored to the absolute base of the sidebar */
-.status-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2vh;
-    margin-top: auto; /* Claims all remaining vertical space to lock to the floor */
-}
-
-/* ======================================================================= */
-/* HOME MATRIX GRID RESET                                                 */
-/* ======================================================================= */
-
-/* Restores the 7 across x 5 down layout arrangement for the 35 buttons */
 #home-category-grid {
     width: 100% !important;   
     height: 100% !important;   
     max-height: 94vh !important; 
     display: grid !important;  
-    grid-template-columns: repeat(7, 1fr) !important; /* 7 balanced columns */
-    grid-template-rows: repeat(5, 1fr) !important;    /* 5 balanced rows */
-    gap: 2.4vh 0.55vw !important;                      /* Generous industrial spacing gaps */
+    grid-template-columns: repeat(7, 1fr) !important;
+    grid-template-rows: repeat(5, 1fr) !important;
+    gap: 2.4vh 0.55vw !important;
     padding-right: 0.8vw !important; 
     box-sizing: border-box !important;
 }
 
-/* ======================================================================= */
-/* HOME SELECTION MATRIX BUTTON VISUAL PROPERTIES                         */
-/* ======================================================================= */
 .home-cat-btn {
     width: 100%;                  
     height: 100%;                 
@@ -485,39 +397,29 @@ body {
     box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important; 
     cursor: pointer !important;
     box-sizing: border-box !important;
-    
     display: flex;
     flex-direction: column;     
     align-items: center;         
     justify-content: flex-start; 
-    padding-top: 1.5vh;         /* Keeping the space at the top */
+    padding-top: 1.5vh;         
     text-align: center; 
-    
-    /* --- NEW DEFENSIVE LOCK --- */
-    overflow: hidden !important; /* Prevents internal content from physically stretching the button */
+    overflow: hidden !important;
 }
 
-/* --- Fine-Tuned Text Box --- */
 .home-cat-btn .btn-text {
     width: 100%;
-    line-height: 1.1;            /* Slightly tighter line height to save vertical pixels */
+    line-height: 1.1;
     margin-bottom: auto;         
-    flex-shrink: 0;              /* Prevents the text box itself from collapsing */
+    flex-shrink: 0;
 }
 
-/* --- Fine-Tuned Image Box --- */
 .home-cat-btn .btn-icon {
-    max-height: 50% !important;  /* Leave explicit room for the bottom padding and shadows */
+    max-height: 50% !important;
     max-width: 85%;             
     object-fit: contain;        
-    margin-bottom: 1vh;        /* Keeps a clean safety gap above the bottom border */
-    flex-shrink: 1;              /* Forces the image to shrink first if space runs tight */
+    margin-bottom: 1vh;
+    flex-shrink: 1;
 }
-
-/* ======================================================================= */
-/* INACTIVE BUTTON STATE OVERRIDES                                        */
-/* ======================================================================= */
-
 /* Force all text variants inside inactive rows to flat grey */
 .inactive-row .card-btn,
 .inactive-row .q-prefix,
@@ -543,51 +445,55 @@ body {
     filter: saturate(20%) brightness(110%) !important;
 }
 
-/* ======================================================================= */
-/* MONTHLY EXPIRATION & SHORT DATE LAYOUT STYLES                          */
-/* ======================================================================= */
-
-/* Gray out both historically expired and future short-date month spans cleanly */
 .months-text .expired-month,
 .months-text .short-date-month {
     color: #8E8E8E !important;
 }
 
-/* Force complete button expiration overrides once all three options run out */
 .grid-container .card-btn.btn-expired-out {
     cursor: default !important;
     pointer-events: none !important;
     filter: saturate(20%) brightness(110%) !important;
 }
 
-/* Gray out the top text structures exclusively on fully dead buttons */
 .btn-expired-out .q-prefix,
 .btn-expired-out .year-subtext,
 .btn-expired-out .months-text {
     color: #8E8E8E !important;
 }
 
-/* Neutralise pressing movement states on dead quarter buttons */
 .btn-expired-out:active {
     top: 0 !important;
     box-shadow: 0px 1vh 0px #000000 !important;
 }
 
-/* Transparent screen-wide safety lock (Lets the user see the grid behind it) */
+/* Amended 06-08: */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255, 255, 255, 0.4); 
-    display: flex;
-    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); 
+    display: flex !important; /* Centres Layout content horizontally */
+    justify-content: center;  /* Centres Layout content vertically */
     align-items: center;
     z-index: 999999;
 }
 
-/* THE INDUSTRIAL ENVELOPE BORDER BOX: Scaled down strictly to match ideal mockup size */
+/* THE PURPLE BACKDROP PULSE KEYFRAME ENGINE */
+@keyframes purplePrintPulse {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.printing-active-state {
+    background: linear-gradient(270deg, #7851A9, #a078d1, #563380) !important;
+    background-size: 600% 600% !important;
+    animation: purplePrintPulse 4s ease infinite !important;
+}
+
 .modal-content {
     display: flex;
     flex-direction: column;
@@ -598,28 +504,26 @@ body {
     border: 3px solid #333333; 
     border-radius: 8px;
     box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
-    width: 25vw;             /* Significantly reduced width to match mockup */
-    max-width: 320px;        /* Strict physical boundary cap */
+    width: 25vw;             
+    max-width: 320px;        
     box-sizing: border-box;
 }
 
-/* HIGH VISIBILITY SCALING: Balanced representation of your physical label */
 .preview-label {
     width: 100%;             
     border: 1px solid #777777;
     padding: 20px 10px;
     display: flex;
-    flex-direction: column;  /* Stack lines 1, 2, and 3 vertically */
-    justify-content: center; /* Center the stack vertically inside the box */
-    align-items: center;     /* Center the text strings horizontally */
+    flex-direction: column;  
+    justify-content: center; 
+    align-items: center;     
     box-sizing: border-box;
 }
 
-/* BALANCED STATIC FOOTER CAPTION: Positioned neatly underneath the preview label */
 .modal-caption {
     color: #000000 !important;
     font-family: Arial, sans-serif;
-    font-size: 0.9rem;       /* Small crisp text instead of blown-up h1 style */
+    font-size: 0.9rem;       
     font-weight: 700;
     text-align: center;
     text-transform: uppercase;
@@ -627,14 +531,8 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Visibility Control Utility class */
-.modal-hide { display: none !important; }
-
-/* ======================================================================= */
-/* BALANCED PREVIEW TYPOGRAPHY (Scaled to look clean inside small layout)  */
-/* ======================================================================= */
 .p-title1, .p-title2 { 
-    font-size: 1.4rem;       /* Scaled down to match target layout title height */
+    font-size: 1.4rem;       
     font-weight: bold; 
     text-align: center; 
     color: #000000; 
@@ -642,7 +540,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* Pulls elements right to the absolute horizontal center line */
 .p-middle { 
     display: flex; 
     justify-content: center; 
@@ -652,38 +549,18 @@ body {
     margin: 5px 0 0 0; 
 }
 
-/* Forces the year text to expand neatly inside the smaller element boundaries */
-#modal-preview-year {
+#modal-preview-year, #modal-preview-qtr {
     font-size: 1.8rem !important; 
     font-weight: 800;
     color: #000000;
-    text-align: center !important; 
-    display: inline-block;
 }
 
-/* Quarter text layout scaling balance */
-#modal-preview-qtr {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #000000;
-}
-
-/* System Warning Modifications to match styling boundaries */
-.modal-alert-border { border-color: #cc0000 !important; }
-.modal-alert-bg { background-color: #ffe6e6 !important; }
-.modal-alert-text { color: #cc0000 !important; font-weight: bold; }
-
-/* ==========================================================================
-   ADMIN KIOSK INTERFACE INTERACTIVE STYLES
-   ========================================================================== */
-
-/* Kiosk white touch buttons - EXPANDED SCREEN GAP LAYOUT */
 .admin-btn {
     background-color: #FFFFFF;
     color: #000000;
     border: none;
     border-radius: 15px;
-    padding: 3.5vh 2.5vw;    /* Adds deep vertical cushioning inside the box */
+    padding: 3.5vh 2.5vw;    
     font-size: 2.4vh;
     font-weight: 600;
     display: flex;
@@ -693,32 +570,24 @@ body {
     cursor: pointer;
     text-align: left;
     outline: none;
-    transition: transform 0.1s ease, background-color 0.2s;
     box-sizing: border-box;
     width: 100%;
-    min-height: 9.5vh;       /* Enforces taller buttons to stretch out vertically */
+    min-height: 9.5vh;       
 }
 
-/* Tactile push action feedback on click */
 .admin-btn:active {
-    transform: scale(0.98);
     background-color: #f0f0f0;
 }
 
-/* HIGH FIDELITY TOGGLE SLIDER SWITCH CONFIGURATIONS */
 .admin-switch {
     position: relative;
     display: inline-block;
     width: 65px;
     height: 36px;
-    pointer-events: none;    /* Ensures touch events pass into button parent container */
+    pointer-events: none;    
 }
 
-.admin-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+.admin-switch input { opacity: 0; width: 0; height: 0; }
 
 .admin-slider {
     position: absolute;
@@ -731,28 +600,16 @@ body {
 .admin-slider:before {
     position: absolute;
     content: "";
-    height: 28px;
-    width: 28px;
-    left: 4px;
-    bottom: 4px;
+    height: 28px; width: 28px; left: 4px; bottom: 4px;
     background-color: white;
     transition: .3s;
     border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* Apple/iOS standard green check state track color */
-input:checked + .admin-slider {
-    background-color: #4cd964;
-}
+input:checked + .admin-slider { background-color: #4cd964; }
+input:checked + .admin-slider:before { transform: translateX(29px); }
 
-input:checked + .admin-slider:before {
-    transform: translateX(29px);
-}
-
-/* ==========================================================================
-   KIOSK EMBEDDED SOFTWARE KEYBOARD LAYOUT
-   ========================================================================== */
+/* KIOSK VIRTUAL PHYSICAL ENTRY GRID KEYBOARDS */
 #kiosk-embedded-keyboard {
     width: 100%;
     display: flex;
@@ -764,14 +621,9 @@ input:checked + .admin-slider:before {
     box-sizing: border-box;
 }
 
-.kbd-row {
-    display: flex;
-    gap: 0.8vw;
-    justify-content: center;
-    width: 100%;
-}
+.kbd-row { display: flex; gap: 0.8vw; justify-content: center; width: 100%; }
 
-.kbd-key {
+.kbd-key, .pin-key-btn {
     flex: 1;
     height: 6vh;
     min-height: 45px;
@@ -785,22 +637,57 @@ input:checked + .admin-slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    user-select: none;
     outline: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    box-sizing: border-box;
 }
 
-.kbd-key:active {
-    background: #cfd8dc;
-    transform: scale(0.97);
+.kbd-key:active, .pin-key-btn:active { background: #cfd8dc; }
+.utility-key { color: #ffffff; font-size: 1.8vh; }
+
+.modal-hide {
+    display: none !important;
 }
 
-.utility-key {
-    color: #ffffff;
-    font-size: 1.8vh;
+/* ==========================================================================
+   MULTIPLES SYSTEM WORKFLOW VISUAL REFINEMENTS
+   ========================================================================== */
+
+/* Shift intimidating white overlays to a soft buttermilk brand profile */
+.modal-content, #admin-multiples-modal .modal-content, #gatekeeper-pin-modal .modal-content {
+    background-color: #FFF4C2 !important;
+    border: 4px solid #7851A9 !important;
+    box-shadow: 0px 12px 30px rgba(0,0,0,0.4) !important;
 }
 
-.utility-key:active {
-    filter: brightness(0.85);
+/* Ensure the layout pad buttons inside the overlays have high contrast */
+.pin-key-btn, .qty-key-btn {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #7851A9 !important;
+    font-size: 2.6vh !important;
+    font-weight: bold !important;
+    border-radius: 8px !important;
+    height: 6.5vh !important;
+    box-shadow: 0 3px 0 #563380 !important;
+}
+
+.pin-key-btn:active, .qty-key-btn:active {
+    background: #f0f0f0 !important;
+    transform: translateY(2px) !important;
+    box-shadow: 0 1px 0 #563380 !important;
+}
+
+/* Industrialized Multiples Action Buttons (No Garish/Traffic-Light Colors) */
+.btn-multiples-confirm { background-color: #4A8B5B !important; color: white !important; font-weight: bold; border-radius: 8px; box-shadow: 0 4px 0 #2d5437; }
+.btn-multiples-fresh   { background-color: #E3A83F !important; color: black !important; font-weight: bold; border-radius: 8px; box-shadow: 0 4px 0 #aa7e2f; }
+.btn-multiples-exit    { background-color: #C64B4B !important; color: white !important; font-weight: bold; border-radius: 8px; box-shadow: 0 4px 0 #953838; }
+
+.btn-multiples-confirm:active, .btn-multiples-fresh:active, .btn-multiples-exit:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 transparent;
+}
+
+/* Eliminate confusing unrequested fading transitions */
+body, .dashboard-wrapper {
+    transition: none !important;
 }

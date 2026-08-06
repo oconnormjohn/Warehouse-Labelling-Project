@@ -1,41 +1,67 @@
 // 1. Establish the base starting calendar year dynamically using the PC system clock
 let currentYear = new Date().getFullYear();
 
-// Global control variable for superuser release state
+// Global control variables for kiosk run modes
 let isFourthYearReleased = false; 
-
-// Control variable for Short Date look-ahead buffer (e.g., 1 = current month + 1 future month)
 let shortDatePeriod = 1;
+let isKioskShiftActive = false; 
 
-// Single state tracker variable for Virtual Keyboard
-let isKioskShiftActive = false; // Tracks uppercase caps toggle for software keyboard
-
-// Global configuration state (ready to hook into future admin JSON settings)
+// Persistent configuration layer framework using standard browser localStorage
 let kioskConfig = {
-    showPrintConfirmation: true, // Master toggle to completely turn confirmation off/on
-    fourthYearHidden: false      // Your existing fourth year toggle variable
+    showPrintConfirmation: true,
+    fourthYearHidden: false,
+    securityPin: "1234" // Default 4-digit PIN gatekeeper value
 };
 
-// Hardcoded core administrative default setup state credentials
+// ==========================================================================
+// WORKSPACE MODES & PROCESSING TRACKERS
+// ==========================================================================
+let isDemoModeActive = false;           // Prevents system timing drops during testing runs
+let isAdminMultiplesModeActive = false; 
+let multiplesCountTarget = 1;          
+let lastExecutedPrintPayload = null;    
+
+// Hardcoded legacy administrative secondary menu backup password
 let adminSystemPassword = "DCPdrum1";
 let pendingAdminOptionKey = null; 
 
-// Structural row class names matching your layout palette
+// Structural row class names matching your palette mappings
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
 
-// Build the matrix template grid with proper rolling years, matching colours, and monthly expiry structures
+// Initialize configuration layers asynchronously from persistent memory assets
+function loadKioskConfigurationState() {
+    const localStoreData = localStorage.getItem('foodbank_kiosk_config');
+    if (localStoreData) {
+        try {
+            const parsedConfig = JSON.parse(localStoreData);
+            kioskConfig = { ...kioskConfig, ...parsedConfig };
+            isFourthYearReleased = !kioskConfig.fourthYearHidden;
+        } catch (e) {
+            console.error("Failed parsing configurations initialization storage profile:", e);
+        }
+    } else {
+        saveKioskConfigurationState();
+    }
+}
+
+function saveKioskConfigurationState() {
+    kioskConfig.fourthYearHidden = !isFourthYearReleased;
+    localStorage.setItem('foodbank_kiosk_config', JSON.stringify(kioskConfig));
+}
+
+// Call on startup pipeline immediately
+loadKioskConfigurationState();
+// Build the matrix template grid with proper rolling years and expiration profiles
 function generateDynamicGrid() {
     const gridContainer = document.getElementById('master-grid');
     if (!gridContainer) return;
     
-    // Get the current system month (0 = Jan, 1 = Feb, ..., 11 = Dec)
     const systemDate = new Date();
     const systemYear = systemDate.getFullYear();
     const systemMonthIndex = systemDate.getMonth(); 
     
     let gridHTML = '';
 
-    // Fixed tracking arrays
     const quarterMonthsMap = [
         { qName: 'Q1', months: ['Jan', 'Feb', 'Mar'], indices: [0, 1, 2] },
         { qName: 'Q2', months: ['Apr', 'May', 'Jun'], indices: [3, 4, 5] },
@@ -48,22 +74,18 @@ function generateDynamicGrid() {
         const remainder = targetYear % 4;
         let colorIndex;
         
-        if (remainder === 2) colorIndex = 0;      // Pink family
-        else if (remainder === 3) colorIndex = 1; // Green family
-        else if (remainder === 0) colorIndex = 2; // Yellow family
-        else if (remainder === 1) colorIndex = 3; // Blue family
+        if (remainder === 2) colorIndex = 0;      // Pink
+        else if (remainder === 3) colorIndex = 1; // Green
+        else if (remainder === 0) colorIndex = 2; // Yellow
+        else if (remainder === 1) colorIndex = 3; // Blue
         
         const colorClass = colorCycle[colorIndex];
-        
-        // Enforce structural restriction on the 4th physical row slot
         const isFourthRow = (i === 3);
         const isRowFourInactive = isFourthRow && !isFourthYearReleased;
-        
         const rowStatusClass = isRowFourInactive ? 'inactive-row' : '';
 
         let rowHTML = `<div class="grid-row ${colorClass} ${rowStatusClass}">`;
 
-        // Generate the 4 Quarter Buttons for this row loop dynamically
         quarterMonthsMap.forEach(qBlock => {
             let disabledMonthsCount = 0;
             let monthsMarkup = '';
@@ -71,53 +93,41 @@ function generateDynamicGrid() {
 
             qBlock.indices.forEach((mIdx, pos) => {
                 const mName = qBlock.months[pos];
-                
                 let isMonthExpired = false;
                 let isMonthShortDate = false;
 
-                // A. Check for historical expiration (Past Months)
                 if (targetYear < systemYear) {
                     isMonthExpired = true;
                 } else if (targetYear === systemYear) {
-                    if (mIdx < systemMonthIndex) {
-                        isMonthExpired = true;
-                    }
+                    if (mIdx < systemMonthIndex) isMonthExpired = true;
                 }
 
-                // B. Check for future "Short Date" exclusion (Current month up to shortDatePeriod limit)
                 if (!isMonthExpired) {
-                    // Convert target button date to an absolute distance in months from now
                     const yearDiff = targetYear - systemYear;
                     const absoluteMonthOffset = (yearDiff * 12) + mIdx - systemMonthIndex;
-
-                    // If it falls within the current month (0) up to the look-ahead boundary, flag it
                     if (absoluteMonthOffset >= 0 && absoluteMonthOffset <= shortDatePeriod) {
                         isMonthShortDate = true;
                     }
                 }
 
-                // C. Render markup and construct payload based on status flags
                 if (isMonthExpired) {
                     disabledMonthsCount++;
                     monthsMarkup += `<span class="expired-month">${mName}</span>`;
-                    zplPrintMonths.push('x'); // Expired payload placeholder
+                    zplPrintMonths.push('x');
                 } else if (isMonthShortDate) {
                     disabledMonthsCount++;
                     monthsMarkup += `<span class="short-date-month">${mName}</span>`;
-                    zplPrintMonths.push('x'); // Short date payload placeholder (prevents template print)
+                    zplPrintMonths.push('x');
                 } else {
                     monthsMarkup += `<span>${mName}</span>`;
-                    zplPrintMonths.push(mName); // Valid active month name
+                    zplPrintMonths.push(mName);
                 }
             });
 
-            // Button components are completely inactive if forced by row 4 rules OR if all 3 constituent months are blocked
             const isButtonFullyDisabled = (disabledMonthsCount === 3);
             const isButtonDisabled = isRowFourInactive || isButtonFullyDisabled;
-
             const buttonStatusClass = isButtonFullyDisabled ? 'btn-expired-out' : '';
             
-            // Join array as a single-quoted string literal to guarantee absolute safety inside onclick wrapper
             const payloadArrayString = zplPrintMonths.map(m => `'${m}'`).join(',');
             const clickPayload = isButtonDisabled ? '' : `onclick="handleCardClick('${targetYear}', '${qBlock.qName}', [${payloadArrayString}])"`;
 
@@ -128,7 +138,6 @@ function generateDynamicGrid() {
             </div>`;
         });
 
-        // Append the final 5th Year Card block column safely to complete the row segment
         const clickYearPayload = isRowFourInactive ? '' : `onclick="handleCardClick('${targetYear}', 'Full Year', ['All'])"`;
         rowHTML += `
             <div class="card-btn year-card" ${clickYearPayload}>${targetYear}</div>
@@ -136,11 +145,9 @@ function generateDynamicGrid() {
 
         gridHTML += rowHTML;
     }
-    
     gridContainer.innerHTML = gridHTML;
 }
-
-// Direct click handler function linked to the static HTML button
+// Direct click handler function linked to your simulation testing tools
 function triggerManualRollOver() {
     currentYear += 1;
     generateDynamicGrid();
@@ -173,61 +180,56 @@ window.addEventListener('DOMContentLoaded', () => {
 
             button.addEventListener('click', () => {
                 const textElement = button.querySelector('.btn-text');
-                
-                // Pull out the raw string label (e.g. "BEANS" or "COOK-IN-SAUCE")
                 const rawCategoryText = textElement ? textElement.textContent.trim() : '';
 
                 // Split text cleanly by spaces or hyphens to look for multi-word configurations
                 const wordsArray = rawCategoryText.split(/[\s-]+/);
 
-                if (slot1 && slot2) {
-                    if (wordsArray.length > 1) {
-                        // First part goes to line 1, remaining parts go to line 2
-                        slot1.textContent = wordsArray[0].toUpperCase();
-                        slot2.textContent = wordsArray.slice(1).join('-').toUpperCase();
-                    } else {
-                        // Single word configuration
-                        slot1.textContent = rawCategoryText.toUpperCase();
-                        slot2.textContent = '';
-                    }
-                }
+// CORRECT COMPONENT FORMAT:
+if (slot1 && slot2) {
+    if (wordsArray.length > 1) {
+        // Fix: Target the individual array string index [0] before calling the case function
+        // First part goes to line 1, remaining parts go to line 2
+        slot1.textContent = wordsArray[0].toUpperCase();
+        slot2.textContent = wordsArray.slice(1).join('-').toUpperCase();
+    } else {
+        // Single word configuration
+        slot1.textContent = rawCategoryText.toUpperCase();
+        slot2.textContent = '';
+    }
+}
 
-            // D. TO VIEW STATE 2 FLIP: Completely swap grid tracks cleanly using explicit style overrides
+
+                // D. TO VIEW STATE 2 FLIP: Completely swap grid tracks cleanly using explicit style overrides
                 if (homeGrid && workspaceView && homeDeck && screen2Deck) {
-                    // Force Screen 1 to completely collapse, overriding any CSS grid !important tags
                     homeGrid.style.setProperty('display', 'none', 'important');
                     homeDeck.style.setProperty('display', 'none', 'important');
     
-                    // Force Screen 2 to render beautifully using your flex settings
                     workspaceView.classList.remove('screen-hide');
                     workspaceView.style.setProperty('display', 'flex', 'important'); 
     
                     screen2Deck.classList.remove('screen-hide');
                 }
-
             });
         });
     }
 });
-
- /**
+/**
  * Core Touch Event Processors & Network Print Router Pipeline
+ * Updated to animate the true home page purple background state during active print loops
  */
 function handleCardClick(year, period, zplMonths) { 
-    // A. Gather active text labels from Screen 2 heading slots
     const slot1 = document.getElementById('cat-word1');
     const slot2 = document.getElementById('cat-word2');
     const activeWord1 = slot1 ? slot1.textContent.trim() : '';
     const activeWord2 = slot2 ? slot2.textContent.trim() : '';
 
-    // B. FIXED: Track target color by matching row configuration indexes safely
-    const currentEvt = window.event || arguments.callee.caller.arguments[0];
+    const currentEvt = window.event || (arguments.callee ? arguments.callee.caller.arguments[0] : null);
     const activeBtn = currentEvt ? currentEvt.currentTarget || currentEvt.target : null;
     const parentRow = activeBtn ? activeBtn.closest('.grid-row') : null;
-    let detectedColor = 'green'; // Safe fallback queue default
+    let detectedColor = 'green'; 
 
     if (parentRow) {
-        // Scrape whatever row identifier class name is active on the element
         const matchClasses = Array.from(parentRow.classList);
         if (matchClasses.includes('row-2026')) detectedColor = 'pink';
         else if (matchClasses.includes('row-2027')) detectedColor = 'green';
@@ -235,18 +237,11 @@ function handleCardClick(year, period, zplMonths) {
         else if (matchClasses.includes('row-2029')) detectedColor = 'blue';
     }
 
-    // C. Extract individual month variables safely out of the array payload
-    let month1 = ' ';
-    let month2 = ' ';
-    let month3 = ' ';
-
+    let month1 = ' ', month2 = ' ', month3 = ' ';
     if (zplMonths && zplMonths.length === 3) {
-        month1 = zplMonths[0];
-        month2 = zplMonths[1];
-        month3 = zplMonths[2];
+        month1 = zplMonths[0]; month2 = zplMonths[1]; month3 = zplMonths[2];
     }
 
-    // D. Package everything into a clean JSON data token profile
     const printPayload = {
         color: detectedColor,
         cwrd1: activeWord1,
@@ -258,50 +253,80 @@ function handleCardClick(year, period, zplMonths) {
         m3: month3
     };
 
-    // E. Execute asynchronous network transmission to local Python daemon
-    fetch('http://localhost:8080', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(printPayload)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP network error code status: ${response.status}`);
-        }
-        return response.json();
-    })
+    let targetHexColor = '#ffcdd2';
+    if (printPayload.color === 'green') targetHexColor = '#a5d6a7';
+    else if (printPayload.color === 'yellow') targetHexColor = '#fff59d';
+    else if (printPayload.color === 'blue') targetHexColor = '#81d4fa';
+
+    const displayQuarterText = printPayload.q === 'FY' ? '' : `Qtr ${printPayload.q}`;
     
-    .then(data => {
-        console.log('🎉 Print job successfully pushed to CUPS spooler:', data);
-        
-        // 1. Resolve row background color maps using exact system values
-        let targetHexColor = '#ffcdd2'; // default pink fallback
-        if (printPayload.color === 'green') targetHexColor = '#a5d6a7';
-        else if (printPayload.color === 'yellow') targetHexColor = '#fff59d';
-        else if (printPayload.color === 'blue') targetHexColor = '#81d4fa';
+    lastExecutedPrintPayload = { 
+        ...printPayload, 
+        finalHex: targetHexColor, 
+        finalPeriod: displayQuarterText 
+    };
 
-        // 2. Clear out the middle period line completely if printing a Full Year card
-        const finalPeriodText = printPayload.q === 'FY' ? '' : `Qtr ${printPayload.q}`;
-        
-        // 3. Fire the updated universal overlay view processor
-        showUserAlert('PRINT_CONFIRM', { 
-            categoryName: `${printPayload.cwrd1} ${printPayload.cwrd2}`.trim(), 
-            periodText: finalPeriodText, // Becomes empty string on Full Year, perfectly centering the label
-            yearText: printPayload.year, 
-            hexColor: targetHexColor 
-        }, 3000);
-    })
+    // TRIGGER VISUAL PRINTING STATE FEEDBACK: Apply animated purple background to master dashboard wrapper
+    const mainWrapper = document.getElementById('main-app-wrapper');
+    if (mainWrapper) {
+        mainWrapper.classList.add('printing-active-state');
+    }
 
-    .catch(error => {
-        console.error('❌ Direct printing error tracking log failure:', error);
+    if (isDemoModeActive) {
+        console.log("✈️ DEMO MODE ACTIVE: Bypassing print daemon.");
+        if (isAdminMultiplesModeActive) {
+            triggerMultiplesQuantityOverlay();
+        } else {
+            showUserAlert('PRINT_CONFIRM', { 
+                categoryName: `${printPayload.cwrd1} ${printPayload.cwrd2}`.trim(), 
+                periodText: displayQuarterText, 
+                yearText: printPayload.year, 
+                hexColor: targetHexColor 
+            }, 3000);
+        }
+    } else {
+        // UPDATE the live server routing code block to loop the quantity amount:
+        const totalRuns = isAdminMultiplesModeActive ? multiplesCountTarget : 1;
         
-        // Use the universal component fallback to show an elegant error message
-        showUserAlert('SYSTEM_ALERT', { message: 'PRINTER ROUTER CONNECTION OFFLINE' }, 5000);
-    }); // <-- Closes the .catch block
-} // <-- Closes the handleCardClick function. MAKE SURE THERE IS ONLY ONE HERE.
+        // Loop the network call as many times as you specified on the pad
+        for (let run = 0; run < totalRuns; run++) {
+            fetch('http://localhost:8080', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(printPayload)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                console.log('🎉 Live print job dispatched to Pi spooler:', data);
+            })
+            .catch(error => {
+                console.error('❌ Network printing engine link broken:', error);
+                const mainWrapper = document.getElementById('main-app-wrapper');
+                if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
+                showUserAlert('SYSTEM_ALERT', { message: 'PRINTER ROUTER CONNECTION OFFLINE' }, 5000);
+            });
+        }
 
+        // Keep the exact same continuity workflow sequence panels open at the end
+        if (isAdminMultiplesModeActive) {
+            triggerMultiplesQuantityOverlay();
+        } else {
+            showUserAlert('PRINT_CONFIRM', { 
+                categoryName: `${printPayload.cwrd1} ${printPayload.cwrd2}`.trim(), 
+                periodText: displayQuarterText, 
+                yearText: printPayload.year, 
+                hexColor: targetHexColor 
+            }, 3000);
+        }
+    }
+}
+
+/**
+ * Universal Navigation Sidebar Action Manager
+ */
 function sidebarAction(action) {
     if (action === 'BACK') {
         const homeGrid = document.getElementById('home-category-grid');
@@ -316,67 +341,39 @@ function sidebarAction(action) {
             
             homeGrid.style.setProperty('display', 'grid', 'important');
             homeDeck.style.setProperty('display', 'flex', 'important');
-        }
-    } else if (action === 'SETTINGS') {
-        // Hides Screen 1 elements and maps the full screen Admin View layer cleanly
-        const homeGrid = document.getElementById('home-category-grid');
-        const homeDeck = document.getElementById('deck-home-actions');
-        const adminView = document.getElementById('admin-settings-view');
-
-        if (homeGrid && homeDeck && adminView) {
-            homeGrid.style.setProperty('display', 'none', 'important');
-            homeDeck.style.setProperty('display', 'none', 'important');
             
-            adminView.classList.remove('screen-hide');
-            adminView.style.setProperty('display', 'block', 'important');
+            // Keeps the screen purple if you are in admin multiples mode!
+            syncKioskBackgroundState();
         }
     } else if (action === 'MONTHS') {
         alert('SYSTEM COMMAND:\nSwitching to Monthly Breakdown View');
     }
-} // <-- This brace MUST be the clean end of sidebarAction!
+}
 
 /**
- * Universal Inform User Component
- * Handles print previews and general system alerts using a 3-line centralized layout
- * 
- * @param {string} type - Either 'PRINT_CONFIRM' or 'SYSTEM_ALERT'
- * @param {Object} data - Contains categoryName, periodText (Quarter/Month), yearText, hexColor
- * @param {number} duration - Modal display lifespan in milliseconds
+ * Universal Inform User Alert Canvas Component
  */
 function showUserAlert(type, data = {}, duration = 3000) {
-    // 1. Core print filter evaluation: Respect the admin switch settings
-    if (type === 'PRINT_CONFIRM') {
-        if (!kioskConfig.showPrintConfirmation) {
-            sidebarAction('BACK');
-            return;
-        }
+    if (type === 'PRINT_CONFIRM' && !kioskConfig.showPrintConfirmation) {
+        // Strip active background animation queue instantly if modals are turned off
+        const mainWrapper = document.getElementById('main-app-wrapper');
+        if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
+        sidebarAction('BACK');
+        return;
     }
 
-    // 2. Clear out lingering stale overlay objects to prevent screen stacking
     const oldModal = document.getElementById('kiosk-universal-overlay');
     if (oldModal) oldModal.remove();
 
-    // 3. Assemble structural container markup based on intent
     let modalHtml = '';
-    
     if (type === 'PRINT_CONFIRM') {
-        // Fallback checks to prevent null pointers
-        const labelCategory = data.categoryName || '';
-        const labelPeriod   = data.periodText || ''; // Holds "Qtr 1", "Jan", or "" for Full Year
-        const labelYear     = data.yearText || '';
-
         modalHtml = `
             <div class="modal-overlay" id="kiosk-universal-overlay">
                 <div class="modal-content">
                     <div class="preview-label" style="background-color: ${data.hexColor || '#ffffff'}">
-                        <!-- Line 1: Category Name -->
-                        <div class="p-title1">${labelCategory}</div>
-                        
-                        <!-- Line 2: Period (Quarter or Month). If empty, collapses cleanly to preserve layout margins -->
-                        <div class="p-title2" style="margin: 5px 0; font-size: 1.3rem; font-weight: bold; min-height: 1.5rem;">${labelPeriod}</div>
-                        
-                        <!-- Line 3: Year Tracking Display -->
-                        <div id="modal-preview-year">${labelYear}</div>
+                        <div class="p-title1">${data.categoryName || ''}</div>
+                        <div class="p-title2" style="margin: 5px 0; font-size: 1.3rem; font-weight: bold; min-height: 1.5rem;">${data.periodText || ''}</div>
+                        <div id="modal-preview-year">${data.yearText || ''}</div>
                     </div>
                     <div class="modal-caption">PLEASE TAKE YOUR LABEL</div>
                 </div>
@@ -395,34 +392,108 @@ function showUserAlert(type, data = {}, duration = 3000) {
             </div>`;
     }
 
-    // 4. Inject element onto active view canvas
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-    // Minimize baseline layout visibility noise during print phase
-    if (type === 'PRINT_CONFIRM') {
-        const monthsBox = document.querySelector('.p-months-box');
-        if (monthsBox) monthsBox.style.setProperty('display', 'none', 'important');
-    }
-
-    // 5. Managed lifespan decay pipeline execution
     setTimeout(() => {
         const activeModal = document.getElementById('kiosk-universal-overlay');
         if (activeModal) {
             activeModal.remove();
-            if (type === 'PRINT_CONFIRM') {
-                sidebarAction('BACK');
-            }
+            
+            // Clean queue animation safely once physical runtime block clears out
+            const mainWrapper = document.getElementById('main-app-wrapper');
+            if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
+            
+            if (type === 'PRINT_CONFIRM') sidebarAction('BACK');
         }
     }, duration);
 }
-
-// ==========================================================================
-// ADMINISTRATIVE SECURITY AUTHENTICATION PIPELINE ENGINE
-// ==========================================================================
+/**
+ * Intercepts the settings cog click event right at the front gate
+ */
+function interceptSettingsCogClick() {
+    const pinModal = document.getElementById('gatekeeper-pin-modal');
+    const pinInput = document.getElementById('gatekeeper-pin-input');
+    const errorSlot = document.getElementById('gatekeeper-pin-error');
+    
+    if (pinModal && pinInput) {
+        pinInput.value = ''; 
+        if (errorSlot) {
+            errorSlot.style.display = 'none';
+            errorSlot.textContent = '';
+        }
+        pinModal.classList.remove('modal-hide');
+        pinModal.style.setProperty('display', 'flex', 'important'); 
+    }
+}
 
 /**
- * Intercepts Admin Menu taps and routes into the password verification pipeline
+ * Appends standard touches to our 4-digit entry array buffer
  */
+function pressPinPadKey(digitString) {
+    const pinInput = document.getElementById('gatekeeper-pin-input');
+    const errorSlot = document.getElementById('gatekeeper-pin-error');
+    if (!pinInput) return;
+    
+    if (errorSlot) {
+        errorSlot.style.display = 'none';
+    }
+
+    if (pinInput.value.length < 4) {
+        pinInput.value += digitString;
+    }
+
+    // Automatically fire verification code validation the exact moment length reaches 4
+    if (pinInput.value.length === 4) {
+        setTimeout(verifyGatekeeperPinEntry, 200);
+    }
+}
+
+function clearPinPadEntry() {
+    const pinInput = document.getElementById('gatekeeper-pin-input');
+    if (pinInput) pinInput.value = '';
+}
+
+function dismissPinPadSecurity() {
+    const pinModal = document.getElementById('gatekeeper-pin-modal');
+    if (pinModal) {
+        pinModal.style.setProperty('display', 'none', 'important');
+        pinModal.classList.add('modal-hide');
+    }
+}
+
+/**
+ * Strict 4-Digit Entry Verification Routing Pipeline
+ */
+function verifyGatekeeperPinEntry() {
+    const pinInput = document.getElementById('gatekeeper-pin-input');
+    const errorSlot = document.getElementById('gatekeeper-pin-error');
+    if (!pinInput) return;
+
+    if (pinInput.value === kioskConfig.securityPin) {
+        // Correct Entry: Dismiss gatekeeper and transition straight to the Admin Page Suite view canvas
+        dismissPinPadSecurity();
+        
+        const homeGrid = document.getElementById('home-category-grid');
+        const homeDeck = document.getElementById('deck-home-actions');
+        const adminView = document.getElementById('admin-settings-view');
+
+        if (homeGrid && homeDeck && adminView) {
+            homeGrid.style.setProperty('display', 'none', 'important');
+            homeDeck.style.setProperty('display', 'none', 'important');
+            adminView.classList.remove('screen-hide');
+            adminView.style.setProperty('display', 'block', 'important');
+        }
+    } else {
+        // Bad PIN: Reject input, throw user alert callout, and scrub entry field clear
+        if (errorSlot) {
+            errorSlot.textContent = "INVALID PIN - ACCESS DENIED";
+            errorSlot.style.display = 'block';
+        }
+        pinInput.value = '';
+    }
+}
+
+/* REPLACE THIS FUNCTION COMPLETELY IN APP.JS */
 function handleAdminMenuSelection(optionKey) {
     if (optionKey === 'EXIT') {
         const adminView = document.getElementById('admin-settings-view');
@@ -434,231 +505,174 @@ function handleAdminMenuSelection(optionKey) {
             adminView.classList.add('screen-hide');
             homeGrid.style.setProperty('display', 'grid', 'important');
             homeDeck.style.setProperty('display', 'flex', 'important');
+            document.body.style.backgroundColor = isAdminMultiplesModeActive ? '#7851A9' : '#1b5e20';
         }
         return;
     }
 
-    // Capture target operation and present the verification challenge overlay box
-    pendingAdminOptionKey = optionKey;
-    
-    const authModal = document.getElementById('admin-auth-modal');
-    const inputField = document.getElementById('admin-password-input');
-    const errorSlot = document.getElementById('admin-auth-error-msg');
-    
-    if (authModal && inputField) {
-        inputField.value = ''; 
-        if (errorSlot) {
-            errorSlot.style.display = 'none';
-            errorSlot.textContent = '';
-        }
-        
-        // Reset shift state to lowercase system defaults on fresh opens
-        isKioskShiftActive = true; 
-        toggleKioskShift(); 
-        
-        authModal.classList.remove('modal-hide');
-        authModal.style.setProperty('display', 'flex', 'important'); 
-    } else {
-        console.error("Critical Error: Could not find security DOM nodes on active canvas!");
-    }
+    // Front gate PIN is passed! Execute the validated action menu choice instantly
+    console.log(`🔓 Admin option authorized & executed instantly: [${optionKey}]`);
+    executeValidatedAdminAction(optionKey);
 }
 
-/**
- * Validates syntax requirements and verifies correct credential matching
- * Outputs rejections inline to prevent global timer component hanging loops
- */
+function pressKioskKey(keyCharacter) {
+    const inputField = document.getElementById('admin-password-input');
+    if (!inputField) return;
+    let targetChar = isKioskShiftActive ? keyCharacter.toUpperCase() : keyCharacter.toLowerCase();
+    if (inputField.value.length < 16) inputField.value += targetChar;
+}
+
+function backspaceKioskKey() {
+    const inputField = document.getElementById('admin-password-input');
+    if (inputField && inputField.value.length > 0) inputField.value = inputField.value.slice(0, -1);
+}
+
+function toggleKioskShift() {
+    isKioskShiftActive = !isKioskShiftActive;
+    const shiftBtn = document.getElementById('kbd-shift-btn');
+    const letterKeys = document.querySelectorAll('.letter-key');
+    if (shiftBtn) shiftBtn.style.backgroundColor = isKioskShiftActive ? '#4cd964' : '#90caf9';
+    letterKeys.forEach(key => {
+        key.textContent = isKioskShiftActive ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+    });
+}
+
 function submitAdminPasswordVerification() {
     const inputField = document.getElementById('admin-password-input');
     const errorSlot = document.getElementById('admin-auth-error-msg');
     if (!inputField) return;
     
-    // Clear out any old error highlights instantly
-    if (errorSlot) {
-        errorSlot.style.display = 'none';
-        errorSlot.textContent = '';
-    }
-    
     const pwd = inputField.value;
-
-    // Helper to safely display an error inline without freezing the application canvas
     const triggerInlineError = (msg) => {
-        if (errorSlot) {
-            errorSlot.textContent = msg;
-            errorSlot.style.display = 'block';
-        } else {
-            // Fallback safe tracker if layout nodes are missing
-            alert(msg);
-        }
+        if (errorSlot) { errorSlot.textContent = msg; errorSlot.style.display = 'block'; }
         inputField.value = '';
-        inputField.focus();
     };
 
-    // --- SYNTAX RULES EVALUATIONS ---
-    // --- SIMPLIFIED SYNTAX RULES EVALUATIONS ---
-    if (pwd.length < 8 || pwd.length > 16) {
-        triggerInlineError('REJECTED: Password must be 8-16 characters!');
-        return;
-    }
+    if (pwd.length < 8 || pwd.length > 16) return triggerInlineError('REJECTED: Password must be 8-16 characters!');
+    if (!/[A-Z]/.test(pwd)) return triggerInlineError('REJECTED: Missing an UPPERCASE letter!');
+    if (!/[a-z]/.test(pwd)) return triggerInlineError('REJECTED: Missing a lowercase letter!');
+    if (!/[0-9]/.test(pwd)) return triggerInlineError('REJECTED: Missing a number digit!');
+    if (pwd !== adminSystemPassword) return triggerInlineError('ACCESS DENIED: Incorrect password!');
 
-    const hasUppercase = /[A-Z]/.test(pwd);
-    const hasLowercase = /[a-z]/.test(pwd);
-    const hasDigit     = /[0-9]/.test(pwd);
-
-    if (!hasUppercase) {
-        triggerInlineError('REJECTED: Missing an UPPERCASE letter!');
-        return;
-    }
-    if (!hasLowercase) {
-        triggerInlineError('REJECTED: Missing a lowercase letter!');
-        return;
-    }
-    if (!hasDigit) {
-        triggerInlineError('REJECTED: Missing a number digit!');
-        return;
-    }
-
-    // Strict Character Whitelist: Letters and numbers only (No spaces or special characters)
-    const illegalCharacterMatch = /[^A-Za-z0-9]/.test(pwd);
-    if (illegalCharacterMatch) {
-        triggerInlineError('REJECTED: Special characters or spaces not allowed!');
-        return;
-    }
-
-    // --- CREDENTIAL VALUE MATCH CHECK ---
-    if (pwd !== adminSystemPassword) {
-        triggerInlineError('ACCESS DENIED: Incorrect password!');
-        return;
-    }
-
-    // --- ACCESS GRANTED ---
     console.log(`🔓 ACCESS GRANTED for execution key payload target: [${pendingAdminOptionKey}]`);
-    
-    // Hide auth lock layer cleanly
-    const authModal = document.getElementById('admin-auth-modal');
-    if (authModal) {
-        authModal.style.setProperty('display', 'none', 'important');
-        authModal.classList.add('modal-hide');
-    }
+    document.getElementById('admin-auth-modal').style.setProperty('display', 'none', 'important');
     
     executeValidatedAdminAction(pendingAdminOptionKey);
     pendingAdminOptionKey = null; 
 }
 
-/**
- * Closes out security layer cleanly on cancel requests
- */
 function cancelAdminPasswordVerification() {
     const authModal = document.getElementById('admin-auth-modal');
-    if (authModal) {
-        authModal.style.setProperty('display', 'none', 'important');
-        authModal.classList.add('modal-hide');
-    }
+    if (authModal) { authModal.style.setProperty('display', 'none', 'important'); authModal.classList.add('modal-hide'); }
     pendingAdminOptionKey = null;
 }
 
-/**
- * Master Execution Handler for fully authenticated administrative commands
- * Runs immediately upon passing the on-screen password challenge screen
- * 
- * @param {string} actionKey - The key corresponding to the selected menu item
- */
-/**
- * Master Execution Handler for fully authenticated administrative commands
- * Runs immediately upon passing the on-screen password challenge screen
- * 
- * @param {string} actionKey - The key corresponding to the selected menu item
- */
+function syncKioskBackgroundState() {
+    const mainWrapper = document.getElementById('main-app-wrapper');
+    const TargetColor = isAdminMultiplesModeActive ? '#7851A9' : '#1b5e20';
+    
+    document.body.style.backgroundColor = TargetColor;
+    if (mainWrapper) {
+        mainWrapper.style.setProperty('background-color', TargetColor, 'important');
+        mainWrapper.style.setProperty('background', TargetColor, 'important');
+    }
+}
+
 function executeValidatedAdminAction(actionKey) {
     if (actionKey === 'CLOSE_PROGRAM') {
-        console.log("🛑 Administrative 'CLOSE_PROGRAM' command authorized. Initiating terminal window closure...");
-        setTimeout(() => {
-            window.open('', '_self', ''); 
-            window.close();
-            window.location.href = 'about:blank';
-        }, 500);
+        setTimeout(() => { window.open('', '_self', ''); window.close(); window.location.href = 'about:blank'; }, 500);
         return;
     }
     
     if (actionKey === 'TOGGLE_ROW4') {
         isFourthYearReleased = !isFourthYearReleased;
         generateDynamicGrid(); 
-        
         const row4Checkbox = document.getElementById('admin-toggle-row4');
-        if (row4Checkbox) {
-            row4Checkbox.checked = isFourthYearReleased;
-        }
-
-        showUserAlert('SYSTEM_ALERT', { 
-            message: `SUCCESS: FOURTH YEAR ROWS ARE NOW ${isFourthYearReleased ? 'FULLY ACTIVE' : 'DISABLED'}` 
-        }, 2500);
+        if (row4Checkbox) row4Checkbox.checked = isFourthYearReleased;
+        saveKioskConfigurationState();
         return;
     }
     
-    // === NEW ADDITION: SHOW PRINT CONFIRMATION MESSAGES TOGGLE ===
     if (actionKey === 'TOGGLE_CONFIRM') {
-        // 1. Flip your global kiosk config property state
         kioskConfig.showPrintConfirmation = !kioskConfig.showPrintConfirmation;
-        
-        // 2. Sync the visual slide-switch check state on the admin panel menu button
         const confirmCheckbox = document.getElementById('admin-toggle-confirm');
-        if (confirmCheckbox) {
-            confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
-        }
-
-        // 3. Alert the supervisor of the updated system rules context
-        showUserAlert('SYSTEM_ALERT', { 
-            message: `CONFIRMATION MODALS ARE NOW ${kioskConfig.showPrintConfirmation ? 'ENABLED (3s OVERLAY)' : 'DISABLED (INSTANT ROUTE)'}` 
-        }, 2500);
+        if (confirmCheckbox) confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
+        saveKioskConfigurationState();
         return;
     }
 
-    // Default logging fallback profile trace tracks for remaining features
-    showUserAlert('SYSTEM_ALERT', { message: `SUCCESS: AUTHORIZED VALUE APPLIED FOR [${actionKey}]` }, 2500);
-}
-
-/**
- * Injects tapped key values into the administrative password input field
- * @param {string} keyCharacter - The lowercase base character tapped
- */
-function pressKioskKey(keyCharacter) {
-    const inputField = document.getElementById('admin-password-input');
-    if (!inputField) return;
-
-    // Evaluate casing state
-    let targetChar = isKioskShiftActive ? keyCharacter.toUpperCase() : keyCharacter.toLowerCase();
-    
-    // Check max character cap bounds
-    if (inputField.value.length < 16) {
-        inputField.value += targetChar;
+    if (actionKey === 'MULTIPLES') {
+        isAdminMultiplesModeActive = true;
+        handleAdminMenuSelection('EXIT');
+        syncKioskBackgroundState();
+        return;
     }
 }
 
-/**
- * Handles backspace deletion operations on our read-only terminal field
- */
-function backspaceKioskKey() {
-    const inputField = document.getElementById('admin-password-input');
-    if (inputField && inputField.value.length > 0) {
-        inputField.value = inputField.value.slice(0, -1);
+function triggerMultiplesQuantityOverlay() {
+    multiplesCountTarget = 1; 
+    const qtyDisplay = document.getElementById('admin-qty-display');
+    if (qtyDisplay) qtyDisplay.value = "1";
+    
+    document.getElementById('multiples-modal-title').textContent = "Set Print Quantity";
+    document.getElementById('multiples-qty-zone').style.display = 'flex';
+    document.getElementById('multiples-fork-zone').style.display = 'none';
+    
+    const multiplesModal = document.getElementById('admin-multiples-modal');
+    if (multiplesModal) {
+        multiplesModal.classList.remove('modal-hide');
+        multiplesModal.style.setProperty('display', 'flex', 'important');
     }
 }
 
-/**
- * Toggles capitalization casing state across the visual layout matrix buttons
- */
-function toggleKioskShift() {
-    isKioskShiftActive = !isKioskShiftActive;
+function pressQtyPadKey(digitString) {
+    const qtyDisplay = document.getElementById('admin-qty-display');
+    if (!qtyDisplay) return;
     
-    const shiftBtn = document.getElementById('kbd-shift-btn');
-    const letterKeys = document.querySelectorAll('.letter-key');
+    if (qtyDisplay.value === "1" && digitString !== "0") {
+        qtyDisplay.value = "";
+    } else if (qtyDisplay.value === "1" && digitString === "0") {
+        return;
+    }
     
-    if (shiftBtn) {
-        shiftBtn.style.backgroundColor = isKioskShiftActive ? '#4cd964' : '#90caf9';
+    if (qtyDisplay.value.length < 2) {
+        qtyDisplay.value += digitString;
+    }
+    
+    let currentParsedValue = parseInt(qtyDisplay.value) || 1;
+    if (currentParsedValue > 50) {
+        qtyDisplay.value = "50";
+        currentParsedValue = 50;
+    }
+    multiplesCountTarget = currentParsedValue;
+}
+
+function clearQtyPadEntry() {
+    const qtyDisplay = document.getElementById('admin-qty-display');
+    if (qtyDisplay) qtyDisplay.value = "1";
+    multiplesCountTarget = 1;
+}
+
+function confirmMultiplesQuantityRun() {
+    document.getElementById('multiples-modal-title').textContent = "Print Job Dispatched";
+    document.getElementById('multiples-qty-zone').style.display = 'none';
+    document.getElementById('multiples-fork-zone').style.display = 'flex';
+}
+
+function handleContinuityChoice(choiceType) {
+    const multiplesModal = document.getElementById('admin-multiples-modal');
+    if (multiplesModal) {
+        multiplesModal.style.setProperty('display', 'none', 'important');
+        multiplesModal.classList.add('modal-hide');
     }
 
-    // Live update button text strings instantly to show visual capitalization cues
-    letterKeys.forEach(key => {
-        const text = key.textContent;
-        key.textContent = isKioskShiftActive ? text.toUpperCase() : text.toLowerCase();
-    });
+    if (choiceType === 'SAME') {
+        setTimeout(triggerMultiplesQuantityOverlay, 150);
+    } else if (choiceType === 'FRESH_PURPLE') {
+        sidebarAction('BACK');
+    } else if (choiceType === 'EXIT_GREEN') {
+        isAdminMultiplesModeActive = false;
+        syncKioskBackgroundState();
+        sidebarAction('BACK');
+    }
 }

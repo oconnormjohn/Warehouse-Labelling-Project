@@ -1,0 +1,12 @@
+{
+  "version": "1.1.0",
+  "last_updated": "2026-08-06T09:01:00Z",
+  "security": {
+    "pin_required": true,
+    "pin_hash": "hashed_value_here"
+  },
+  "kiosk_settings": {
+    "station_id": "GATEWAY_01",
+    "printer_name": "Label_Printer_Alpha"
+  }
+}

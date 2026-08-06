@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,188 +8,64 @@
 </head>
 <body>
 
-    <!-- SIMULATE NEXT YEAR BUTTON DEACTIVATED FOR SCREEN 1 PRODUCTION STABILISATION -->
-    <!-- <button id="manual-sim-btn" onclick="triggerManualRollOver()">SIMULATE NEXT YEAR &raquo;</button> -->
+    <div class="dashboard-wrapper" id="main-app-wrapper">
+        <!-- ======================================================================= -->
+        <!-- STAGE 1: NEW HOME SCREEN / CATEGORY SELECTION MATRIX WORKSPACE          -->
+        <!-- ======================================================================= -->
+        <div id="home-category-grid">
+            <!-- 35 physical standalone button slots for our 7x5 matrix -->
+            <button class="home-cat-btn"><span class="btn-text">BEANS</span><img src="label-graphics/beans.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">BISCUITS</span><img src="label-graphics/biscuits.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">CHOC-SWEETS</span><img src="label-graphics/choc-sweets.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">COFFEE</span><img src="label-graphics/coffee.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">COOK-IN-SAUCE</span><img src="label-graphics/cook-in-sauce.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">CUSTARD</span><img src="label-graphics/custard.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">FISH</span><img src="label-graphics/fish.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">FRUIT</span><img src="label-graphics/fruit.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">FRUIT-JUICE</span><img src="label-graphics/fruit-juice.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">INSTANT-MEALS</span><img src="label-graphics/instant-meals.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">JAM-PRESERVES</span><img src="label-graphics/jam-preserves.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">MEAT</span><img src="label-graphics/meat.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">MILK</span><img src="label-graphics/milk.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">MISC.</span><img src="label-graphics/miscellaneous.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">PASTA</span><img src="label-graphics/pasta.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">PET-FOOD</span><img src="label-graphics/pet-food.jpg" class="btn-icon" alt="Icon"></button>                    
+            <button class="home-cat-btn"><span class="btn-text">POP-SQUASH</span><img src="label-graphics/pop-squash.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">POTATOES</span><img src="label-graphics/potatoes.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">RICE</span><img src="label-graphics/rice.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">RICE-PUDDING</span><img src="label-graphics/rice-pudding.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">SAV-TREATS</span><img src="label-graphics/sav-treats.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">SOUP</span><img src="label-graphics/soup.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">SPAGHETTI</span><img src="label-graphics/spaghetti.jpg" class="btn-icon" alt="Icon"></button>                    
+            <button class="home-cat-btn"><span class="btn-text">TEA</span><img src="label-graphics/tea.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">TOMATOES</span><img src="label-graphics/tomatoes.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">VEGETABLES</span><img src="label-graphics/vegetables.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">27</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">28</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">29</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>                   
+            <button class="home-cat-btn"><span class="btn-text">30</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">31</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">32</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">33</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">34</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+            <button class="home-cat-btn"><span class="btn-text">35</span><img src="label-graphics/blank.jpg" class="btn-icon" alt="Icon"></button>
+        </div>
 
-    <div class="dashboard-wrapper">
-                   <!-- ======================================================================= -->
-            <!-- STAGE 1: NEW HOME SCREEN / CATEGORY SELECTION MATRIX WORKSPACE          -->
-            <!-- ======================================================================= -->
-                
-                <!-- Main Category Grid Canvas: Occupies 91.5% of the viewport width    -->
-                <div id="home-category-grid">
-                    <!-- 35 physical standalone button slots for our 7x5 matrix          -->
-                    <button class="home-cat-btn">
-                        <span class="btn-text">BEANS</span>
-                        <img src="label-graphics/beans.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                                        <button class="home-cat-btn">
-                        <span class="btn-text">BISCUITS</span>
-                        <img src="label-graphics/biscuits.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">CHOC-SWEETS</span>
-                        <img src="label-graphics/choc-sweets.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                                        <button class="home-cat-btn">
-                        <span class="btn-text">COFFEE</span>
-                        <img src="label-graphics/coffee.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">COOK-IN-SAUCE</span>
-                        <img src="label-graphics/cook-in-sauce.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                                        <button class="home-cat-btn">
-                        <span class="btn-text">CUSTARD</span>
-                        <img src="label-graphics/custard.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">FISH</span>
-                        <img src="label-graphics/fish.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">FRUIT</span>
-                        <img src="label-graphics/fruit.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-
-                    <button class="home-cat-btn">
-                        <span class="btn-text">FRUIT-JUICE</span>
-                        <img src="label-graphics/fruit-juice.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">INSTANT-MEALS</span>
-                        <img src="label-graphics/instant-meals.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">JAM-PRESERVES</span>
-                        <img src="label-graphics/jam-preserves.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">MEAT</span>
-                        <img src="label-graphics/meat.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">MILK</span>
-                        <img src="label-graphics/milk.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">MISC.</span>
-                        <img src="label-graphics/miscellaneous.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">PASTA</span>
-                        <img src="label-graphics/pasta.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-
-                    <button class="home-cat-btn">
-                        <span class="btn-text">PET-FOOD</span>
-                        <img src="label-graphics/pet-food.jpg" class="btn-icon" alt="Category Icon">
-                    </button>                    
-                    <button class="home-cat-btn">
-                        <span class="btn-text">POP-SQUASH</span>
-                        <img src="label-graphics/pop-squash.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">POTATOES</span>
-                        <img src="label-graphics/potatoes.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">RICE</span>
-                        <img src="label-graphics/rice.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">RICE-PUDDING</span>
-                        <img src="label-graphics/rice-pudding.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">SAV-TREATS</span>
-                        <img src="label-graphics/sav-treats.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">SOUP</span>
-                        <img src="label-graphics/soup.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-
-                    <button class="home-cat-btn">
-                        <span class="btn-text">SPAGHETTI</span>
-                        <img src="label-graphics/spaghetti.jpg" class="btn-icon" alt="Category Icon">
-                    </button>                    
-                    <button class="home-cat-btn">
-                        <span class="btn-text">TEA</span>
-                        <img src="label-graphics/tea.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">TOMATOES</span>
-                        <img src="label-graphics/tomatoes.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">VEGETABLES</span>
-                        <img src="label-graphics/vegetables.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">27</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">28</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-
-                     <button class="home-cat-btn">
-                        <span class="btn-text">29</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>                   
-                    <button class="home-cat-btn">
-                        <span class="btn-text">30</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">31</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">32</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">33</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">34</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                    <button class="home-cat-btn">
-                        <span class="btn-text">35</span>
-                        <img src="label-graphics/blank.jpg" class="btn-icon" alt="Category Icon">
-                    </button>
-                </div>
-
-            
-            <!-- ======================================================================= -->
-
-            <!-- Left Workspace View Panel Component Area (ORIGINAL EXPIRY GRID - HIDDEN BY DEFAULT) -->
-            <div class="main-container screen-hide" id="workspace-view">
-                <div class="header-title" id="category-header">
-                    <span id="cat-word1"></span><span id="cat-word2"></span>
-                </div>
-                <div class="grid-container" id="master-grid">
-                    <!-- Automatically built by the dynamic JavaScript engine -->
-                </div>
+        <!-- Left Workspace View Panel Component Area -->
+        <div class="main-container screen-hide" id="workspace-view">
+            <div class="header-title" id="category-header">
+                <span id="cat-word1"></span><span id="cat-word2"></span>
             </div>
-
-        <!-- ======================================================================= -->
-        <!-- UNIVERSAL GLOBAL SIDEBAR (Occupies 5.8% width on all screens)          -->
-        <!-- ======================================================================= -->
+            <div class="grid-container" id="master-grid"></div>
+        </div>
+        <!-- UNIVERSAL GLOBAL SIDEBAR (Occupies 5.8% width on all screens) -->
         <div class="sidebar-container">
             <div class="sidebar">
-                
                 <!-- SCREEN 1 DECK: Top Action Buttons (Active on Home Screen) -->
                 <div class="nav-group" id="deck-home-actions">
-                    
-                    <!-- Action Block 1: Settings -->
+                    <!-- Action Block 1: Settings Cog -->
                     <div class="action-block">
-                        <button class="side-btn btn-settings" onclick="sidebarAction('SETTINGS')">
+                        <button class="side-btn btn-settings" onclick="interceptSettingsCogClick()">
                             <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -197,7 +73,6 @@
                         </button>
                         <div class="sidebar-legend-text">SETTINGS</div>
                     </div>
-                    
                     <!-- Action Block 2: Plain Labels -->
                     <div class="action-block">
                         <button class="side-btn btn-plain" onclick="sidebarAction('PLAIN_MODE')">
@@ -209,7 +84,6 @@
                         </button>
                         <div class="sidebar-legend-text">PLAIN<br>LABELS</div>
                     </div>
-                    
                     <!-- Action Block 3: Dispatch Labels -->
                     <div class="action-block">
                         <button class="side-btn btn-dispatch" onclick="sidebarAction('DISPATCH_MODE')">
@@ -222,10 +96,9 @@
                         </button>
                         <div class="sidebar-legend-text">DISPATCH<br>LABELS</div>
                     </div>
-
                 </div>
 
-                <!-- SCREEN 2 DECK: Navigation Buttons (Hidden by default on Home Screen) -->
+                <!-- SCREEN 2 DECK: Navigation Buttons -->
                 <div class="nav-group screen-hide" id="deck-screen2-nav">
                     <button class="side-btn btn-legacy" onclick="sidebarAction('BACK')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#0091ea" stroke-width="3.5"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>BACK
@@ -235,7 +108,7 @@
                     </button>
                 </div>
 
-                <!-- Printer Status Module: Stays permanently visible at the bottom -->
+                <!-- Printer Status Module -->
                 <div class="status-container">
                     <div class="status-title">PRINTER<br>STATUS</div>
                     <div class="status-row"><div class="color-box pink"></div><div class="led-dot"></div></div>
@@ -245,16 +118,13 @@
                     <div class="status-row"><div class="color-box text-box">PLAIN</div><div class="led-dot"></div></div>
                     <div class="status-row"><div class="color-box text-box">DISP.</div><div class="led-dot"></div></div>
                 </div>
-
             </div>
         </div>
-<!-- Cleaned out old layout script to prevent session crashes -->
-    <script src="app.js?v=3"></script>
+    </div>
 
-<!-- PRINT CONFIRMATION MODAL OVERLAY -->
-<div id="print-modal" class="modal-overlay modal-hide">
-    <div class="modal-content">
-            <!-- The Dynamic Visual Label Display Box -->
+    <!-- PRINT CONFIRMATION MODAL OVERLAY -->
+    <div id="print-modal" class="modal-overlay modal-hide">
+        <div class="modal-content">
             <div id="modal-label-preview" class="preview-label">
                 <div id="modal-preview-title1" class="p-title1"></div>
                 <div id="modal-preview-title2" class="p-title2"></div>
@@ -267,14 +137,11 @@
                     <span id="modal-preview-m2"></span>
                     <span id="modal-preview-m3"></span>
                 </div>
-            </div> <!-- Ensure this closing tag is clean and has no loose text directly under it -->
-            <!-- The Instruction Caption Below -->
+            </div>
             <h1 class="modal-caption">Please take your label</h1>
+        </div>
     </div>
-</div>
-<!-- ======================================================================= -->
-<!-- STAGE 3: FULLSCREEN INDEPENDENT ADMINISTRATIVE MANAGEMENT SUITE          -->
-<!-- ======================================================================= -->
+<!-- STAGE 3: FULLSCREEN INDEPENDENT ADMINISTRATIVE MANAGEMENT SUITE -->
 <div id="admin-settings-view" class="screen-hide" style="display: none; background-color: #7851A9; width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; box-sizing: border-box; padding: 4vh 4vw; font-family: sans-serif; z-index: 9999999;">
     
     <!-- Top Centered Header Banner Box -->
@@ -351,26 +218,52 @@
 
     </div>
 </div>
+<!-- FRONT GATE NUMERICAL PIN PAD SECURITY OVERLAY -->
+<div id="gatekeeper-pin-modal" class="modal-overlay modal-hide" style="z-index: 999999999;">
+    <div class="modal-content" style="width: 45vw; max-width: 420px; padding: 3vh 2vw; border: 4px solid #7851A9; gap: 2vh;">
+        
+        <div style="color: #7851A9; font-weight: bold; font-size: 2.8vh; text-transform: uppercase; text-align: center; letter-spacing: 1px;">
+            Security Check
+        </div>
+        
+        <!-- Masked Entry Field -->
+        <input type="password" id="gatekeeper-pin-input" placeholder="••••" readonly 
+               style="width: 100%; padding: 1.8vh 1vw; font-size: 4vh; font-weight: bold; text-align: center; border: 2px solid #333; border-radius: 8px; box-sizing: border-box; background: #fff; letter-spacing: 2vw;">
 
-<!-- ADMIN PASSWORD CHALLENGE MODAL OVERLAY WITH INTERNAL KEYBOARD -->
+        <!-- Dynamic PIN Error Message Slot -->
+        <div id="gatekeeper-pin-error" style="color: #ff3b30; font-weight: bold; font-size: 1.8vh; text-align: center; min-height: 2.2vh; display: none; text-transform: uppercase;"></div>
+
+        <!-- 3x4 Touch Grid Layout Component -->
+        <div class="pin-grid-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2vh; width: 100%; box-sizing: border-box;">
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('1')">1</button>
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('2')">2</button>
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('3')">3</button>
+            
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('4')">4</button>
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('5')">5</button>
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('6')">6</button>
+            
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('7')">7</button>
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('8')">8</button>
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('9')">9</button>
+            
+            <button type="button" class="pin-key-btn clear-key" onclick="clearPinPadEntry()" style="background: #ffb74d; color: #fff;">CLR</button>
+            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('0')">0</button>
+            <button type="button" class="pin-key-btn cancel-key" onclick="dismissPinPadSecurity()" style="background: #ff3b30; color: #fff;">X</button>
+        </div>
+    </div>
+</div>
+<!-- ADMIN PASSWORD CHALLENGE MODAL OVERLAY WITH INTERNAL KEYBOARD (UPDATED WITH DASH KEY) -->
 <div id="admin-auth-modal" class="modal-overlay modal-hide" style="z-index: 99999999;">
     <div class="modal-content" style="width: 70vw; max-width: 800px; padding: 2.5vh 2.5vw; border: 4px solid #7851A9; gap: 1.5vh;">
         
         <div style="color: #7851A9; font-weight: bold; font-size: 2.8vh; text-transform: uppercase; text-align: center;">
-            Security Check Required
+            Edit Mode Validation
         </div>
         
-        <!-- Move: Live Requirements Prompt Box directly below heading -->
-        <div style="background-color: #f5f5f5; border: 1px solid #ddd; border-radius: 8px; padding: 1vh 1.5vw; width: 100%; box-sizing: border-box; font-size: 1.5vh; color: #555; text-align: center;">
-            <strong style="color: #333; display: inline;">PASSWORD REQUIREMENTS:</strong>
-            Length 8-16 chars | One Uppercase (A-Z) | One lowercase (a-z) | One Number (0-9)
-        </div>
-        
-        <!-- Native Password Entry Input -->
         <input type="password" id="admin-password-input" placeholder="TAP VIRTUAL KEYBOARD TO ENTER" readonly 
                style="width: 100%; padding: 1.5vh 1vw; font-size: 2.4vh; font-weight: bold; text-align: center; border: 2px solid #333; border-radius: 8px; box-sizing: border-box; outline: none; background: #fff; cursor: default;">
 
-        <!-- NEW DYNAMIC ERROR CALLOUT SLOT -->
         <div id="admin-auth-error-msg" style="color: #ff3b30; font-weight: bold; font-size: 1.6vh; text-align: center; width: 100%; min-height: 2.2vh; display: none; text-transform: uppercase;"></div>
 
         <!-- KIOSK INTERNAL VIRTUAL TOUCH KEYBOARD AREA -->
@@ -413,27 +306,83 @@
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('k')">k</button>
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('l')">l</button>
             </div>
-            <!-- Row 4: ZXCV & Modifiers -->
+            <!-- Row 4: ZXCV, Dash & Modifiers -->
             <div class="kbd-row">
-                <button type="button" id="kbd-shift-btn" class="kbd-key utility-key" onclick="toggleKioskShift()" style="flex: 1.5; background: #90caf9;">SHIFT</button>
+                <button type="button" id="kbd-shift-btn" class="kbd-key utility-key" onclick="toggleKioskShift()" style="flex: 1.2; background: #90caf9;">SHIFT</button>
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('z')">z</button>
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('x')">x</button>
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('c')">c</button>
-                <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('v')">v</button>
+                <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('v') textless-fix">v</button>
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('b')">b</button>
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('n')">n</button>
                 <button type="button" class="kbd-key letter-key" onclick="pressKioskKey('m')">m</button>
-                <button type="button" class="kbd-key utility-key" onclick="backspaceKioskKey()" style="flex: 1.5; background: #ffb74d;">BACK</button>
+                <button type="button" class="kbd-key spatial-key" onclick="pressKioskKey('-')" style="flex: 1.0; background: #e0e0e0; font-weight: bold;">-</button>
+                <button type="button" class="kbd-key utility-key" onclick="backspaceKioskKey()" style="flex: 1.2; background: #ffb74d;">BACK</button>
             </div>
         </div>
 
-        <!-- Action Control Buttons Row -->
         <div style="display: flex; gap: 2vw; width: 100%; margin-top: 1vh;">
-            <button onclick="submitAdminPasswordVerification()" style="flex: 1; background-color: #4cd964; color: white; border: none; padding: 1.8vh; font-size: 2.2vh; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Confirm</button>
-            <button onclick="cancelAdminPasswordVerification()" style="flex: 1; background-color: #ff3b30; color: white; border: none; padding: 1.8vh; font-size: 2.2vh; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Cancel</button>
+            <button onclick="submitAdminPasswordVerification()" style="flex: 1; background-color: #4cd964; color: white; border: none; padding: 1.8vh; font-size: 2.2vh; font-weight: bold; border-radius: 8px; text-transform: uppercase;">Confirm</button>
+            <button onclick="cancelAdminPasswordVerification()" style="flex: 1; background-color: #ff3b30; color: white; border: none; padding: 1.8vh; font-size: 2.2vh; font-weight: bold; border-radius: 8px; text-transform: uppercase;">Cancel</button>
         </div>
     </div>
 </div>
 
+<!-- REFINED MULTIPLES QUANTITY SELECTION Pad MODAL -->
+<div id="admin-multiples-modal" class="modal-overlay modal-hide" style="z-index: 999999999;">
+    <div class="modal-content" style="width: 48vw; max-width: 440px; padding: 3vh 2.5vw; gap: 2vh; display: flex; flex-direction: column;">
+        
+        <div id="multiples-modal-title" style="color: #7851A9; font-weight: bold; font-size: 2.8vh; text-transform: uppercase; text-align: center; letter-spacing: 1px;">
+            Set Print Quantity
+        </div>
+        
+        <!-- ZONE A: NUMERICAL KEYPAD ENTRY ZONE -->
+        <div id="multiples-qty-zone" style="width: 100%; display: flex; flex-direction: column; gap: 2vh;">
+            <input type="text" id="admin-qty-display" value="1" readonly 
+                   style="width: 100%; padding: 1.5vh 0; font-size: 4vh; font-weight: 900; text-align: center; border: 3px solid #7851A9; border-radius: 10px; background: #fff; color: #000;">
+            
+            <!-- 3x4 Grid Mapping -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1vh; width: 100%;">
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('1')">1</button>
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('2')">2</button>
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('3')">3</button>
+                
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('4')">4</button>
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('5')">5</button>
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('6')">6</button>
+                
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('7')">7</button>
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('8')">8</button>
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('9')">9</button>
+                
+                <button type="button" class="qty-key-btn" onclick="clearQtyPadEntry()" style="background: #ffb74d !important; color: #fff !important;">CLR</button>
+                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('0')">0</button>
+                <button type="button" class="btn-multiples-confirm" onclick="confirmMultiplesQuantityRun()" style="font-size: 1.8vh;">SEND</button>
+            </div>
+        </div>
+
+        <!-- ZONE B: CONTINUITY DECISION FORK BOX -->
+        <div id="multiples-fork-zone" style="width: 100%; display: none; flex-direction: column; align-items: center; gap: 2.5vh;">
+            <div style="font-size: 2.2vh; color: #7851A9; font-weight: 800; text-align: center; text-transform: uppercase;">
+                Are more labels required?
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 1.5vh; width: 100%;">
+                <button onclick="handleContinuityChoice('SAME')" class="btn-multiples-confirm" style="width: 100%; padding: 2vh 0; font-size: 2vh; border: none; cursor: pointer; text-transform: uppercase;">
+                    Print More of Same Label
+                </button>
+                <button onclick="handleContinuityChoice('FRESH_PURPLE')" class="btn-multiples-fresh" style="width: 100%; padding: 2vh 0; font-size: 2vh; border: none; cursor: pointer; text-transform: uppercase;">
+                    Pick Fresh Label
+                </button>
+                <button onclick="handleContinuityChoice('EXIT_GREEN')" class="btn-multiples-exit" style="width: 100%; padding: 2vh 0; font-size: 2vh; border: none; cursor: pointer; text-transform: uppercase;">
+                    No (Return to Normal Green System)
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="app.js?v=4"></script>
 </body>
 </html>

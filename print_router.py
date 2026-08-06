@@ -11,28 +11,27 @@ PRINTER_POOL = {
     'blue': 'blue_labels'
 }
 
+# Local physical file pathway on the Pi for persistent storage synchronization
+CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), 'kiosk_persistent_state.json')
+
 class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
     
-    # 1. Unified Web Asset Router (HTML, CSS, JS, and graphics folders)
+    # Unified Web Asset Router (HTML, CSS, JS, and graphics folders)
     def do_GET(self):
-        # FIXED: Extract the first index string element explicitly out of the path array split
         clean_path = self.path.split('?')[0]
         
         # Default empty root path requests straight to your index file
         if clean_path == '/' or clean_path == '':
             clean_path = '/index.html'
         
-        # Calculate the absolute physical file path on your Pi
         file_path = os.path.join(os.path.dirname(__file__), clean_path.lstrip('/'))
         
-        # Safety check: if file doesn't exist on disk, return a clean 404
         if not os.path.exists(file_path) or os.path.isdir(file_path):
             self.send_response(404)
             self.end_headers()
             self.wfile.write(b"Asset not found inside project workspace.")
             return
 
-        # Determine precise content headers to prevent browser parsing errors
         mimetype = 'application/octet-stream'
         lower_path = file_path.lower()
         
@@ -55,7 +54,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(f"Internal server file error: {str(e)}".encode('utf-8'))
 
-    # 2. Configure CORS Safety Headers explicitly so Firefox doesn't block print requests
+    # Configure CORS Safety Headers explicitly so Firefox doesn't block requests
     def _set_headers(self):
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
@@ -66,29 +65,35 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self._set_headers()
-
-    # 3. Process the incoming print job data payload
+    # Process the incoming print job data payload or configuration syncing tasks
     def do_POST(self):
         try:
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
-            job = json.loads(post_data.decode('utf-8'))
+            payload = json.loads(post_data.decode('utf-8'))
 
-            # Extract variable payload data fields
-            color = job.get('color', '').lower()
-            cwrd1 = job.get('cwrd1', '')
-            cwrd2 = job.get('cwrd2', '')
-            q_num = job.get('q', '')
-            year  = job.get('year', '')
-            m1    = job.get('m1', ' ')
-            m2    = job.get('m2', ' ')
-            m3    = job.get('m3', ' ')
+            # CHECK ROUTING POINT: Handle configuration synchronization tasks natively
+            if self.path == '/api/config':
+                with open(CONFIG_FILE_PATH, 'w') as config_file:
+                    json.dump(payload, config_file, indent=2)
+                self._set_headers()
+                self.wfile.write(json.dumps({"status": "success", "message": "Config saved successfully"}).encode('utf-8'))
+                return
+
+            # STANDARD PRINT ROUTINE (Runs normally for standard labels entry points)
+            color = payload.get('color', '').lower()
+            cwrd1 = payload.get('cwrd1', '')
+            cwrd2 = payload.get('cwrd2', '')
+            q_num = payload.get('q', '')
+            year  = payload.get('year', '')
+            m1    = payload.get('m1', ' ')
+            m2    = payload.get('m2', ' ')
+            m3    = payload.get('m3', ' ')
 
             target_cups_printer = PRINTER_POOL.get(color)
             if not target_cups_printer:
                 raise ValueError(f"Unknown printer color requested: {color}")
 
-            # Select the correct master ZPL template layout configuration
             is_full_year = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
             is_two_word  = (cwrd2.strip() != '')
 
@@ -136,8 +141,28 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.send_response(500)
             error_response = {"status": "error", "message": str(e)}
             self.wfile.write(json.dumps(error_response).encode('utf-8'))
-
 def run_server(port=8080):
+    # Initialize a default state configuration layout on disk if file is missing
+    if not os.path.exists(CONFIG_FILE_PATH):
+        default_config = {
+            "version": "1.1.0",
+            "last_updated": "2026-08-06T10:00:00Z",
+            "security": {
+                "pin_required": True,
+                "pin_hash": "1234"
+            },
+            "kiosk_settings": {
+                "station_id": "GATEWAY_01",
+                "printer_name": "Label_Printer_Alpha"
+            }
+        }
+        try:
+            with open(CONFIG_FILE_PATH, 'w') as f:
+                json.dump(default_config, f, indent=2)
+            print(f"📁 Created default persistent state configuration layer file.")
+        except Exception as e:
+            print(f"⚠️ Warning: Could not write default layout configurations file: {e}")
+
     server_address = ('', port)
     httpd = http.server.HTTPServer(server_address, PrintRouterHandler)
     print(f"🚀 Print Router Server active on Pi port {port}...")
