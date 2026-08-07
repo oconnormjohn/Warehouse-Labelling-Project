@@ -216,7 +216,7 @@ if (slot1 && slot2) {
 });
 /**
  * Core Touch Event Processors & Network Print Router Pipeline
- * Updated to animate the true home page purple background state during active print loops
+ * INTERCEPT LAYER: Prepares data payload and halts instant printing if Multiples Mode is active.
  */
 function handleCardClick(year, period, zplMonths) { 
     const slot1 = document.getElementById('cat-word1');
@@ -224,7 +224,7 @@ function handleCardClick(year, period, zplMonths) {
     const activeWord1 = slot1 ? slot1.textContent.trim() : '';
     const activeWord2 = slot2 ? slot2.textContent.trim() : '';
 
-    const currentEvt = window.event || (arguments.callee ? arguments.callee.caller.arguments[0] : null);
+    const currentEvt = window.event || (arguments.callee ? arguments.callee.caller.arguments : null);
     const activeBtn = currentEvt ? currentEvt.currentTarget || currentEvt.target : null;
     const parentRow = activeBtn ? activeBtn.closest('.grid-row') : null;
     let detectedColor = 'green'; 
@@ -260,67 +260,83 @@ function handleCardClick(year, period, zplMonths) {
 
     const displayQuarterText = printPayload.q === 'FY' ? '' : `Qtr ${printPayload.q}`;
     
+    // Save selected layout parameters safely to global space
     lastExecutedPrintPayload = { 
         ...printPayload, 
         finalHex: targetHexColor, 
         finalPeriod: displayQuarterText 
     };
 
-    // TRIGGER VISUAL PRINTING STATE FEEDBACK: Apply animated purple background to master dashboard wrapper
+    // Sequence Divergence Gate
+    if (isAdminMultiplesModeActive) {
+        console.log("📌 Multiples Mode Intercept: Pausing print queue. Loading key entry pad.");
+        triggerMultiplesQuantityOverlay();
+    } else {
+        console.log("🟢 Normal Mode: Dispatching single print job.");
+        executePhysicalPrintSpooler(lastExecutedPrintPayload, 1);
+    }
+}
+
+/**
+ * Dedicated Multiples Loop Execution Engine
+ * Fires network requests sequentially based on validated user numeric input.
+ */
+function executePhysicalPrintSpooler(payload, totalRuns) {
+    if (!payload) return;
+
     const mainWrapper = document.getElementById('main-app-wrapper');
     if (mainWrapper) {
         mainWrapper.classList.add('printing-active-state');
     }
 
     if (isDemoModeActive) {
-        console.log("✈️ DEMO MODE ACTIVE: Bypassing print daemon.");
-        if (isAdminMultiplesModeActive) {
-            triggerMultiplesQuantityOverlay();
-        } else {
-            showUserAlert('PRINT_CONFIRM', { 
-                categoryName: `${printPayload.cwrd1} ${printPayload.cwrd2}`.trim(), 
-                periodText: displayQuarterText, 
-                yearText: printPayload.year, 
-                hexColor: targetHexColor 
-            }, 3000);
-        }
+        console.log(`✈️ DEMO MODE ACTIVE: Bypassing print daemon for ${totalRuns} labels.`);
+        showUserAlert('PRINT_CONFIRM', { 
+            categoryName: `${payload.cwrd1} ${payload.cwrd2}`.trim(), 
+            periodText: payload.finalPeriod, 
+            yearText: payload.year, 
+            hexColor: payload.finalHex 
+        }, 3000);
     } else {
-        // UPDATE the live server routing code block to loop the quantity amount:
-        const totalRuns = isAdminMultiplesModeActive ? multiplesCountTarget : 1;
-        
-        // Loop the network call as many times as you specified on the pad
+        const structuralPostPayload = {
+            color: payload.color,
+            cwrd1: payload.cwrd1,
+            cwrd2: payload.cwrd2,
+            q: payload.q,
+            year: payload.year,
+            m1: payload.m1,
+            m2: payload.m2,
+            m3: payload.m3
+        };
+
+        // Fire the print loop cleanly for the exact keypad target quantity
         for (let run = 0; run < totalRuns; run++) {
             fetch('http://localhost:8080', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(printPayload)
+                body: JSON.stringify(structuralPostPayload)
             })
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
                 return response.json();
             })
             .then(data => {
-                console.log('🎉 Live print job dispatched to Pi spooler:', data);
+                console.log(`🎉 Dispatched run (${run + 1}/${totalRuns}) to local CUPS spooler:`, data);
             })
             .catch(error => {
                 console.error('❌ Network printing engine link broken:', error);
-                const mainWrapper = document.getElementById('main-app-wrapper');
-                if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
+                const wrapper = document.getElementById('main-app-wrapper');
+                if (wrapper) wrapper.classList.remove('printing-active-state');
                 showUserAlert('SYSTEM_ALERT', { message: 'PRINTER ROUTER CONNECTION OFFLINE' }, 5000);
             });
         }
 
-        // Keep the exact same continuity workflow sequence panels open at the end
-        if (isAdminMultiplesModeActive) {
-            triggerMultiplesQuantityOverlay();
-        } else {
-            showUserAlert('PRINT_CONFIRM', { 
-                categoryName: `${printPayload.cwrd1} ${printPayload.cwrd2}`.trim(), 
-                periodText: displayQuarterText, 
-                yearText: printPayload.year, 
-                hexColor: targetHexColor 
-            }, 3000);
-        }
+        showUserAlert('PRINT_CONFIRM', { 
+            categoryName: `${payload.cwrd1} ${payload.cwrd2}`.trim(), 
+            periodText: payload.finalPeriod, 
+            yearText: payload.year, 
+            hexColor: payload.finalHex 
+        }, 3000);
     }
 }
 
@@ -493,7 +509,6 @@ function verifyGatekeeperPinEntry() {
     }
 }
 
-/* REPLACE THIS FUNCTION COMPLETELY IN APP.JS */
 function handleAdminMenuSelection(optionKey) {
     if (optionKey === 'EXIT') {
         const adminView = document.getElementById('admin-settings-view');
@@ -654,6 +669,11 @@ function clearQtyPadEntry() {
 }
 
 function confirmMultiplesQuantityRun() {
+    // 🚀 EXECUTE PRINT LOOP NOW: Fires the target count collected by the keypad sliders
+    if (lastExecutedPrintPayload) {
+        executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
+    }
+
     document.getElementById('multiples-modal-title').textContent = "Print Job Dispatched";
     document.getElementById('multiples-qty-zone').style.display = 'none';
     document.getElementById('multiples-fork-zone').style.display = 'flex';
