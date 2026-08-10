@@ -2,15 +2,14 @@
 let currentYear = new Date().getFullYear();
 
 // Global control variables for kiosk run modes
-let isFourthYearReleased = false; 
 let shortDatePeriod = 1;
 let isKioskShiftActive = false; 
 
-// Persistent configuration layer framework using standard browser localStorage
+// Base runtime configuration layer blueprint matching config.json keys exactly
 let kioskConfig = {
+    isFourthYearReleased: false,
     showPrintConfirmation: true,
-    fourthYearHidden: false,
-    securityPin: "1234" // Default 4-digit PIN gatekeeper value
+    securityPin: "1234"
 };
 
 // ==========================================================================
@@ -28,25 +27,45 @@ let pendingAdminOptionKey = null;
 // Structural row class names matching your palette mappings
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
 
-// Initialize configuration layers asynchronously from persistent memory assets
+// Fetch configuration profile asynchronously from the live Python server disk file
 function loadKioskConfigurationState() {
-    const localStoreData = localStorage.getItem('foodbank_kiosk_config');
-    if (localStoreData) {
-        try {
-            const parsedConfig = JSON.parse(localStoreData);
+    fetch('http://localhost:8080/config.json')
+        .then(response => {
+            if (!response.ok) throw new Error("Config file missing or server unreachable.");
+            return response.json();
+        })
+        .then(parsedConfig => {
+            // Merge file settings smoothly into the runtime blueprint
             kioskConfig = { ...kioskConfig, ...parsedConfig };
-            isFourthYearReleased = !kioskConfig.fourthYearHidden;
-        } catch (e) {
-            console.error("Failed parsing configurations initialization storage profile:", e);
-        }
-    } else {
-        saveKioskConfigurationState();
-    }
+            
+            // Rebuild matrix layout cleanly using the newly retrieved data parameters
+            generateDynamicGrid();
+            console.log("⚙️ Kiosk configuration loaded successfully from server disk.");
+        })
+        .catch(e => {
+            console.warn("⚠️ Local network config fetch failed, relying on defaults:", e);
+            generateDynamicGrid();
+        });
 }
 
+// Push configuration updates directly to the background Python persistence daemon
 function saveKioskConfigurationState() {
-    kioskConfig.fourthYearHidden = !isFourthYearReleased;
-    localStorage.setItem('foodbank_kiosk_config', JSON.stringify(kioskConfig));
+    fetch('http://localhost:8080/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(kioskConfig)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP save sync failure status: ${response.status}`);
+        return response.json();
+    })
+    .then(data => {
+        console.log("💾 Persistent layout configurations updated on server disk:", data);
+    })
+    .catch(error => {
+        console.error("❌ Failed to push setting changes to server storage:", error);
+        showUserAlert('SYSTEM_ALERT', { message: 'FAILED TO SAVE CONFIGURATION TO DISK' }, 4000);
+    });
 }
 
 // Call on startup pipeline immediately
@@ -81,7 +100,7 @@ function generateDynamicGrid() {
         
         const colorClass = colorCycle[colorIndex];
         const isFourthRow = (i === 3);
-        const isRowFourInactive = isFourthRow && !isFourthYearReleased;
+        const isRowFourInactive = isFourthRow && !kioskConfig.isFourthYearReleased;
         const rowStatusClass = isRowFourInactive ? 'inactive-row' : '';
 
         let rowHTML = `<div class="grid-row ${colorClass} ${rowStatusClass}">`;
@@ -156,8 +175,8 @@ function triggerManualRollOver() {
 // Initialize the dynamically built interface once DOM structures are loaded
 window.addEventListener('DOMContentLoaded', () => {
     // A. Build the multi-year calendar grid instantly
-    generateDynamicGrid();
-
+    // generateDynamicGrid(); Instruction removed to avoid building layout twice at startup
+    
     // B. Cache our UI view elements, layout groups, and text tracks
     const homeGrid = document.getElementById('home-category-grid');
     const workspaceView = document.getElementById('workspace-view');
@@ -185,20 +204,18 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Split text cleanly by spaces or hyphens to look for multi-word configurations
                 const wordsArray = rawCategoryText.split(/[\s-]+/);
 
-// CORRECT COMPONENT FORMAT:
-if (slot1 && slot2) {
-    if (wordsArray.length > 1) {
-        // Fix: Target the individual array string index [0] before calling the case function
-        // First part goes to line 1, remaining parts go to line 2
-        slot1.textContent = wordsArray[0].toUpperCase();
-        slot2.textContent = wordsArray.slice(1).join('-').toUpperCase();
-    } else {
-        // Single word configuration
-        slot1.textContent = rawCategoryText.toUpperCase();
-        slot2.textContent = '';
-    }
-}
-
+                // CORRECT COMPONENT FORMAT:
+                if (slot1 && slot2) {
+                    if (wordsArray.length > 1) {
+                        // First part goes to line 1, remaining parts go to line 2
+                        slot1.textContent = wordsArray[0].toUpperCase();
+                        slot2.textContent = wordsArray.slice(1).join('-').toUpperCase();
+                    } else {
+                        // Single word configuration
+                        slot1.textContent = rawCategoryText.toUpperCase();
+                        slot2.textContent = '';
+                    }
+                }
 
                 // D. TO VIEW STATE 2 FLIP: Completely swap grid tracks cleanly using explicit style overrides
                 if (homeGrid && workspaceView && homeDeck && screen2Deck) {
@@ -214,6 +231,7 @@ if (slot1 && slot2) {
         });
     }
 });
+
 /**
  * Core Touch Event Processors & Network Print Router Pipeline
  * INTERCEPT LAYER: Prepares data payload and halts instant printing if Multiples Mode is active.
@@ -486,7 +504,6 @@ function verifyGatekeeperPinEntry() {
     if (!pinInput) return;
 
     if (pinInput.value === kioskConfig.securityPin) {
-        // Correct Entry: Dismiss gatekeeper and transition straight to the Admin Page Suite view canvas
         dismissPinPadSecurity();
         
         const homeGrid = document.getElementById('home-category-grid');
@@ -498,9 +515,14 @@ function verifyGatekeeperPinEntry() {
             homeDeck.style.setProperty('display', 'none', 'important');
             adminView.classList.remove('screen-hide');
             adminView.style.setProperty('display', 'block', 'important');
+            
+                        // 🔒 BULLETPROOF SYNC: Match visual states directly to user-facing config properties
+            const row4Checkbox = document.getElementById('admin-toggle-row4');
+            const confirmCheckbox = document.getElementById('admin-toggle-confirm');
+            if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
+            if (confirmCheckbox) confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
         }
     } else {
-        // Bad PIN: Reject input, throw user alert callout, and scrub entry field clear
         if (errorSlot) {
             errorSlot.textContent = "INVALID PIN - ACCESS DENIED";
             errorSlot.style.display = 'block';
@@ -518,14 +540,24 @@ function handleAdminMenuSelection(optionKey) {
         if (adminView && homeGrid && homeDeck) {
             adminView.style.setProperty('display', 'none', 'important');
             adminView.classList.add('screen-hide');
+            
+            // Clear the 5-column distortion cleanly
+            homeGrid.style.removeProperty('grid-template-columns');
             homeGrid.style.setProperty('display', 'grid', 'important');
+            
             homeDeck.style.setProperty('display', 'flex', 'important');
             document.body.style.backgroundColor = isAdminMultiplesModeActive ? '#7851A9' : '#1b5e20';
         }
         return;
     }
 
-    // Front gate PIN is passed! Execute the validated action menu choice instantly
+    // Intercept toggles cleanly and return early to stop double-execution loops
+    if (optionKey === 'TOGGLE_ROW4' || optionKey === 'TOGGLE_CONFIRM') {
+        executeValidatedAdminAction(optionKey);
+        return;
+    }
+
+    // Standard administrative suite password gates process normally here
     console.log(`🔓 Admin option authorized & executed instantly: [${optionKey}]`);
     executeValidatedAdminAction(optionKey);
 }
@@ -600,18 +632,24 @@ function executeValidatedAdminAction(actionKey) {
     }
     
     if (actionKey === 'TOGGLE_ROW4') {
-        isFourthYearReleased = !isFourthYearReleased;
-        generateDynamicGrid(); 
-        const row4Checkbox = document.getElementById('admin-toggle-row4');
-        if (row4Checkbox) row4Checkbox.checked = isFourthYearReleased;
-        saveKioskConfigurationState();
-        return;
+    // Toggle the release parameter directly
+    kioskConfig.isFourthYearReleased = !kioskConfig.isFourthYearReleased;
+        
+    // Sync checkmark visually to match the user's intent perfectly
+    const row4Checkbox = document.getElementById('admin-toggle-row4');
+    if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
+        
+    generateDynamicGrid(); 
+    saveKioskConfigurationState();
+    return;
     }
-    
+   
     if (actionKey === 'TOGGLE_CONFIRM') {
         kioskConfig.showPrintConfirmation = !kioskConfig.showPrintConfirmation;
+        
         const confirmCheckbox = document.getElementById('admin-toggle-confirm');
         if (confirmCheckbox) confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
+        
         saveKioskConfigurationState();
         return;
     }

@@ -11,8 +11,9 @@ PRINTER_POOL = {
     'blue': 'blue_labels'
 }
 
-# Local physical file pathway on the Pi for persistent storage synchronization
-CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), 'kiosk_persistent_state.json')
+# Direct target pathway on the Pi for persistent state synchronization layout
+CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
+
 
 class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
     
@@ -72,8 +73,9 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             payload = json.loads(post_data.decode('utf-8'))
 
-            # CHECK ROUTING POINT: Handle configuration synchronization tasks natively
-            if self.path == '/api/config':
+            # CHECK ROUTING POINT: Handle configuration tasks safely with flexible path boundary matching
+            if self.path.rstrip('/') == '/api/config':
+
                 with open(CONFIG_FILE_PATH, 'w') as config_file:
                     json.dump(payload, config_file, indent=2)
                 self._set_headers()
@@ -143,23 +145,19 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(error_response).encode('utf-8'))
 def run_server(port=8080):
     # Initialize a default state configuration layout on disk if file is missing
+    # Initialize a clean configuration layout on disk if file is missing completely
     if not os.path.exists(CONFIG_FILE_PATH):
         default_config = {
             "version": "1.1.0",
-            "last_updated": "2026-08-06T10:00:00Z",
-            "security": {
-                "pin_required": True,
-                "pin_hash": "1234"
-            },
-            "kiosk_settings": {
-                "station_id": "GATEWAY_01",
-                "printer_name": "Label_Printer_Alpha"
-            }
+            "isFourthYearReleased": False,
+            "showPrintConfirmation": True,
+            "securityPin": "1234"
         }
+        
         try:
             with open(CONFIG_FILE_PATH, 'w') as f:
                 json.dump(default_config, f, indent=2)
-            print(f"📁 Created default persistent state configuration layer file.")
+            print(f"📁 Created default persistent state configuration layer file: config.json")
         except Exception as e:
             print(f"⚠️ Warning: Could not write default layout configurations file: {e}")
 
