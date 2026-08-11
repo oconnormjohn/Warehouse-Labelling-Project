@@ -96,10 +96,13 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             if not target_cups_printer:
                 raise ValueError(f"Unknown printer color requested: {color}")
 
-            is_full_year = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
-            is_two_word  = (cwrd2.strip() != '')
+            is_month_mode = (str(q_num).upper() == 'MM')
+            is_full_year  = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
+            is_two_word   = (cwrd2.strip() != '')
 
-            if is_full_year:
+            if is_month_mode:
+                template_name = 'twoWordMonthLabel.zpl' if is_two_word else 'oneWordMonthLabel.zpl'
+            elif is_full_year:
                 template_name = 'twoWordYearLabel.zpl' if is_two_word else 'oneWordYearLabel.zpl'
             else:
                 template_name = 'twoWordCategoryLabel.zpl' if is_two_word else 'oneWordCategoryLabel.zpl'
@@ -120,6 +123,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             zpl_content = zpl_content.replace('{{M1}}', m1 if m1 != 'x' else ' ')
             zpl_content = zpl_content.replace('{{M2}}', m2 if m2 != 'x' else ' ')
             zpl_content = zpl_content.replace('{{M3}}', m3 if m3 != 'x' else ' ')
+            zpl_content = zpl_content.replace('{{MONTH}}', m1)  # Exact match for your literal template token
 
             # Write out a temporary file to deliver to the physical queue execution pipeline
             temp_print_file = os.path.join(os.path.dirname(__file__), 'temp_print_job.zpl')

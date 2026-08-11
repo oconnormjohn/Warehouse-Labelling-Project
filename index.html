@@ -58,6 +58,37 @@
             </div>
             <div class="grid-container" id="master-grid"></div>
         </div>
+
+                <!-- STAGE 4: MONTH SELECTION SCREEN MATRIX WORKSPACE -->
+        <div class="main-container screen-hide" id="month-selection-view">
+            <!-- Universal Category Header Banner Track -->
+            <div class="header-title" id="month-category-header">
+                <span id="month-cat-word1"></span><span id="month-cat-word2"></span>
+            </div>
+            
+            <!-- Proportional Year Selection Header Bar Layout -->
+            <div id="month-year-selection-bar">
+                <button id="btn-month-current-year" class="month-year-toggle-btn" onclick="selectMonthTargetYear('CURRENT')"></button>
+                <button id="btn-month-next-year" class="month-year-toggle-btn" onclick="selectMonthTargetYear('NEXT')"></button>
+            </div>
+
+            <!-- Balanced 4x3 Month Selection Button Grid Workspace -->
+            <div id="month-buttons-matrix-grid">
+                <button class="month-grid-cell" id="m-cell-0" onclick="handleMonthGridCellClick(0)"><span>JANUARY</span></button>
+                <button class="month-grid-cell" id="m-cell-1" onclick="handleMonthGridCellClick(1)"><span>FEBRUARY</span></button>
+                <button class="month-grid-cell" id="m-cell-2" onclick="handleMonthGridCellClick(2)"><span>MARCH</span></button>
+                <button class="month-grid-cell" id="m-cell-3" onclick="handleMonthGridCellClick(3)"><span>APRIL</span></button>
+                <button class="month-grid-cell" id="m-cell-4" onclick="handleMonthGridCellClick(4)"><span>MAY</span></button>
+                <button class="month-grid-cell" id="m-cell-5" onclick="handleMonthGridCellClick(5)"><span>JUNE</span></button>
+                <button class="month-grid-cell" id="m-cell-6" onclick="handleMonthGridCellClick(6)"><span>JULY</span></button>
+                <button class="month-grid-cell" id="m-cell-7" onclick="handleMonthGridCellClick(7)"><span>AUGUST</span></button>
+                <button class="month-grid-cell" id="m-cell-8" onclick="handleMonthGridCellClick(8)"><span>SEPTEMBER</span></button>
+                <button class="month-grid-cell" id="m-cell-9" onclick="handleMonthGridCellClick(9)"><span>OCTOBER</span></button>
+                <button class="month-grid-cell" id="m-cell-10" onclick="handleMonthGridCellClick(10)"><span>NOVEMBER</span></button>
+                <button class="month-grid-cell" id="m-cell-11" onclick="handleMonthGridCellClick(11)"><span>DECEMBER</span></button>
+            </div>
+        </div>
+
         <!-- UNIVERSAL GLOBAL SIDEBAR (Occupies 5.8% width on all screens) -->
         <div class="sidebar-container">
             <div class="sidebar">
@@ -98,31 +129,31 @@
                     </div>
                 </div>
 
-<!-- SCREEN 2 DECK: Navigation Buttons -->
-<div class="nav-group screen-hide" id="deck-screen2-nav">
-    <!-- Action Block: Back Button -->
-    <div class="action-block">
-        <button class="side-btn btn-back" onclick="sidebarAction('BACK')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#0091ea" stroke-width="3.5">
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-            </svg>
-        </button>
-        <div class="sidebar-legend-text">BACK</div>
-    </div>
-    <!-- Action Block: Months Button -->
-    <div class="action-block">
-        <button class="side-btn btn-months" onclick="sidebarAction('MONTHS')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2.5">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-        </button>
-        <div class="sidebar-legend-text">MONTHS</div>
-    </div>
-</div>
+                <!-- SCREEN 2 & 4 UNIVERSAL DECK: Navigation Control Layer -->
+                <div class="nav-group screen-hide" id="deck-screen2-nav">
+                    <!-- Action Block: Back Button -->
+                    <div class="action-block">
+                        <button class="side-btn btn-back" onclick="sidebarAction('BACK')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#0091ea" stroke-width="3.5">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                        </button>
+                        <div class="sidebar-legend-text">BACK</div>
+                    </div>
+                    <!-- Action Block: Months Switch Button -->
+                    <div class="action-block" id="sidebar-months-action-wrapper">
+                        <button class="side-btn btn-months" onclick="sidebarAction('MONTHS')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2.5">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </button>
+                        <div class="sidebar-legend-text">MONTHS</div>
+                    </div>
+                </div>
 
                 <!-- Printer Status Module -->
                 <div class="status-container">

@@ -4,6 +4,13 @@ let currentYear = new Date().getFullYear();
 // Global control variables for kiosk run modes
 let shortDatePeriod = 1;
 let isKioskShiftActive = false; 
+// Month View Architecture Management Trackers
+let currentActiveWorkspaceMode = "STANDARD_GREEN"; // Options: STANDARD_GREEN, ADMIN_PURPLE, PLAIN_MODE, DISPATCH_MODE
+let monthActiveTargetYearInt = null;
+const fullMonthNamesMap = [
+    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+];
 
 // Base runtime configuration layer blueprint matching config.json keys exactly
 let kioskConfig = {
@@ -362,13 +369,28 @@ function executePhysicalPrintSpooler(payload, totalRuns) {
  * Universal Navigation Sidebar Action Manager
  */
 function sidebarAction(action) {
-    if (action === 'BACK') {
-        const homeGrid = document.getElementById('home-category-grid');
-        const workspaceView = document.getElementById('workspace-view');
-        const homeDeck = document.getElementById('deck-home-actions');
-        const screen2Deck = document.getElementById('deck-screen2-nav');
+    const homeGrid = document.getElementById('home-category-grid');
+    const workspaceView = document.getElementById('workspace-view');
+    const monthView = document.getElementById('month-selection-view');
+    const homeDeck = document.getElementById('deck-home-actions');
+    const screen2Deck = document.getElementById('deck-screen2-nav');
+    const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
 
-        if (homeGrid && workspaceView && homeDeck && screen2Deck) {
+    if (action === 'BACK') {
+        // If on Month View, BACK returns to Date View
+        if (!monthView.classList.contains('screen-hide')) {
+            monthView.style.setProperty('display', 'none', 'important');
+            monthView.classList.add('screen-hide');
+            
+            workspaceView.classList.remove('screen-hide');
+            workspaceView.style.setProperty('display', 'flex', 'important');
+            
+            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
+            return;
+        }
+
+        // Standard exit out of Date Selection view back to Categories matrix
+        if (workspaceView && homeGrid && homeDeck && screen2Deck) {
             workspaceView.style.setProperty('display', 'none', 'important');
             workspaceView.classList.add('screen-hide');
             screen2Deck.classList.add('screen-hide');
@@ -376,11 +398,27 @@ function sidebarAction(action) {
             homeGrid.style.setProperty('display', 'grid', 'important');
             homeDeck.style.setProperty('display', 'flex', 'important');
             
-            // Keeps the screen purple if you are in admin multiples mode!
             syncKioskBackgroundState();
         }
     } else if (action === 'MONTHS') {
-        alert('SYSTEM COMMAND:\nSwitching to Monthly Breakdown View');
+        // Route from Date selection workspace into Months screen layout
+        if (workspaceView && monthView) {
+            workspaceView.style.setProperty('display', 'none', 'important');
+            workspaceView.classList.add('screen-hide');
+            
+            // Sync up word banners to Month workspace view slots
+            document.getElementById('month-cat-word1').textContent = document.getElementById('cat-word1').textContent;
+            document.getElementById('month-cat-word2').textContent = document.getElementById('cat-word2').textContent;
+            
+            // Hide the MONTHS switcher trigger button out of the sidebar view safely
+            if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
+            
+            monthView.classList.remove('screen-hide');
+            monthView.style.setProperty('display', 'flex', 'important');
+            
+            // Automatically select current system calendar year on load execution
+            selectMonthTargetYear('CURRENT');
+        }
     }
 }
 
@@ -429,17 +467,30 @@ function showUserAlert(type, data = {}, duration = 3000) {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 
     setTimeout(() => {
+        // 🔒 SAFETY CHECK: If admin multiples selection overlay is open on screen, halt auto-dismiss entirely!
+        if (isAdminMultiplesModeActive) {
+            console.log("🔒 Admin Multiples Mode active: Halting automatic alert dashboard dismiss countdown.");
+            return;
+        }
+
         const activeModal = document.getElementById('kiosk-universal-overlay');
         if (activeModal) {
             activeModal.remove();
             
-            // Clean queue animation safely once physical runtime block clears out
             const mainWrapper = document.getElementById('main-app-wrapper');
             if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
             
-            if (type === 'PRINT_CONFIRM') sidebarAction('BACK');
+            if (type === 'PRINT_CONFIRM') {
+                const monthView = document.getElementById('month-selection-view');
+                if (monthView && !monthView.classList.contains('screen-hide')) {
+                    handleContinuityChoice('EXIT_TO_HOME_SCREEN_DIRECTLY');
+                } else {
+                    sidebarAction('BACK');
+                }
+            }
         }
     }, duration);
+
 }
 /**
  * Intercepts the settings cog click event right at the front gate
@@ -616,12 +667,12 @@ function cancelAdminPasswordVerification() {
 
 function syncKioskBackgroundState() {
     const mainWrapper = document.getElementById('main-app-wrapper');
-    const TargetColor = isAdminMultiplesModeActive ? '#7851A9' : '#1b5e20';
+    const targetColor = (currentActiveWorkspaceMode === 'ADMIN_PURPLE' || isAdminMultiplesModeActive) ? '#7851A9' : '#1b5e20';
     
-    document.body.style.backgroundColor = TargetColor;
+    document.body.style.backgroundColor = targetColor;
     if (mainWrapper) {
-        mainWrapper.style.setProperty('background-color', TargetColor, 'important');
-        mainWrapper.style.setProperty('background', TargetColor, 'important');
+        mainWrapper.style.setProperty('background-color', targetColor, 'important');
+        mainWrapper.style.setProperty('background', targetColor, 'important');
     }
 }
 
@@ -656,10 +707,12 @@ function executeValidatedAdminAction(actionKey) {
 
     if (actionKey === 'MULTIPLES') {
         isAdminMultiplesModeActive = true;
+        currentActiveWorkspaceMode = "ADMIN_PURPLE";
         handleAdminMenuSelection('EXIT');
         syncKioskBackgroundState();
         return;
     }
+
 }
 
 function triggerMultiplesQuantityOverlay() {
@@ -712,6 +765,18 @@ function confirmMultiplesQuantityRun() {
         executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
     }
 
+    // 🧼 CLEAN-UP: Instantly find and remove the standard print confirmation overlay if it popped up
+    const universalOverlay = document.getElementById('kiosk-universal-overlay');
+    if (universalOverlay) {
+        universalOverlay.remove();
+    }
+
+    // Strip active background animation queue safely
+    const mainWrapper = document.getElementById('main-app-wrapper');
+    if (mainWrapper) {
+        mainWrapper.classList.remove('printing-active-state');
+    }
+
     document.getElementById('multiples-modal-title').textContent = "Print Job Dispatched";
     document.getElementById('multiples-qty-zone').style.display = 'none';
     document.getElementById('multiples-fork-zone').style.display = 'flex';
@@ -719,6 +784,8 @@ function confirmMultiplesQuantityRun() {
 
 function handleContinuityChoice(choiceType) {
     const multiplesModal = document.getElementById('admin-multiples-modal');
+    const monthView = document.getElementById('month-selection-view');
+    
     if (multiplesModal) {
         multiplesModal.style.setProperty('display', 'none', 'important');
         multiplesModal.classList.add('modal-hide');
@@ -726,11 +793,162 @@ function handleContinuityChoice(choiceType) {
 
     if (choiceType === 'SAME') {
         setTimeout(triggerMultiplesQuantityOverlay, 150);
-    } else if (choiceType === 'FRESH_PURPLE') {
-        sidebarAction('BACK');
-    } else if (choiceType === 'EXIT_GREEN') {
-        isAdminMultiplesModeActive = false;
+    } else {
+        // For FRESH_PURPLE, EXIT_GREEN, or standard prints, clear views completely and drop cleanly to Home Screen
+        if (!monthView.classList.contains('screen-hide')) {
+            // Clear Month Selection Workspace elements
+            monthView.style.setProperty('display', 'none', 'important');
+            monthView.classList.add('screen-hide');
+            
+            // Un-hide Month Action in sidebars if previously cleared out
+            const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
+            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
+        }
+        
+        if (choiceType === 'EXIT_GREEN') {
+            isAdminMultiplesModeActive = false;
+            currentActiveWorkspaceMode = "STANDARD_GREEN";
+        }
+        
+        // Trigger a force route all the way back to main categories matrix array
+        const workspaceView = document.getElementById('workspace-view');
+        if (workspaceView) {
+            workspaceView.style.setProperty('display', 'none', 'important');
+            workspaceView.classList.add('screen-hide');
+        }
+        
+        const homeGrid = document.getElementById('home-category-grid');
+        const homeDeck = document.getElementById('deck-home-actions');
+        const screen2Deck = document.getElementById('deck-screen2-nav');
+        
+        if (homeGrid && homeDeck && screen2Deck) {
+            screen2Deck.classList.add('screen-hide');
+            homeGrid.style.setProperty('display', 'grid', 'important');
+            homeDeck.style.setProperty('display', 'flex', 'important');
+        }
+        
         syncKioskBackgroundState();
-        sidebarAction('BACK');
+    }
+}
+
+/**
+ * Resolves the 4-year industrial color mapping assignments
+ */
+function resolveYearThemeHexColor(targetYear) {
+    const remainder = targetYear % 4;
+    if (remainder === 2) return '#ffcdd2';      // Pink
+    if (remainder === 3) return '#a5d6a7';      // Green
+    if (remainder === 0) return '#fff59d';      // Yellow
+    return '#81d4fa';                           // Blue
+}
+
+/**
+ * Handles toggling between Current and Next Year scopes on the Months layout
+ */
+function selectMonthTargetYear(yearScopeKey) {
+    const systemDate = new Date();
+    const systemYear = systemDate.getFullYear();
+    
+    monthActiveTargetYearInt = (yearScopeKey === 'CURRENT') ? systemYear : (systemYear + 1);
+    
+    const currentBtn = document.getElementById('btn-month-current-year');
+    const nextBtn = document.getElementById('btn-month-next-year');
+    
+    if (currentBtn && nextBtn) {
+        currentBtn.textContent = systemYear;
+        nextBtn.textContent = systemYear + 1;
+        
+        currentBtn.classList.remove('year-selected-focus');
+        nextBtn.classList.remove('year-selected-focus');
+        
+        currentBtn.style.backgroundColor = resolveYearThemeHexColor(systemYear);
+        nextBtn.style.backgroundColor = resolveYearThemeHexColor(systemYear + 1);
+        
+        const targetBtn = (yearScopeKey === 'CURRENT') ? currentBtn : nextBtn;
+        targetBtn.classList.add('year-selected-focus');
+    }
+    
+    rebuildMonthCellsValidationAesthetics();
+}
+
+/**
+ * Validates calendars and dynamic boundary frames to flag expired cells
+ */
+function rebuildMonthCellsValidationAesthetics() {
+    const systemDate = new Date();
+    const systemYear = systemDate.getFullYear();
+    const systemMonthIndex = systemDate.getMonth();
+    
+    const themeColor = resolveYearThemeHexColor(monthActiveTargetYearInt);
+    
+    for (let mIdx = 0; mIdx < 12; mIdx++) {
+        const cellButton = document.getElementById(`m-cell-${mIdx}`);
+        if (!cellButton) continue;
+        
+        let isExpired = false;
+        let isShortDate = false;
+        
+        if (monthActiveTargetYearInt < systemYear) {
+            isExpired = true;
+        } else if (monthActiveTargetYearInt === systemYear) {
+            if (mIdx < systemMonthIndex) isExpired = true;
+        }
+        
+        if (!isExpired) {
+            const offset = ((monthActiveTargetYearInt - systemYear) * 12) + mIdx - systemMonthIndex;
+            if (offset >= 0 && offset <= shortDatePeriod) isShortDate = true;
+        }
+        
+                cellButton.classList.remove('month-inactive');
+        
+        // Force every cell to take the active year color first
+        cellButton.style.backgroundColor = themeColor;
+        
+        // If it's expired or short-date, apply the inactive overlay rule
+        if (isExpired || isShortDate) {
+            cellButton.classList.add('month-inactive');
+        }
+
+    }
+}
+
+/**
+ * Formats data models and coordinates submissions to physical printer channels
+ */
+function handleMonthGridCellClick(monthIndexInt) {
+    const word1 = document.getElementById('month-cat-word1').textContent.trim();
+    const word2 = document.getElementById('month-cat-word2').textContent.trim();
+    const monthName = fullMonthNamesMap[monthIndexInt];
+    
+    const isPurpleActive = (currentActiveWorkspaceMode === 'ADMIN_PURPLE' || isAdminMultiplesModeActive);
+    let targetColorTrackingString = "green";
+    const yearColorHex = resolveYearThemeHexColor(monthActiveTargetYearInt);
+    
+    const targetRemainder = monthActiveTargetYearInt % 4;
+    if (targetRemainder === 2) targetColorTrackingString = 'pink';
+    else if (targetRemainder === 3) targetColorTrackingString = 'green';
+    else if (targetRemainder === 0) targetColorTrackingString = 'yellow';
+    else if (targetRemainder === 1) targetColorTrackingString = 'blue';
+
+    // Pack payload matching templates routing profiles cleanly
+    lastExecutedPrintPayload = {
+        color: targetColorTrackingString,
+        cwrd1: word1,
+        cwrd2: word2,
+        q: "MM", // Marker flag indicating Month template processing configurations
+        year: monthActiveTargetYearInt,
+        m1: monthName, // Pass targeted full month name straight into standard M1 slot
+        m2: " ",
+        m3: " ",
+        finalHex: yearColorHex,
+        finalPeriod: monthName
+    };
+
+    if (isPurpleActive) {
+        console.log("📌 Admin Months Intercept: Loading quantity matrix keypad panels.");
+        triggerMultiplesQuantityOverlay();
+    } else {
+        console.log("🟢 Normal User Month Run: Dispatching single print target job.");
+        executePhysicalPrintSpooler(lastExecutedPrintPayload, 1);
     }
 }
