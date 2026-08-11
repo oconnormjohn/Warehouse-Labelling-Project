@@ -663,9 +663,9 @@ function executeValidatedAdminAction(actionKey) {
 }
 
 function triggerMultiplesQuantityOverlay() {
-    multiplesCountTarget = 1; 
+    multiplesCountTarget = 0; 
     const qtyDisplay = document.getElementById('admin-qty-display');
-    if (qtyDisplay) qtyDisplay.value = "1";
+    if (qtyDisplay) qtyDisplay.value = "";
     
     document.getElementById('multiples-modal-title').textContent = "Set Print Quantity";
     document.getElementById('multiples-qty-zone').style.display = 'flex';
@@ -702,8 +702,8 @@ function pressQtyPadKey(digitString) {
 
 function clearQtyPadEntry() {
     const qtyDisplay = document.getElementById('admin-qty-display');
-    if (qtyDisplay) qtyDisplay.value = "1";
-    multiplesCountTarget = 1;
+    if (qtyDisplay) qtyDisplay.value = "";
+    multiplesCountTarget = 0;
 }
 
 function confirmMultiplesQuantityRun() {
