@@ -13,13 +13,48 @@ PRINTER_POOL = {
 
 # Direct target pathway on the Pi for persistent state synchronization layout
 CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
-
+# Registered data matrix pathways for dynamic configuration lists
+LIST_FILES_POOL = {
+    'category': os.path.join(os.path.dirname(__file__), 'category.json'),
+    'toiletries': os.path.join(os.path.dirname(__file__), 'toiletries.json'),
+    'christmas': os.path.join(os.path.dirname(__file__), 'christmas.json'),
+    'dispatch': os.path.join(os.path.dirname(__file__), 'dispatch.json'),
+    'misc': os.path.join(os.path.dirname(__file__), 'misc.json')
+}
 
 class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
     
     # Unified Web Asset Router (HTML, CSS, JS, and graphics folders)
     def do_GET(self):
+        # API Intercept Layer: Check if frontend is reading a list file
+        if self.path.startswith('/api/list?name='):
+            list_key = self.path.split('name=')[1].split('&')[0].lower()
+            target_path = LIST_FILES_POOL.get(list_key)
+            
+            if not target_path:
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b"Invalid list file resource requested.")
+                return
+                
+            # If the file does not exist yet on disk, return a clean empty array fallback
+            data_payload = []
+            if os.path.exists(target_path):
+                try:
+                    with open(target_path, 'r') as f:
+                        data_payload = json.load(f)
+                except Exception:
+                    data_payload = []
+                    
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps(data_payload).encode('utf-8'))
+            return
+
         clean_path = self.path.split('?')[0]
+
         
         # Default empty root path requests straight to your index file
         if clean_path == '/' or clean_path == '':
@@ -80,6 +115,24 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     json.dump(payload, config_file, indent=2)
                 self._set_headers()
                 self.wfile.write(json.dumps({"status": "success", "message": "Config saved successfully"}).encode('utf-8'))
+                return
+            
+            # API Intercept Layer: Handle saving modified arrays back to disk
+            if self.path.startswith('/api/list/save?name='):
+                list_key = self.path.split('name=')[1].split('&')[0].lower()
+                target_path = LIST_FILES_POOL.get(list_key)
+                
+                if not target_path:
+                    self.send_response(400)
+                    self._set_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "Invalid list destination"}).encode('utf-8'))
+                    return
+                    
+                with open(target_path, 'w') as config_file:
+                    json.dump(payload, config_file, indent=2)
+                    
+                self._set_headers()
+                self.wfile.write(json.dumps({"status": "success", "message": f"{list_key} list updated on disk"}).encode('utf-8'))
                 return
 
             # STANDARD PRINT ROUTINE (Runs normally for standard labels entry points)

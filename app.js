@@ -4,6 +4,7 @@ let currentYear = new Date().getFullYear();
 // Global control variables for kiosk run modes
 let shortDatePeriod = 1;
 let isKioskShiftActive = false; 
+
 // Month View Architecture Management Trackers
 let currentActiveWorkspaceMode = "STANDARD_GREEN"; // Options: STANDARD_GREEN, ADMIN_PURPLE, PLAIN_MODE, DISPATCH_MODE
 let monthActiveTargetYearInt = null;
@@ -11,6 +12,11 @@ const fullMonthNamesMap = [
     "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
     "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
 ];
+
+// Universal JSON List Editor Workspace Tracker Layers
+let activeEditorFileKey = ""; // Tracks which file is open (category, toiletries, etc.)
+let activeFocusedInputId = null; // Tracks which specific list button slot is being typed into
+let isEditorShiftActive = false;
 
 // Base runtime configuration layer blueprint matching config.json keys exactly
 let kioskConfig = {
@@ -592,7 +598,6 @@ function handleAdminMenuSelection(optionKey) {
             adminView.style.setProperty('display', 'none', 'important');
             adminView.classList.add('screen-hide');
             
-            // Clear the 5-column distortion cleanly
             homeGrid.style.removeProperty('grid-template-columns');
             homeGrid.style.setProperty('display', 'grid', 'important');
             
@@ -602,13 +607,24 @@ function handleAdminMenuSelection(optionKey) {
         return;
     }
 
-    // Intercept toggles cleanly and return early to stop double-execution loops
     if (optionKey === 'TOGGLE_ROW4' || optionKey === 'TOGGLE_CONFIRM') {
         executeValidatedAdminAction(optionKey);
         return;
     }
 
-    // Standard administrative suite password gates process normally here
+    // Intercept data list editing requests and launch the workspace layout
+    if (['EDIT_CATEGORY', 'EDIT_TOILETRIES', 'EDIT_CHRISTMAS', 'EDIT_MISC', 'EDIT_DISPATCH'].includes(optionKey)) {
+        const listMappingKeys = {
+            'EDIT_CATEGORY': 'category',
+            'EDIT_TOILETRIES': 'toiletries',
+            'EDIT_CHRISTMAS': 'christmas',
+            'EDIT_MISC': 'misc',
+            'EDIT_DISPATCH': 'dispatch'
+        };
+        launchListEditorWorkspace(listMappingKeys[optionKey]);
+        return;
+    }
+
     console.log(`🔓 Admin option authorized & executed instantly: [${optionKey}]`);
     executeValidatedAdminAction(optionKey);
 }
@@ -950,5 +966,218 @@ function handleMonthGridCellClick(monthIndexInt) {
     } else {
         console.log("🟢 Normal User Month Run: Dispatching single print target job.");
         executePhysicalPrintSpooler(lastExecutedPrintPayload, 1);
+    }
+}
+
+/**
+ * Fetches targeted array content from server storage and populates editor input forms
+ */
+function launchListEditorWorkspace(listFileKey) {
+    activeEditorFileKey = listFileKey;
+    activeFocusedInputId = null;
+    isEditorShiftActive = false;
+    
+    // Clear keyboard preview line clean
+    const displayBar = document.getElementById('editor-virtual-keyboard-display');
+    if (displayBar) displayBar.value = "";
+    
+    document.getElementById('list-editor-title-banner').textContent = `EDITING: ${listFileKey.toUpperCase()} LIST`;
+    
+    // Determine target size boundary (35 slots for categories/home grid variants)
+    const totalInputSlotsCount = 35;
+    
+    fetch(`http://localhost:8080/api/list?name=${listFileKey}`)
+        .then(response => response.json())
+        .then(dataArray => {
+            const container = document.getElementById('list-editor-inputs-container');
+            if (!container) return;
+            
+            let formsHTML = "";
+            for (let i = 0; i < totalInputSlotsCount; i++) {
+                const textValue = dataArray[i] || "";
+                formsHTML += `
+                <div style="display: flex; align-items: center; width: 100%; gap: 1vw; box-sizing: border-box;">
+                    <span style="font-weight: bold; color: #563380; font-size: 2.2vh; width: 3vw; text-align: right;">#${i + 1}</span>
+                    <input type="text" id="editor-field-slot-${i}" value="${textValue}" readonly
+                           onclick="setEditorInputFocus(${i})"
+                           style="flex: 1; padding: 1vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #7851A9; border-radius: 6px; background: #fff; cursor: pointer; text-transform: uppercase;">
+                </div>`;
+            }
+            container.innerHTML = formsHTML;
+            
+            // Toggle application screens safely
+            document.getElementById('admin-settings-view').style.setProperty('display', 'none', 'important');
+            const editorWorkspace = document.getElementById('admin-list-editor-workspace');
+            editorWorkspace.classList.remove('screen-hide');
+            editorWorkspace.style.setProperty('display', 'block', 'important');
+            
+            // Default select the first slot instantly on load completion
+            setEditorInputFocus(0);
+        })
+        .catch(err => {
+            console.error("❌ Failed to stream configuration list from background storage:", err);
+            alert("SYSTEM ERROR: UNABLE TO RETRIEVE TARGET DATA LIST");
+        });
+}
+
+/**
+ * Shifts typing target paths onto selected form elements
+ */
+function setEditorInputFocus(slotIndexInt) {
+    // Drop active focus borders on previous fields
+    if (activeFocusedInputId !== null) {
+        const pastField = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
+        if (pastField) pastField.style.borderColor = "#7851A9";
+    }
+    
+    activeFocusedInputId = slotIndexInt;
+    const currentField = document.getElementById(`editor-field-slot-${slotIndexInt}`);
+    const displayBar = document.getElementById('editor-virtual-keyboard-display');
+    
+    if (currentField && displayBar) {
+        currentField.style.borderColor = "#000000"; // Dark high-contrast active marker outline
+        displayBar.value = currentField.value.toUpperCase();
+        
+        // Auto scroll input container smoothly to track active line placement
+        currentField.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+/**
+/**
+ * Streams characters directly into the active field selection buffer
+ */
+function pressEditorKey(keyChar) {
+    if (activeFocusedInputId === null) return;
+    
+    const targetInput = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
+    const displayBar = document.getElementById('editor-virtual-keyboard-display');
+    if (!targetInput || !displayBar) return;
+    
+    // Force uppercase conversion instantly
+    let resolvedChar = keyChar.toUpperCase();
+    
+    if (targetInput.value.length < 16) {
+        targetInput.value += resolvedChar;
+        displayBar.value = targetInput.value;
+    }
+}
+
+function backspaceEditorKey() {
+    if (activeFocusedInputId === null) return;
+    const targetInput = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
+    const displayBar = document.getElementById('editor-virtual-keyboard-display');
+    if (!targetInput || !displayBar) return;
+    
+    if (targetInput.value.length > 0) {
+        targetInput.value = targetInput.value.slice(0, -1);
+        displayBar.value = targetInput.value.toUpperCase();
+    }
+}
+
+function toggleEditorShift() {
+    isEditorShiftActive = !isEditorShiftActive;
+    const shiftBtn = document.getElementById('editor-kbd-shift-btn');
+    const letters = document.querySelectorAll('.list-letter-key');
+    
+    if (shiftBtn) shiftBtn.style.backgroundColor = isEditorShiftActive ? '#4cd964' : '#90caf9';
+    letters.forEach(btn => {
+        btn.textContent = isEditorShiftActive ? btn.textContent.toUpperCase() : btn.textContent.toLowerCase();
+    });
+}
+
+/**
+ * ENTER Key Action: Saves the current field directly to disk and advances to the next slot
+ */
+function triggerEditorFieldCommit() {
+    if (activeFocusedInputId === null) return;
+    
+    const field = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
+    const currentValue = field ? field.value.trim().toUpperCase() : "";
+    
+    console.log(`💾 ENTER pressed: Automatically syncing field #${activeFocusedInputId + 1} ("${currentValue}") to disk.`);
+    
+    // Gathers the entire current array layout to ensure persistence tracking integrity
+    const currentDataArray = [];
+    const totalSlotsCount = 35;
+    
+    for (let i = 0; i < totalSlotsCount; i++) {
+        const currentField = document.getElementById(`editor-field-slot-${i}`);
+        currentDataArray.push(currentField ? currentField.value.trim().toUpperCase() : "");
+    }
+    
+    // Direct selective background stream write operation
+    fetch(`http://localhost:8080/api/list/save?name=${activeEditorFileKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(currentDataArray)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Disk stream failed");
+        return response.json();
+    })
+    .then(data => {
+        console.log(`🎉 Field #${activeFocusedInputId + 1} synced successfully.`);
+        
+        // Calculate the next field index
+        const nextSlotIndex = activeFocusedInputId + 1;
+        
+        if (nextSlotIndex < totalSlotsCount) {
+            // Shift screen focus down to the next row slot automatically
+            setEditorInputFocus(nextSlotIndex);
+        } else {
+            console.log("🏁 Reached the end of the input configuration array list matrix.");
+            // Optional wrap around back to first slot if desired, currently stays on last item
+        }
+    })
+    .catch(err => {
+        console.error("❌ Background individual field auto-save failure:", err);
+    });
+}
+
+/**
+ * Gathers inputs matrix elements and posts flat data arrays to backend Python storage
+ */
+function saveActiveListEditorDataToDisk() {
+    const dataPayloadArray = [];
+    const totalSlotsCount = 35;
+    
+    for (let i = 0; i < totalSlotsCount; i++) {
+        const field = document.getElementById(`editor-field-slot-${i}`);
+        // Trim whitespace and force clean string conversions
+        const valueString = field ? field.value.trim().toUpperCase() : "";
+        dataPayloadArray.push(valueString);
+    }
+    
+    fetch(`http://localhost:8080/api/list/save?name=${activeEditorFileKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataPayloadArray)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Network disk streaming connection failure");
+        return response.json();
+    })
+    .then(data => {
+        console.log(`💾 Configuration sync success for [${activeEditorFileKey}]:`, data);
+        exitListEditorWorkspace();
+    })
+    .catch(err => {
+        console.error("❌ Failed to save lists data configurations array onto server disk:", err);
+        alert("CRITICAL ERROR: DATA WRITE ENGINES SECURE SYNC FAILURE");
+    });
+}
+
+function exitListEditorWorkspace() {
+    const editorWorkspace = document.getElementById('admin-list-editor-workspace');
+    if (editorWorkspace) {
+        editorWorkspace.style.setProperty('display', 'none', 'important');
+        editorWorkspace.classList.add('screen-hide');
+    }
+    
+    const adminView = document.getElementById('admin-settings-view');
+    if (adminView) {
+        adminView.classList.remove('screen-hide');
+        adminView.style.setProperty('display', 'block', 'important');
     }
 }

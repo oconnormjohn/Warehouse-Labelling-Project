@@ -265,6 +265,112 @@
 
     </div>
 </div>
+
+<!-- STAGE 5: FULLSCREEN INDEPENDENT MANAGEMENT LIST DATA ENTRY EDITOR -->
+<div id="admin-list-editor-workspace" class="screen-hide" style="display: none; background-color: #563380; width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; box-sizing: border-box; padding: 3vh 3vw; font-family: sans-serif; z-index: 99999999;">
+    
+    <!-- Top Configuration Header Banner Box -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3vh;">
+        <div style="background-color: #FFFFFF; color: #563380; font-weight: bold; font-size: 3vh; padding: 1vh 4vw; border-radius: 50px; text-transform: uppercase;" id="list-editor-title-banner">
+            EDITING: CATEGORY LIST
+        </div>
+        <div style="display: flex; gap: 1.5vw;">
+            <button onclick="saveActiveListEditorDataToDisk()" style="background-color: #4cd964; color: white; border: none; padding: 1.5vh 3vw; font-size: 2vh; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 0 #2d5437;">SAVE TO DISK</button>
+            <button onclick="exitListEditorWorkspace()" style="background-color: #C64B4B; color: white; border: none; padding: 1.5vh 3vw; font-size: 2vh; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 0 #953838;">CANCEL</button>
+        </div>
+    </div>
+
+    <!-- Balanced Dual Workspace Section View -->
+    <div style="display: grid; grid-template-columns: 45% 55%; gap: 2vw; height: 80vh; width: 100%; box-sizing: border-box;">
+        
+        <!-- COLUMN A: Scrollable Active List Form Entries Selection Matrix -->
+        <div id="list-editor-inputs-container" style="background-color: #FFF4C2; border: 4px solid #7851A9; border-radius: 12px; padding: 2vh 1.5vw; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5vh; box-sizing: border-box;">
+            <!-- Dynamic Form Input rows drop here seamlessly -->
+        </div>
+
+        <!-- COLUMN B: Dedicated Kiosk Embedded Virtual Typing Keyboard Panel -->
+        <div style="display: flex; flex-direction: column; justify-content: center; background-color: #e0e0e0; border-radius: 12px; padding: 2vh 1.5vw; box-sizing: border-box; height: 100%;">
+            <!-- Explicit Focused Field Input Display Bar -->
+            <input type="text" id="editor-virtual-keyboard-display" placeholder="TAP ANY FIELD TO BEGIN TYPING" readonly
+                   style="width: 100%; padding: 1.5vh 1vw; font-size: 3vh; font-weight: bold; text-align: center; border: 3px solid #7851A9; border-radius: 8px; margin-bottom: 2vh; background: #fff; text-transform: uppercase; box-sizing: border-box;">
+            
+            <!-- Complete Virtual Alpha-Numeric Layout Layout -->
+            <div id="editor-embedded-keyboard" style="display: flex; flex-direction: column; gap: 1vh; width: 100%;">
+                <!-- Row 1: Numbers -->
+                <div class="kbd-row">
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('1')">1</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('2')">2</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('3')">3</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('4')">4</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('5')">5</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('6')">6</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('7')">7</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('8')">8</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('9')">9</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('0')">0</button>
+                </div>
+                <!-- Row 2: QWERTY -->
+                <div class="kbd-row">
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('Q')">Q</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('W')">W</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('E')">E</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('R')">R</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('T')">T</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('Y')">Y</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('U')">U</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('I')">I</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('O')">O</button>
+                    <button type="button" class="kbd-key list-letter-key" onclick="pressEditorKey('P')">P</button>
+                </div>
+                <!-- Row 3: ASDF & ENTER -->
+                <div class="kbd-row">
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('A')">A</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('S')">S</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('D')">D</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('F')">F</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('G')">G</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('H')">H</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('J')">J</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('K')">K</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('L')">L</button>
+                    <button type="button" class="kbd-key" onclick="triggerEditorFieldCommit()" style="flex: 1.5; font-weight: bold; color: #000000; background: #ffffff;">ENTER</button>
+                </div>
+                <!-- Row 4: ZXCV, Dash, & Proportional iOS Backspace -->
+                <div class="kbd-row">
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('Z')">Z</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('X')">X</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('C')">C</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('V')">V</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('B')">B</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('N')">N</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('M')">M</button>
+                    <button type="button" class="kbd-key" onclick="pressEditorKey('-')" style="background: #ffffff;">-</button>
+                    
+                    <!-- Proportional White iOS Backspace Key Matching ENTER Dimensions Exactly -->
+                    <button type="button" class="kbd-key" onclick="backspaceEditorKey()" style="flex: 1.5; background: #ffffff; padding: 0; display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.6" style="width: 3.8vh; height: 3.8vh;">
+                            <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                            <line x1="18" y1="9" x2="12" y2="15"></line>
+                            <line x1="12" y1="9" x2="18" y2="15"></line>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Row 5: Visually Balanced Spacebar (Aligned from X to Dash) -->
+                <div class="kbd-row">
+                    <!-- Invisible Spacer matching Z key width on left edge -->
+                    <div style="flex: 1.0; visibility: hidden; pointer-events: none;"></div>
+                    
+                    <!-- Centered Proportional Spacebar with exact standard button typography -->
+                    <button type="button" class="kbd-key" onclick="pressEditorKey(' ')" style="flex: 7.0; background: #ffffff; font-size: 2.2vh; font-weight: bold; color: #000000; letter-spacing: 2px;">SPACE</button>
+                    
+                    <!-- Invisible Spacer matching Backspace key width on right edge -->
+                    <div style="flex: 1.5; visibility: hidden; pointer-events: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- FRONT GATE NUMERICAL PIN PAD SECURITY OVERLAY -->
 <div id="gatekeeper-pin-modal" class="modal-overlay modal-hide" style="z-index: 999999999;">
     <div class="modal-content" style="width: 45vw; max-width: 420px; padding: 3vh 2vw; border: 4px solid #7851A9; gap: 2vh;">
