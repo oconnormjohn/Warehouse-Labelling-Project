@@ -735,12 +735,12 @@ function pressQtyPadKey(digitString) {
     const qtyDisplay = document.getElementById('admin-qty-display');
     if (!qtyDisplay) return;
     
-    if (qtyDisplay.value === "1" && digitString !== "0") {
-        qtyDisplay.value = "";
-    } else if (qtyDisplay.value === "1" && digitString === "0") {
+    // Prevent starting a multi-digit number with a leading zero
+    if (qtyDisplay.value === "" && digitString === "0") {
         return;
     }
     
+    // Allow direct consecutive appending up to 2 physical numeric characters
     if (qtyDisplay.value.length < 2) {
         qtyDisplay.value += digitString;
     }
