@@ -972,199 +972,406 @@ function handleMonthGridCellClick(monthIndexInt) {
 /**
  * Fetches targeted array content from server storage and populates editor input forms
  */
+
+// Universal JSON Multi-Field State Trackers
+let currentListSchemaDataArray = []; // Stores live array of objects fetched from disk
+let activeFocusedFieldKey = "line1"; // Active sub-field typing path: 'line1', 'line2', 'image'
+
+/**
+ * Stage 5 Suite Launcher: Streams object schemas from python daemon and builds the playlist rows
+ */
 function launchListEditorWorkspace(listFileKey) {
     activeEditorFileKey = listFileKey;
     activeFocusedInputId = null;
-    isEditorShiftActive = false;
+    activeFocusedFieldKey = "line1";
+    currentListSchemaDataArray = [];
     
-    // Clear keyboard preview line clean
-    const displayBar = document.getElementById('editor-virtual-keyboard-display');
-    if (displayBar) displayBar.value = "";
+    // Reset our canvas preview display bars
+    document.getElementById('editor-input-line1').value = "";
+    document.getElementById('editor-input-line2').value = "";
+    document.getElementById('editor-input-image').value = "";
+    document.getElementById('editor-active-index-badge').value = "1";
     
-    document.getElementById('list-editor-title-banner').textContent = `EDITING: ${listFileKey.toUpperCase()} LIST`;
-    
-    // Determine target size boundary (35 slots for categories/home grid variants)
-    const totalInputSlotsCount = 35;
-    
+    // Synchronize title banner tracking header text
+    const visualHeaderTitles = {
+        'category': 'FOOD CATEGORY LABELS LIST',
+        'toiletries': 'TOILETRIES LABELS LIST',
+        'christmas': 'CHRISTMAS LABELS LIST',
+        'misc': 'MISCELLANEOUS LABELS LIST',
+        'dispatch': 'DISPATCH LABELS LIST'
+    };
+    document.getElementById('list-editor-title-banner').textContent = visualHeaderTitles[listFileKey] || "EDITING LABELS LIST";
+
+    // Set rigid length caps matching industrial device parameters
+    const maxBoundaryCaps = { 'category': 35, 'toiletries': 14, 'christmas': 14, 'misc': 7, 'dispatch': 48 };
+    const currentTargetListCap = maxBoundaryCaps[listFileKey] || 35;
+
     fetch(`http://localhost:8080/api/list?name=${listFileKey}`)
-        .then(response => response.json())
-        .then(dataArray => {
-            const container = document.getElementById('list-editor-inputs-container');
-            if (!container) return;
-            
-            let formsHTML = "";
-            for (let i = 0; i < totalInputSlotsCount; i++) {
-                const textValue = dataArray[i] || "";
-                formsHTML += `
-                <div style="display: flex; align-items: center; width: 100%; gap: 1vw; box-sizing: border-box;">
-                    <span style="font-weight: bold; color: #563380; font-size: 2.2vh; width: 3vw; text-align: right;">#${i + 1}</span>
-                    <input type="text" id="editor-field-slot-${i}" value="${textValue}" readonly
-                           onclick="setEditorInputFocus(${i})"
-                           style="flex: 1; padding: 1vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #7851A9; border-radius: 6px; background: #fff; cursor: pointer; text-transform: uppercase;">
-                </div>`;
+        .then(res => res.json())
+        .then(serverPayloadArray => {
+            // Guarantee perfect structural formatting and cushion padding up to max bounds
+            for (let i = 0; i < currentTargetListCap; i++) {
+                const item = serverPayloadArray[i] || {};
+                currentListSchemaDataArray.push({
+                    text1: (item.text1 || "").toString().trim().toUpperCase(),
+                    text2: (item.text2 || "").toString().trim().toUpperCase(),
+                    image_file: (item.image_file || (listFileKey === 'dispatch' ? "" : "blank.jpg")).toString().trim()
+                });
             }
-            container.innerHTML = formsHTML;
             
-            // Toggle application screens safely
+            // Re-render the right pane selection column seamlessly
+            rebuildPlaylistVisualStreamContainer();
+
+            // Toggle dashboard screen states safely
             document.getElementById('admin-settings-view').style.setProperty('display', 'none', 'important');
-            const editorWorkspace = document.getElementById('admin-list-editor-workspace');
-            editorWorkspace.classList.remove('screen-hide');
-            editorWorkspace.style.setProperty('display', 'block', 'important');
-            
-            // Default select the first slot instantly on load completion
+            const workspace = document.getElementById('admin-list-editor-workspace');
+            workspace.classList.remove('screen-hide');
+            workspace.style.setProperty('display', 'block', 'important');
+
+            // Default focus the very first index cell automatically on interface generation
             setEditorInputFocus(0);
         })
         .catch(err => {
-            console.error("❌ Failed to stream configuration list from background storage:", err);
-            alert("SYSTEM ERROR: UNABLE TO RETRIEVE TARGET DATA LIST");
+            console.error("❌ Failed to stream configuration database arrays:", err);
+            alert("CRITICAL ERROR: UNABLE TO ACCESS LIVE NETWORK TARGET STORAGE");
         });
 }
 
 /**
- * Shifts typing target paths onto selected form elements
+ * Re-orders visual highlights and maps objects contents to active canvas elements
  */
-function setEditorInputFocus(slotIndexInt) {
-    // Drop active focus borders on previous fields
-    if (activeFocusedInputId !== null) {
-        const pastField = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
-        if (pastField) pastField.style.borderColor = "#7851A9";
-    }
+function setEditorInputFocus(targetSlotIndex) {
+    if (targetSlotIndex < 0 || targetSlotIndex >= currentListSchemaDataArray.length) return;
+
+    // Drop historical focus outlines across all row items smoothly
+    const historicElements = document.querySelectorAll('.playlist-stream-row-btn');
+    historicElements.forEach(el => {
+        el.style.backgroundColor = "#FFFFFF";
+        el.style.borderColor = "#7851A9";
+    });
+
+    activeFocusedInputId = targetSlotIndex;
     
-    activeFocusedInputId = slotIndexInt;
-    const currentField = document.getElementById(`editor-field-slot-${slotIndexInt}`);
-    const displayBar = document.getElementById('editor-virtual-keyboard-display');
+    // Update numerical badge indicator tracking values
+    document.getElementById('editor-active-index-badge').value = targetSlotIndex + 1;
+
+    const targetObjectData = currentListSchemaDataArray[targetSlotIndex];
     
-    if (currentField && displayBar) {
-        currentField.style.borderColor = "#000000"; // Dark high-contrast active marker outline
-        displayBar.value = currentField.value.toUpperCase();
-        
-        // Auto scroll input container smoothly to track active line placement
-        currentField.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // Map current text metrics straight to editing inputs bars
+    document.getElementById('editor-input-line1').value = targetObjectData.text1;
+    document.getElementById('editor-input-line2').value = targetObjectData.text2;
+    document.getElementById('editor-input-image').value = targetObjectData.image_file;
+
+    // Set prominent highlighted focus on targeted row matching mock-up soft green
+    const activeRowElement = document.getElementById(`playlist-row-cell-id-${targetSlotIndex}`);
+    if (activeRowElement) {
+        activeRowElement.style.backgroundColor = "#a5d6a7";
+        activeRowElement.style.borderColor = "#000000";
+        activeRowElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+    // Default cursor positioning directly back onto text field 1 for speed
+    setEditorFieldFocus(activeFocusedFieldKey || 'line1');
+    refreshLiveWorkspaceCanvasPreviews();
 }
 
 /**
 /**
- * Streams characters directly into the active field selection buffer
+ * Focus Router: Shifts active styling and typing parameters onto selected canvas inputs
+ */
+function setEditorFieldFocus(fieldKey) {
+    activeFocusedFieldKey = fieldKey;
+    
+    // Clear active border halos from all three workspace entry fields
+    document.getElementById('editor-input-line1').style.borderColor = "#7851A9";
+    document.getElementById('editor-input-line2').style.borderColor = "#7851A9";
+    document.getElementById('editor-input-image').style.borderColor = "#7851A9";
+    
+    // Assign a dark high-contrast active marker outline to the selected field
+    const activeInputTarget = document.getElementById(`editor-input-${fieldKey}`);
+    if (activeInputTarget) {
+        activeInputTarget.style.borderColor = "#000000";
+    }
+}
+
+/**
+ * Character Stream Proxy: Appends touches from the digital keyboard into the active object buffer
  */
 function pressEditorKey(keyChar) {
-    if (activeFocusedInputId === null) return;
+    if (activeFocusedInputId === null || !activeFocusedFieldKey) return;
     
-    const targetInput = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
-    const displayBar = document.getElementById('editor-virtual-keyboard-display');
-    if (!targetInput || !displayBar) return;
+    const targetObject = currentListSchemaDataArray[activeFocusedInputId];
+    let currentValue = "";
+    let characterLimit = 10; // Standard text bounds constraint matching specifications
     
-    // Force uppercase conversion instantly
-    let resolvedChar = keyChar.toUpperCase();
-    
-    if (targetInput.value.length < 16) {
-        targetInput.value += resolvedChar;
-        displayBar.value = targetInput.value;
+    if (activeFocusedFieldKey === 'line1') {
+        currentValue = targetObject.text1;
+    } else if (activeFocusedFieldKey === 'line2') {
+        currentValue = targetObject.text2;
+    } else if (activeFocusedFieldKey === 'image') {
+        currentValue = targetObject.image_file;
+        characterLimit = 40; // Extended path name limit
     }
-}
-
-function backspaceEditorKey() {
-    if (activeFocusedInputId === null) return;
-    const targetInput = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
-    const displayBar = document.getElementById('editor-virtual-keyboard-display');
-    if (!targetInput || !displayBar) return;
     
-    if (targetInput.value.length > 0) {
-        targetInput.value = targetInput.value.slice(0, -1);
-        displayBar.value = targetInput.value.toUpperCase();
+    // Force uppercase filtering for text entry slots
+    let processedChar = (activeFocusedFieldKey === 'image') ? keyChar : keyChar.toUpperCase();
+    
+    if (currentValue.length < characterLimit) {
+        let updatedValue = currentValue + processedChar;
+        
+        // Save state changes directly inside the live memory object matrix array
+        if (activeFocusedFieldKey === 'line1') targetObject.text1 = updatedValue;
+        else if (activeFocusedFieldKey === 'line2') targetObject.text2 = updatedValue;
+        else if (activeFocusedFieldKey === 'image') targetObject.image_file = updatedValue;
+        
+        // Push string values visually onto active layout display inputs bars
+        document.getElementById(`editor-input-${activeFocusedFieldKey}`).value = updatedValue;
+        
+        // Update the scrollable playlist row lookups dynamically
+        synchronizePlaylistTextLineLabel(activeFocusedInputId);
+        refreshLiveWorkspaceCanvasPreviews();
     }
-}
-
-function toggleEditorShift() {
-    isEditorShiftActive = !isEditorShiftActive;
-    const shiftBtn = document.getElementById('editor-kbd-shift-btn');
-    const letters = document.querySelectorAll('.list-letter-key');
-    
-    if (shiftBtn) shiftBtn.style.backgroundColor = isEditorShiftActive ? '#4cd964' : '#90caf9';
-    letters.forEach(btn => {
-        btn.textContent = isEditorShiftActive ? btn.textContent.toUpperCase() : btn.textContent.toLowerCase();
-    });
 }
 
 /**
- * ENTER Key Action: Saves the current field directly to disk and advances to the next slot
+ * Backspace Processor: Remaps truncation requests down to active data strings
+ */
+function backspaceEditorKey() {
+    if (activeFocusedInputId === null || !activeFocusedFieldKey) return;
+    
+    const targetObject = currentListSchemaDataArray[activeFocusedInputId];
+    let currentValue = "";
+    
+    if (activeFocusedFieldKey === 'line1') currentValue = targetObject.text1;
+    else if (activeFocusedFieldKey === 'line2') currentValue = targetObject.text2;
+    else if (activeFocusedFieldKey === 'image') currentValue = targetObject.image_file;
+    
+    if (currentValue.length > 0) {
+        let updatedValue = currentValue.slice(0, -1);
+        
+        if (activeFocusedFieldKey === 'line1') targetObject.text1 = updatedValue;
+        else if (activeFocusedFieldKey === 'line2') targetObject.text2 = updatedValue;
+        else if (activeFocusedFieldKey === 'image') targetObject.image_file = updatedValue;
+        
+        document.getElementById(`editor-input-${activeFocusedFieldKey}`).value = updatedValue;
+        
+        synchronizePlaylistTextLineLabel(activeFocusedInputId);
+        refreshLiveWorkspaceCanvasPreviews();
+    }
+}
+
+/**
+ * Canvas Graphic Sync Controller: Drives real-time image asset previews inside the canvas
+ */
+function refreshLiveWorkspaceCanvasPreviews() {
+    if (activeFocusedInputId === null) return;
+    
+    const currentObject = currentListSchemaDataArray[activeFocusedInputId];
+    const frame1 = document.getElementById('editor-preview-graphic-frame-1');
+    const frame2 = document.getElementById('editor-preview-graphic-frame-2');
+    
+    if (!frame1) return;
+    
+    // Handle unassigned or blank filename references cleanly without snapping layout structures
+    let rawFilename = (currentObject.image_file || "").toString().trim();
+
+    if (rawFilename === "" || rawFilename.toUpperCase() === "BLANK.JPG" || activeEditorFileKey === 'dispatch') {
+        frame1.src = "label-graphics/blank.jpg";
+        if (frame2) frame2.style.display = "none";
+    } else {
+        // FIXED PATH INJECTION: Use the exact uppercase/lowercase filename typed in the box
+        frame1.src = `label-graphics/${rawFilename}`;
+        
+        // Graceful error recovery fallback loop if typing case mismatches happen on disk
+        frame1.onerror = function() {
+            // If the exact case fails, try checking a lowercase variant as a backup
+            if (frame1.src.indexOf(rawFilename) !== -1) {
+                frame1.src = `label-graphics/${rawFilename.toLowerCase()}`;
+            } else {
+                frame1.src = "label-graphics/blank.jpg";
+            }
+        };
+        
+        if (frame2) frame2.style.display = "none";
+    }
+}
+
+/**
+ * ENTER Key Controller: Commits structural adjustments and shifts focus dynamically
  */
 function triggerEditorFieldCommit() {
     if (activeFocusedInputId === null) return;
-    
-    const field = document.getElementById(`editor-field-slot-${activeFocusedInputId}`);
-    const currentValue = field ? field.value.trim().toUpperCase() : "";
-    
-    console.log(`💾 ENTER pressed: Automatically syncing field #${activeFocusedInputId + 1} ("${currentValue}") to disk.`);
-    
-    // Gathers the entire current array layout to ensure persistence tracking integrity
-    const currentDataArray = [];
-    const totalSlotsCount = 35;
-    
-    for (let i = 0; i < totalSlotsCount; i++) {
-        const currentField = document.getElementById(`editor-field-slot-${i}`);
-        currentDataArray.push(currentField ? currentField.value.trim().toUpperCase() : "");
-    }
-    
-    // Direct selective background stream write operation
-    fetch(`http://localhost:8080/api/list/save?name=${activeEditorFileKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(currentDataArray)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Disk stream failed");
-        return response.json();
-    })
-    .then(data => {
-        console.log(`🎉 Field #${activeFocusedInputId + 1} synced successfully.`);
-        
-        // Calculate the next field index
-        const nextSlotIndex = activeFocusedInputId + 1;
-        
-        if (nextSlotIndex < totalSlotsCount) {
-            // Shift screen focus down to the next row slot automatically
-            setEditorInputFocus(nextSlotIndex);
+
+    if (activeFocusedFieldKey === 'line1') {
+        // Automatically jump down to Line 2 for fast entry
+        setEditorFieldFocus('line2');
+    } else if (activeFocusedFieldKey === 'line2') {
+        // Jump down to the Image field layout track
+        setEditorFieldFocus('image');
+    } else {
+        // Reached the end of the current row: Advance focus to the NEXT list item row
+        const nextRowIndex = activeFocusedInputId + 1;
+        if (nextRowIndex < currentListSchemaDataArray.length) {
+            setEditorInputFocus(nextRowIndex);
+            setEditorFieldFocus('line1');
         } else {
-            console.log("🏁 Reached the end of the input configuration array list matrix.");
-            // Optional wrap around back to first slot if desired, currently stays on last item
+            console.log("🏁 Reached the end of the editable pre-defined list array.");
         }
-    })
-    .catch(err => {
-        console.error("❌ Background individual field auto-save failure:", err);
-    });
+    }
 }
 
 /**
- * Gathers inputs matrix elements and posts flat data arrays to backend Python storage
+ * Visual Assembler: Builds the scrollable right-hand playlist pane with explicit index offsets
+ */
+function rebuildPlaylistVisualStreamContainer() {
+    const container = document.getElementById('list-editor-inputs-container');
+    if (!container) return;
+
+    let playlistHTML = "";
+    currentListSchemaDataArray.forEach((item, index) => {
+        // Concatenate Line 1 and Line 2 with a single space as specified in requirements
+        let labelDisplaySummary = `${item.text1} ${item.text2}`.trim();
+        if (labelDisplaySummary === "") labelDisplaySummary = "----- EMPTY SLOT -----";
+
+        playlistHTML += `
+        <button id="playlist-row-cell-id-${index}" class="playlist-stream-row-btn" onclick="setEditorInputFocus(${index})"
+                style="display: flex; align-items: center; width: 100%; gap: 1vw; box-sizing: border-box; background-color: #FFFFFF; border: 2px solid #7851A9; border-radius: 8px; padding: 1.2vh 1vw; margin-bottom: 0.2vh; cursor: pointer; text-align: left; outline: none; transition: none;">
+            <span style="font-weight: 900; color: #563380; font-size: 2.2vh; min-width: 2.5vw; text-align: right;">#${index + 1}</span>
+            <span id="playlist-text-label-node-${index}" style="font-weight: bold; color: #000000; font-size: 2.2vh; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">${labelDisplaySummary}</span>
+        </button>`;
+    });
+
+    container.innerHTML = playlistHTML;
+}
+
+/**
+ * Text Synchronizer: Fast local update wrapper to refresh labels during live typing
+ */
+function synchronizePlaylistTextLineLabel(index) {
+    const textLabelNode = document.getElementById(`playlist-text-label-node-${index}`);
+    if (!textLabelNode) return;
+
+    const item = currentListSchemaDataArray[index];
+    let combinedSummary = `${item.text1} ${item.text2}`.trim();
+    if (combinedSummary === "") combinedSummary = "----- EMPTY SLOT -----";
+
+    textLabelNode.textContent = combinedSummary.toUpperCase();
+}
+
+/**
+ * Playlist Shifter: Handles MOVE UP and MOVE DOWN sequential array swapping
+ */
+function executePlaylistItemShift(directionString) {
+    if (activeFocusedInputId === null) return;
+
+    const targetedSourceIndex = activeFocusedInputId;
+    let targetedDestinationIndex = (directionString === 'UP') ? targetedSourceIndex - 1 : targetedSourceIndex + 1;
+
+    // Boundary confirmation check
+    if (targetedDestinationIndex < 0 || targetedDestinationIndex >= currentListSchemaDataArray.length) {
+        console.log("🔒 Boundary blocked: Repositioning request falls outside active list range.");
+        return;
+    }
+
+    // Execute implicit array swap based on index location mapping
+    let temporaryHolderObject = currentListSchemaDataArray[targetedSourceIndex];
+    currentListSchemaDataArray[targetedSourceIndex] = currentListSchemaDataArray[targetedDestinationIndex];
+    currentListSchemaDataArray[targetedDestinationIndex] = temporaryHolderObject;
+
+    // Complete re-render and re-focus on the new destination index matching mock-up aesthetics
+    rebuildPlaylistVisualStreamContainer();
+    setEditorInputFocus(targetedDestinationIndex);
+}
+
+/**
+ * Playlist Insertion: Splices a fresh object row into the array and shifts subsequent items down
+ */
+function executePlaylistItemInsert() {
+    if (activeFocusedInputId === null) return;
+
+    const targetInsertIndex = activeFocusedInputId;
+    const finalSlotIndex = currentListSchemaDataArray.length - 1;
+    const lastItemInList = currentListSchemaDataArray[finalSlotIndex];
+
+    // Boundary safety gate check: confirm there is room in the locked length criteria
+    const isLastSlotEmpty = (lastItemInList.text1 === "" && lastItemInList.text2 === "");
+
+    if (!isLastSlotEmpty) {
+        alert("LIMIT REACHED: List boundaries are full. Delete an empty slot or item from the end before inserting.");
+        return;
+    }
+
+    // Safely pop off the empty trailing element to hold array size constraints intact
+    currentListSchemaDataArray.pop();
+
+    // Prepare a clean structured blank data row object format profile
+    const freshBlankObject = {
+        text1: "",
+        text2: "",
+        image_file: (activeEditorFileKey === 'dispatch') ? "" : "blank.jpg"
+    };
+
+    // Splice item cleanly into the specified playlist location row tracker path
+    currentListSchemaDataArray.splice(targetInsertIndex, 0, freshBlankObject);
+
+    // Refresh UI layout elements and lock selection directly onto the newly inserted row
+    rebuildPlaylistVisualStreamContainer();
+    setEditorInputFocus(targetInsertIndex);
+}
+
+/**
+ * Playlist Deletion: Truncates data objects from the stream and re-appends empty structural cushions
+ */
+function executePlaylistItemDelete() {
+    if (activeFocusedInputId === null) return;
+
+    const targetDeleteIndex = activeFocusedInputId;
+
+    // Splice out the active row entry structure path
+    currentListSchemaDataArray.splice(targetDeleteIndex, 1);
+
+    // Dynamic balancing cushion: push an explicit blank placeholder directly onto the end of the array
+    const structuralBlankFallback = {
+        text1: "",
+        text2: "",
+        image_file: (activeEditorFileKey === 'dispatch') ? "" : "blank.jpg"
+    };
+    currentListSchemaDataArray.push(structuralBlankFallback);
+
+    // Refresh UI layouts completely
+    rebuildPlaylistVisualStreamContainer();
+
+    // Adjust focus safety index paths gracefully so selection doesn't drop off bounds
+    let adjustedFocusIndex = targetDeleteIndex;
+    if (adjustedFocusIndex >= currentListSchemaDataArray.length) {
+        adjustedFocusIndex = currentListSchemaDataArray.length - 1;
+    }
+
+    setEditorInputFocus(adjustedFocusIndex);
+}
+
+/**
+ * Master API Sync: Posts multi-field structured array layout configuration files onto python disk
  */
 function saveActiveListEditorDataToDisk() {
-    const dataPayloadArray = [];
-    const totalSlotsCount = 35;
-    
-    for (let i = 0; i < totalSlotsCount; i++) {
-        const field = document.getElementById(`editor-field-slot-${i}`);
-        // Trim whitespace and force clean string conversions
-        const valueString = field ? field.value.trim().toUpperCase() : "";
-        dataPayloadArray.push(valueString);
-    }
-    
+    if (!activeEditorFileKey) return;
+
     fetch(`http://localhost:8080/api/list/save?name=${activeEditorFileKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataPayloadArray)
+        body: JSON.stringify(currentListSchemaDataArray)
     })
     .then(response => {
-        if (!response.ok) throw new Error("Network disk streaming connection failure");
+        if (!response.ok) throw new Error("Disk stream channel transmission timeout failure");
         return response.json();
     })
-    .then(data => {
-        console.log(`💾 Configuration sync success for [${activeEditorFileKey}]:`, data);
+    .then(syncDataConfirmation => {
+        console.log(`💾 Data-Driven array sync successful for [${activeEditorFileKey}]:`, syncDataConfirmation);
         exitListEditorWorkspace();
     })
     .catch(err => {
-        console.error("❌ Failed to save lists data configurations array onto server disk:", err);
-        alert("CRITICAL ERROR: DATA WRITE ENGINES SECURE SYNC FAILURE");
+        console.error("❌ Critical server write sync error:", err);
+        alert("CRITICAL STORAGE SYSTEM ERROR: FIELD DATA WRITE FAILURE STACKED");
     });
 }
 
@@ -1174,7 +1381,6 @@ function exitListEditorWorkspace() {
         editorWorkspace.style.setProperty('display', 'none', 'important');
         editorWorkspace.classList.add('screen-hide');
     }
-    
     const adminView = document.getElementById('admin-settings-view');
     if (adminView) {
         adminView.classList.remove('screen-hide');

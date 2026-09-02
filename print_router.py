@@ -26,7 +26,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
     
     # Unified Web Asset Router (HTML, CSS, JS, and graphics folders)
     def do_GET(self):
-        # API Intercept Layer: Check if frontend is reading a list file
+        # API Intercept Layer: Check if frontend is reading a multi-field list file
         if self.path.startswith('/api/list?name='):
             list_key = self.path.split('name=')[1].split('&')[0].lower()
             target_path = LIST_FILES_POOL.get(list_key)
@@ -37,7 +37,10 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(b"Invalid list file resource requested.")
                 return
                 
-            # If the file does not exist yet on disk, return a clean empty array fallback
+            # Define structural schema capacities matching list length specifications
+            max_boundary_caps = { 'category': 35, 'toiletries': 14, 'christmas': 14, 'misc': 7, 'dispatch': 48 }
+            current_target_cap = max_boundary_caps.get(list_key, 35)
+            
             data_payload = []
             if os.path.exists(target_path):
                 try:
@@ -45,6 +48,16 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                         data_payload = json.load(f)
                 except Exception:
                     data_payload = []
+            
+            # If the file on disk is completely fresh or raw text format, pad it out seamlessly with multi-field fallback objects
+            if not isinstance(data_payload, list) or len(data_payload) == 0:
+                data_payload = []
+                for _ in range(current_target_cap):
+                    data_payload.append({
+                        "text1": "",
+                        "text2": "",
+                        "image_file": "" if list_key == 'dispatch' else "blank.jpg"
+                    })
                     
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -54,8 +67,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             return
 
         clean_path = self.path.split('?')[0]
-
-        
+      
         # Default empty root path requests straight to your index file
         if clean_path == '/' or clean_path == '':
             clean_path = '/index.html'

@@ -777,3 +777,84 @@ body, .dashboard-wrapper {
     filter: saturate(20%) brightness(110%) !important; /* Matches home screen style.css line 444 exactly */
     color: #8E8E8E !important;                        /* Matches home screen style.css line 449 exactly */
 }
+
+/* ==========================================================================
+   STAGE 5: THREE-PANE SCROLLBAR AND ROW BUTTON HOOKS
+   ========================================================================== */
+
+/* High-contrast touch target styling for playlist row buttons */
+.playlist-stream-row-btn {
+    box-shadow: 0px 3px 0px #563380;
+    position: relative;
+    top: 0;
+}
+
+.playlist-stream-row-btn:active {
+    top: 2px !important;
+    box-shadow: 0px 1px 0px #563380 !important;
+}
+
+/* Industrial uniform scrollbar tracking path for touch drag accuracy */
+#list-editor-inputs-container::-webkit-scrollbar {
+    width: 1.2vw;
+}
+
+#list-editor-inputs-container::-webkit-scrollbar-track {
+    background: #FFF4C2;
+    border-radius: 8px;
+}
+
+#list-editor-inputs-container::-webkit-scrollbar-thumb {
+    background: #7851A9;
+    border: 3px solid #FFF4C2;
+    border-radius: 8px;
+}
+
+/* ==========================================================================
+   STAGE 5: SPECIFIC WORKSPACE CANVAS PILLAR CORRECTIONS
+   ========================================================================== */
+
+/* Fix the dashed container box to display as a subtle, recessed background frame */
+#editor-preview-pane-container-layer {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    border: 3px dashed rgba(255, 255, 255, 0.4) !important;
+    width: 100% !important;
+    min-height: 14vh !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 8px !important;
+}
+
+/* Ensure the live image frames don't inherit default broken container blocks */
+#editor-preview-pane-container-layer img {
+    background-color: transparent !important;
+    max-height: 11vh !important;
+    max-width: 45% !important;
+    object-fit: contain !important;
+    border: none !important;
+}
+
+/* Restore the specific fill colors for the green SAVE and red CANCEL action buttons */
+#editor-workspace-green-canvas button[onclick*="saveActiveListEditorDataToDisk"] {
+    background-color: #4cd964 !important;
+    color: #FFFFFF !important;
+}
+
+#editor-workspace-green-canvas button[onclick*="exitListEditorWorkspace"] {
+    background-color: #C64B4B !important;
+    color: #FFFFFF !important;
+}
+
+/* Ensure core borders and 3D shadows are retained across canvas controls */
+#editor-workspace-green-canvas button {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 4px 0 #000000 !important;
+    position: relative;
+    top: 0;
+}
+
+#editor-workspace-green-canvas button:active {
+    top: 2px !important;
+    box-shadow: 0 2px 0 #000000 !important;
+}

@@ -1,37 +1,177 @@
 [
-  "BABY",
-  "BEANS",
-  "COFFEE",
-  "BISCUITS",
-  "WILL THIS SAVE",
-  "",
-  "",
-  "SAVE ON ENTER",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  ""
+  {
+    "text1": "BABY FOOD",
+    "text2": "",
+    "image_file": "BABY.JPG"
+  },
+  {
+    "text1": "BEANS",
+    "text2": "",
+    "image_file": "BEANS.JPG"
+  },
+  {
+    "text1": "BISCUITS",
+    "text2": "",
+    "image_file": "bISCUITS.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
+  }
 ]
