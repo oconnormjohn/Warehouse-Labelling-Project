@@ -811,50 +811,49 @@ body, .dashboard-wrapper {
 }
 
 /* ==========================================================================
-   STAGE 5: SPECIFIC WORKSPACE CANVAS PILLAR CORRECTIONS
+   STAGE 5: REFINED TRAY CANVAS ARCHITECTURE OVERRIDES
    ========================================================================== */
 
-/* Fix the dashed container box to display as a subtle, recessed background frame */
-#editor-preview-pane-container-layer {
-    background-color: rgba(0, 0, 0, 0.15) !important;
-    border: 3px dashed rgba(255, 255, 255, 0.4) !important;
+/* Remove outer borders and roundings from the green tray canvas panel wrapper explicitly */
+#editor-workspace-green-canvas {
+    background-color: #3ea055 !important;
+    border: none !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
     width: 100% !important;
-    min-height: 14vh !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    border-radius: 8px !important;
 }
 
-/* Ensure the live image frames don't inherit default broken container blocks */
+/* Ensure data fields feature high contrast text and remove default blue focus margins */
+#editor-workspace-green-canvas input[type="text"] {
+    font-family: Arial, sans-serif !important;
+    font-weight: bold !important;
+    color: #000000 !important;
+    outline: none !important;
+}
+
+/* Clean transparent canvas image frame metrics */
+#editor-preview-pane-container-layer {
+    background-color: transparent !important;
+    box-sizing: border-box !important;
+}
+
 #editor-preview-pane-container-layer img {
     background-color: transparent !important;
-    max-height: 11vh !important;
-    max-width: 45% !important;
-    object-fit: contain !important;
     border: none !important;
 }
 
-/* Restore the specific fill colors for the green SAVE and red CANCEL action buttons */
-#editor-workspace-green-canvas button[onclick*="saveActiveListEditorDataToDisk"] {
-    background-color: #4cd964 !important;
-    color: #FFFFFF !important;
+/* ==========================================================================
+   PURE VIRTUAL CARET TERMINAL CURSOR PULSE ENGINE
+   ========================================================================== */
+
+@keyframes virtualCaretFlashAnimation {
+    0%, 100% { border-right-color: transparent; }
+    50% { border-right-color: #000000; }
 }
 
-#editor-workspace-green-canvas button[onclick*="exitListEditorWorkspace"] {
-    background-color: #C64B4B !important;
-    color: #FFFFFF !important;
-}
-
-/* Ensure core borders and 3D shadows are retained across canvas controls */
-#editor-workspace-green-canvas button {
-    border: 3px solid #000000 !important;
-    box-shadow: 0 4px 0 #000000 !important;
-    position: relative;
-    top: 0;
-}
-
-#editor-workspace-green-canvas button:active {
-    top: 2px !important;
-    box-shadow: 0 2px 0 #000000 !important;
+/* Attach the blinking caret indicator line strictly onto the selected text entry boxes */
+#editor-workspace-green-canvas input[type="text"][style*="background-color: rgb(165, 214, 167)"],
+#editor-workspace-green-canvas input[type="text"][style*="background-color: #a5d6a7"] {
+    border-right: 4px solid #000000 !important;
+    animation: virtualCaretFlashAnimation 1s step-end infinite !important;
 }
