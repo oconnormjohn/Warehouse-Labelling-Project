@@ -1,37 +1,72 @@
 [
-  "SHAMPOO",
-  "DEODORANT",
-  "TOOTH PASTE",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  ""
+  {
+    "text1": "BUBBLE",
+    "text2": "BATH",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "CONDTIONE",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "SHAMPOO",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "SHOWER GEL",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "SOAP",
+    "text2": "HAND WASH",
+    "image_file": "SOAP.PNG"
+  },
+  {
+    "text1": "TOOTHBRUSH",
+    "text2": "",
+    "image_file": "TOOTHBRUSH.PNG"
+  },
+  {
+    "text1": "TOOTHPASTE",
+    "text2": "",
+    "image_file": "TOOTHPASTE.PNG"
+  },
+  {
+    "text1": "TOILETRIES",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  }
 ]
