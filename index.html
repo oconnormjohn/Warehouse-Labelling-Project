@@ -267,7 +267,7 @@
 </div>
 
 <!-- STAGE 5: FULLSCREEN THREE-PANE INDEPENDENT ADMINISTRATIVE MANAGEMENT LIST EDITING SUITE -->
-<div id="admin-list-editor-workspace" class="screen-hide" style="display: none; background-color: #563380; width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; box-sizing: border-box; padding: 2vh 2vw; font-family: sans-serif; z-index: 999999999;">
+<div id="admin-list-editor-workspace" class="screen-hide" style="display: none; background-color: #563380; width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; box-sizing: border-box; padding: 2vh 2vw; font-family: sans-serif; z-index: 999999999; pointer-events: auto;">
     
     <!-- MASTER DATA DRIVEN THREE-PANE STREAM GRID -->
     <div style="display: grid; grid-template-columns: 52% 48%; gap: 2vw; height: 96vh; width: 100%; box-sizing: border-box;">
@@ -277,49 +277,42 @@
         <!-- ======================================================================= -->
         <div style="display: flex; flex-direction: column; gap: 2vh; height: 100%; box-sizing: border-box;">
             
-            <!-- MASTER GREEN TRAY WRAPPER (RESTORED SEPARATOR HOOK) -->
+            <!-- MASTER GREEN TRAY WRAPPER -->
             <div id="editor-workspace-green-canvas" style="background-color: #3ea055; width: 100%; padding: 2vh 2vw; box-sizing: border-box; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 2.5vh;">
                 
                 <!-- TOP HEADER CONTROL TRACK: SPACED MODULE DESIGN -->
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
-                    <!-- Label Number Selector Box Group -->
                     <div style="display: flex; align-items: center; gap: 0.8vw;">
                         <span style="color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif;">Label No.</span>
                         <input type="text" id="editor-active-index-badge" value="1" readonly
                                style="width: 3.5vw; padding: 0.5vh 0; font-size: 2.2vh; font-weight: bold; text-align: center; border: 2px solid #000000; border-radius: 4px; background: #FFFFFF; color: #000000;">
                     </div>
-                    <!-- Management Save & Exit / Cancel Actions Split Grid -->
                     <div style="display: flex; gap: 1.5vw; align-items: center;">
                         <button onclick="saveActiveListEditorDataToDisk()" style="background-color: #4cd964; color: #000000; border: 2px solid #000000; border-radius: 6px; padding: 1.2vh 1.8vw; font-size: 2vh; font-weight: bold; cursor: pointer; text-transform: uppercase;">SAVE & EXIT</button>
                         <button onclick="exitListEditorWorkspace()" style="background-color: #C64B4B; color: #FFFFFF; border: 2px solid #000000; border-radius: 6px; padding: 1.2vh 1.8vw; font-size: 2vh; font-weight: bold; cursor: pointer; text-transform: uppercase;">EXIT WITHOUT SAVE</button>
                     </div>
                 </div>
 
-                <!-- FLEX DATA ENTRY FORM LOOP (SHIFTS THE REPRESENTATIVE CARD TO THE RIGHT) -->
+                <!-- FLEX DATA ENTRY FORM LOOP -->
                 <div style="display: flex; flex-direction: column; gap: 2.2vh; width: 100%; padding-left: 10vw; box-sizing: border-box;">
-                    
-                    <!-- LINE 1 ENTRY ROW CONTAINER -->
                     <div style="display: flex; align-items: center; width: 100%; position: relative;">
                         <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Line 1 text</span>
                         <input type="text" id="editor-input-line1" readonly onclick="setEditorFieldFocus('line1')"
                                style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top-left-radius: 12px; border-top-right-radius: 12px; text-transform: uppercase; box-sizing: border-box; text-align: center;">
                     </div>
 
-                    <!-- LINE 2 ENTRY ROW CONTAINER -->
                     <div style="display: flex; align-items: center; width: 100%; position: relative;">
                         <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Line 2 text</span>
                         <input type="text" id="editor-input-line2" readonly onclick="setEditorFieldFocus('line2')"
                                style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top: none; text-transform: uppercase; box-sizing: border-box; text-align: center;">
                     </div>
 
-                    <!-- IMAGE FILENAME ENTRY ROW CONTAINER -->
                     <div style="display: flex; align-items: center; width: 100%; position: relative;">
                         <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Image filename</span>
                         <input type="text" id="editor-input-image" readonly onclick="setEditorFieldFocus('image')"
                                style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top: none; text-transform: uppercase; box-sizing: border-box; text-align: center;">
                     </div>
 
-                    <!-- IMAGE PREVIEW CONTAINER LAYER ROW -->
                     <div style="display: flex; align-items: center; width: 100%; position: relative;">
                         <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Image preview</span>
                         <div id="editor-preview-pane-container-layer" style="width: 100%; display: flex; justify-content: center; align-items: center; border: 2px solid #000000; border-top: none; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; padding: 1.5vh 1vw; box-sizing: border-box; min-height: 14vh;">
@@ -327,69 +320,7 @@
                             <img id="editor-preview-graphic-frame-2" src="label-graphics/blank.jpg" alt="Secondary Preview" style="max-height: 12vh; max-width: 45%; object-fit: contain; display: none;">
                         </div>
                     </div>
-
                 </div>
-
-            </div>
-
-        <!-- ======================================================================= -->
-        <!-- LEFT COLUMN PILLAR: TRAY CANVAS & EMBEDDED VIRTUAL TOUCH KEYBOARD       -->
-        <!-- ======================================================================= -->
-        <div style="display: flex; flex-direction: column; gap: 2vh; height: 100%; box-sizing: border-box;">
-            
-            <!-- MASTER GREEN TRAY WRAPPER (RESTORED SEPARATOR HOOK) -->
-            <div id="editor-workspace-green-canvas" style="background-color: #3ea055; width: 100%; padding: 2vh 2vw; box-sizing: border-box; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 2.5vh;">
-                
-                <!-- TOP HEADER CONTROL TRACK: SPACED MODULE DESIGN -->
-                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
-                    <!-- Label Number Selector Box Group -->
-                    <div style="display: flex; align-items: center; gap: 0.8vw;">
-                        <span style="color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif;">Label No.</span>
-                        <input type="text" id="editor-active-index-badge" value="1" readonly
-                               style="width: 3.5vw; padding: 0.5vh 0; font-size: 2.2vh; font-weight: bold; text-align: center; border: 2px solid #000000; border-radius: 4px; background: #FFFFFF; color: #000000;">
-                    </div>
-                    <!-- Management Save & Exit / Cancel Actions Split Grid -->
-                    <div style="display: flex; gap: 1.5vw; align-items: center;">
-                        <button onclick="saveActiveListEditorDataToDisk()" style="background-color: #4cd964; color: #000000; border: 2px solid #000000; border-radius: 6px; padding: 1.2vh 1.8vw; font-size: 2vh; font-weight: bold; cursor: pointer; text-transform: uppercase;">SAVE & EXIT</button>
-                        <button onclick="exitListEditorWorkspace()" style="background-color: #C64B4B; color: #FFFFFF; border: 2px solid #000000; border-radius: 6px; padding: 1.2vh 1.8vw; font-size: 2vh; font-weight: bold; cursor: pointer; text-transform: uppercase;">EXIT WITHOUT SAVE</button>
-                    </div>
-                </div>
-
-                <!-- FLEX DATA ENTRY FORM LOOP (SHIFTS THE REPRESENTATIVE CARD TO THE RIGHT) -->
-                <div style="display: flex; flex-direction: column; gap: 2.2vh; width: 100%; padding-left: 10vw; box-sizing: border-box;">
-                    
-                    <!-- LINE 1 ENTRY ROW CONTAINER -->
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Line 1 text</span>
-                        <input type="text" id="editor-input-line1" readonly onclick="setEditorFieldFocus('line1')"
-                               style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top-left-radius: 12px; border-top-right-radius: 12px; text-transform: uppercase; box-sizing: border-box; text-align: center;">
-                    </div>
-
-                    <!-- LINE 2 ENTRY ROW CONTAINER -->
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Line 2 text</span>
-                        <input type="text" id="editor-input-line2" readonly onclick="setEditorFieldFocus('line2')"
-                               style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top: none; text-transform: uppercase; box-sizing: border-box; text-align: center;">
-                    </div>
-
-                    <!-- IMAGE FILENAME ENTRY ROW CONTAINER -->
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Image filename</span>
-                        <input type="text" id="editor-input-image" readonly onclick="setEditorFieldFocus('image')"
-                               style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top: none; text-transform: uppercase; box-sizing: border-box; text-align: center;">
-                    </div>
-
-                    <!-- IMAGE PREVIEW CONTAINER LAYER ROW -->
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Image preview</span>
-                        <div id="editor-preview-pane-container-layer" style="width: 100%; display: flex; justify-content: center; align-items: center; border: 2px solid #000000; border-top: none; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; padding: 1.5vh 1vw; box-sizing: border-box; min-height: 14vh;">
-                            <img id="editor-preview-graphic-frame-1" src="label-graphics/blank.jpg" alt="Preview Frame" style="max-height: 12vh; max-width: 90%; object-fit: contain;">
-                            <img id="editor-preview-graphic-frame-2" src="label-graphics/blank.jpg" alt="Secondary Preview" style="max-height: 12vh; max-width: 45%; object-fit: contain; display: none;">
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
 
             <!-- DEDICATED KIOSK HIGH CONTRAST EMBEDDED TYPING PANEL -->
@@ -433,7 +364,7 @@
                     <button type="button" class="kbd-key" onclick="pressEditorKey('L')">L</button>
                     <button type="button" class="kbd-key" onclick="triggerEditorFieldCommit()" style="flex: 1.5; background: #FFFFFF; font-weight: bold;">ENTER</button>
                 </div>
-                <!-- Row 4: ZXCV, Dash, Dot, & iOS Backspace -->
+                <!-- Row 4: ZXCV, Dash, Dot, & Backspace -->
                 <div class="kbd-row">
                     <button type="button" class="kbd-key" onclick="pressEditorKey('Z')">Z</button>
                     <button type="button" class="kbd-key" onclick="pressEditorKey('X')">X</button>
@@ -460,6 +391,81 @@
                 </div>
             </div>
         </div>
+
+        <!-- ======================================================================= -->
+        <!-- RIGHT COLUMN PILLAR: MASTER PLAYLIST PANEL STREAM WITH ACTIVE ARROWS   -->
+        <!-- ======================================================================= -->
+        <div style="display: flex; flex-direction: column; gap: 1.5vh; height: 100%; box-sizing: border-box; overflow: hidden;">
+            
+            <!-- Header Title Element Box Tracking Active Selection Type -->
+            <div style="display: flex; justify-content: center; width: 100%; flex-shrink: 0;">
+                <div id="list-editor-title-banner" style="background-color: #FFFFFF; color: #563380; font-weight: 900; font-size: 2.8vh; padding: 0.8vh 4vw; border-radius: 50px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 1px; border: 3px solid #000000; text-align: center; min-width: 70%;">
+                    LABELS LIST
+                </div>
+            </div>
+
+            <!-- CORE PLAYLIST CONTROL WORKSPACE GRID -->
+            <div style="display: grid; grid-template-columns: 18% 82%; width: 100%; flex: 1; box-sizing: border-box; overflow: hidden; background-color: #FFF4C2; border: 4px solid #7851A9; border-radius: 16px; padding: 2vh 1vw;">
+                
+                <!-- CONTEXTUAL DIRECTIONAL SORTING PANEL (4-WAY MATRIX WITH GENEROUS SPACING) -->
+                <div id="editor-playlist-sorting-controls-track" style="display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; border-right: 2px dashed rgba(120, 81, 169, 0.3); padding-right: 0.8vw; height: 100%; box-sizing: border-box;">
+                    
+                    <!-- MOVE UP BUTTON -->
+                    <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                        <button onclick="executePlaylistItemShift('UP')" style="background: none; border: none; padding: 0; cursor: pointer; outline: none; display: flex; justify-content: center; width: 100%;">
+                            <svg viewBox="0 0 24 24" style="width: 5.5vh; height: 5.5vh; filter: drop-shadow(0px 3px 0px #aa7e2f);">
+                                <path d="M12 4l-9 9h6v7h6v-7h6z" fill="#E3A83F" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <span style="font-family: Arial, sans-serif; font-size: 1.1vh; font-weight: 900; color: #000000; margin-top: 0.5vh; text-align: center; text-transform: uppercase;">MOVE UP</span>
+                    </div>
+
+                    <!-- INSERT BUTTON -->
+                    <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                        <button onclick="executePlaylistItemInsert()" style="background: none; border: none; padding: 0; cursor: pointer; outline: none; display: flex; justify-content: center; width: 100%;">
+                            <svg viewBox="0 0 24 24" style="width: 5.5vh; height: 5.5vh; filter: drop-shadow(0px 3px 0px #2d5437);">
+                                <circle cx="12" cy="12" r="10" fill="#4A8B5B" stroke="#000000" stroke-width="1.5"/>
+                                <line x1="12" y1="7" x2="12" y2="17" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="7" y1="12" x2="17" y2="12" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                        <span style="font-family: Arial, sans-serif; font-size: 1.1vh; font-weight: 900; color: #000000; margin-top: 0.5vh; text-align: center; text-transform: uppercase;">INSERT</span>
+                    </div>
+
+                    <!-- DELETE BUTTON -->
+                    <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                        <button onclick="executePlaylistItemDelete()" style="background: none; border: none; padding: 0; cursor: pointer; outline: none; display: flex; justify-content: center; width: 100%;">
+                            <svg viewBox="0 0 24 24" style="width: 5.5vh; height: 5.5vh; filter: drop-shadow(0px 3px 0px #953838);">
+                                <circle cx="12" cy="12" r="10" fill="#C64B4B" stroke="#000000" stroke-width="1.5"/>
+                                <line x1="7" y1="12" x2="17" y2="12" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                        <span style="font-family: Arial, sans-serif; font-size: 1.1vh; font-weight: 900; color: #000000; margin-top: 0.5vh; text-align: center; text-transform: uppercase;">DELETE</span>
+                    </div>
+
+                    <!-- MOVE DOWN BUTTON -->
+                    <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                        <button onclick="executePlaylistItemShift('DOWN')" style="background: none; border: none; padding: 0; cursor: pointer; outline: none; display: flex; justify-content: center; width: 100%;">
+                            <svg viewBox="0 0 24 24" style="width: 5.5vh; height: 5.5vh; filter: drop-shadow(0px 3px 0px #aa7e2f);">
+                                <path d="M12 20l9-9h-6v-7h-6v7h-6z" fill="#E3A83F" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <span style="font-family: Arial, sans-serif; font-size: 1.1vh; font-weight: 900; color: #000000; margin-top: 0.5vh; text-align: center; text-transform: uppercase;">MOVE DOWN</span>
+                    </div>
+
+                </div>
+
+                <!-- SCROLLABLE LIST SELECTION STREAM -->
+                <div id="list-editor-inputs-container" style="padding-left: 1vw; overflow-y: auto; display: flex; flex-direction: column; gap: 1.2vh; height: 100%; box-sizing: border-box;">
+                    <!-- Dynamic multi-field items render here seamlessly -->
+                </div>
+
+            </div> <!-- Closes CORE PLAYLIST CONTROL WORKSPACE GRID -->
+
+        </div> <!-- Closes RIGHT COLUMN PILLAR -->
+
+    </div> <!-- Closes MASTER DATA DRIVEN THREE-PANE STREAM GRID -->
+</div> <!-- Closes id="admin-list-editor-workspace" -->
 
         <!-- ======================================================================= -->
         <!-- RIGHT COLUMN PILLAR: MASTER PLAYLIST PANAL STREAM WITH ACTIVE ARROWS   -->
