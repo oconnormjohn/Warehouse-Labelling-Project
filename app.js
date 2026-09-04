@@ -1007,19 +1007,27 @@ function launchListEditorWorkspace(listFileKey) {
     const maxBoundaryCaps = { 'category': 35, 'toiletries': 14, 'christmas': 14, 'misc': 7, 'dispatch': 48 };
     const currentTargetListCap = maxBoundaryCaps[listFileKey] || 35;
 
-    // DYNAMIC CARD LAYER ASSEMBLY: Applies colors onto the active label fields group
+    // DYNAMIC CARD LAYER ASSEMBLY: Applies theme colors onto the single unified label surface block
+    const unifiedSurfaceCard = document.getElementById('unified-card-surface-block');
+    const targetLabelHexFillColor = (listFileKey === 'category') ? "#FFF4C2" : "#FFFFFF";
+    
+    // 1. Shift the master card rectangle background color
+    if (unifiedSurfaceCard) {
+        unifiedSurfaceCard.style.backgroundColor = targetLabelHexFillColor;
+    }
+
+    // 2. Ensure the individual entry fields retain transparent backgrounds so they blend into the card
     const targetLabelElements = [
         'editor-input-line1', 
         'editor-input-line2', 
         'editor-input-image', 
         'editor-preview-pane-container-layer'
     ];
-    const targetLabelHexFillColor = (listFileKey === 'category') ? "#FFF4C2" : "#FFFFFF";
-    
+
     targetLabelElements.forEach(elementId => {
         const itemEl = document.getElementById(elementId);
         if (itemEl) {
-            itemEl.style.backgroundColor = targetLabelHexFillColor;
+            itemEl.style.backgroundColor = "transparent";
         }
     });
 
@@ -1099,20 +1107,20 @@ function setEditorFieldFocus(fieldKey) {
     activeFocusedFieldKey = fieldKey;
     
     const textEntryFields = ['line1', 'line2', 'image'];
-    const dynamicBaselineLabelHex = (activeEditorFileKey === 'category') ? "#FFF4C2" : "#FFFFFF";
     
     textEntryFields.forEach(key => {
         const fieldEl = document.getElementById(`editor-input-${key}`);
         if (fieldEl) {
-            fieldEl.style.borderColor = "#000000";
-            fieldEl.style.backgroundColor = dynamicBaselineLabelHex; // Resets cleanly back to target background color
+            fieldEl.style.backgroundColor = "transparent";
+            fieldEl.style.borderColor = "rgba(0, 0, 0, 0.2)"; // Soft default border
         }
     });
-    
-    // Assign a soft green selection focus highlight to the active text field block
+
+    // High contrast lookups for the active focused entry row box
     const activeInputTarget = document.getElementById(`editor-input-${fieldKey}`);
     if (activeInputTarget) {
         activeInputTarget.style.backgroundColor = "#a5d6a7";
+        activeInputTarget.style.borderColor = "#000000"; // Sharp, solid black active border
     }
 }
 

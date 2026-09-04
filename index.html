@@ -293,35 +293,49 @@
                     </div>
                 </div>
 
-                <!-- FLEX DATA ENTRY FORM LOOP -->
-                <div style="display: flex; flex-direction: column; gap: 2.2vh; width: 100%; padding-left: 10vw; box-sizing: border-box;">
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Line 1 text</span>
-                        <input type="text" id="editor-input-line1" readonly onclick="setEditorFieldFocus('line1')"
-                               style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top-left-radius: 12px; border-top-right-radius: 12px; text-transform: uppercase; box-sizing: border-box; text-align: center;">
-                    </div>
-
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Line 2 text</span>
-                        <input type="text" id="editor-input-line2" readonly onclick="setEditorFieldFocus('line2')"
-                               style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top: none; text-transform: uppercase; box-sizing: border-box; text-align: center;">
-                    </div>
-
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Image filename</span>
-                        <input type="text" id="editor-input-image" readonly onclick="setEditorFieldFocus('image')"
-                               style="width: 100%; padding: 1.4vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid #000000; border-top: none; text-transform: uppercase; box-sizing: border-box; text-align: center;">
-                    </div>
-
-                    <div style="display: flex; align-items: center; width: 100%; position: relative;">
-                        <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2.2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left;">Image preview</span>
-                        <div id="editor-preview-pane-container-layer" style="width: 100%; display: flex; justify-content: center; align-items: center; border: 2px solid #000000; border-top: none; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; padding: 1.5vh 1vw; box-sizing: border-box; min-height: 14vh;">
-                            <img id="editor-preview-graphic-frame-1" src="label-graphics/blank.jpg" alt="Preview Frame" style="max-height: 12vh; max-width: 90%; object-fit: contain;">
-                            <img id="editor-preview-graphic-frame-2" src="label-graphics/blank.jpg" alt="Secondary Preview" style="max-height: 12vh; max-width: 45%; object-fit: contain; display: none;">
+                <!-- FLEX DATA ENTRY FORM LOOP (RE-BALANCED UNIFIED CARD ARCHITECTURE) -->
+                <!-- Wrapper 1: Limits height strictly to prevent vertical screen overflow -->
+                <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 1.5vh; width: 100%; padding-left: 10vw; box-sizing: border-box; flex: 1; max-height: 48vh;">
+                    
+                    <!-- THE UNIFIED PHYSICAL LABEL SURFACE (BUTTERMILK CARD TRAY EMBED) -->
+                    <!-- Wrapper 2: This container holds all text rows into one single borderless rectangle -->
+                    <div id="unified-card-surface-block" style="background-color: #FFF4C2; border-radius: 12px; padding: 2vh 1.5vw; width: 100%; display: flex; flex-direction: column; gap: 1vh; box-sizing: border-box; box-shadow: 0 6px 12px rgba(0,0,0,0.25); min-height: 40vh;">
+                        
+                        <!-- LINE 1 ENTRY ROW COMPONENT -->
+                        <div style="display: flex; align-items: center; width: 100%; position: relative;">
+                            <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left; font-weight: bold;">Line 1 text</span>
+                            <input type="text" id="editor-input-line1" readonly onclick="setEditorFieldFocus('line1')"
+                                   style="width: 100%; padding: 1vh 1vw; font-size: 2.4vh; font-weight: bold; border: 2px solid rgba(0, 0, 0, 0.2) !important; border-radius: 8px; background: transparent !important; text-transform: uppercase; box-sizing: border-box; text-align: center;">
                         </div>
-                    </div>
-                </div>
-            </div>
+
+                        <!-- LINE 2 ENTRY ROW COMPONENT -->
+                        <div style="display: flex; align-items: center; width: 100%; position: relative;">
+                            <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left; font-weight: bold;">Line 2 text</span>
+                            <input type="text" id="editor-input-line2" readonly onclick="setEditorFieldFocus('line2')"
+                                   style="width: 100%; padding: 1vh 1vw; font-size: 2.4vh; font-weight: bold; border: 2px solid rgba(0, 0, 0, 0.2) !important; border-radius: 8px; background: transparent !important; text-transform: uppercase; box-sizing: border-box; text-align: center;">
+                        </div>
+
+                        <!-- IMAGE FILENAME ENTRY ROW COMPONENT -->
+                        <div style="display: flex; align-items: center; width: 100%; position: relative;">
+                            <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left; font-weight: bold;">Image filename</span>
+                            <input type="text" id="editor-input-image" readonly onclick="setEditorFieldFocus('image')"
+                                   style="width: 100%; padding: 1vh 1vw; font-size: 2.2vh; font-weight: bold; border: 2px solid rgba(0, 0, 0, 0.2) !important; border-radius: 8px; background: transparent !important; text-transform: uppercase; box-sizing: border-box; text-align: center; color: #555555;">
+                        </div>
+
+                        <!-- IMAGE PREVIEW CONTAINER LAYER ROW -->
+                        <div style="display: flex; align-items: center; width: 100%; position: relative; flex: 1;">
+                            <span style="position: absolute; left: -10vw; color: #FFFFFF; font-size: 2vh; font-family: Arial, sans-serif; width: 9.5vw; text-align: left; font-weight: bold;">Image preview</span>
+                            <div id="editor-preview-pane-container-layer" style="width: 100%; display: flex; justify-content: center; align-items: center; border: none !important; background: transparent !important; padding: 0.5vh 0; box-sizing: border-box; min-height: 12vh;">
+                                <img id="editor-preview-graphic-frame-1" src="label-graphics/blank.jpg" alt="Preview Frame" style="max-height: 11vh; max-width: 90%; object-fit: contain; background: transparent !important;">
+                                <img id="editor-preview-graphic-frame-2" src="label-graphics/blank.jpg" alt="Secondary Preview" style="max-height: 11vh; max-width: 45%; object-fit: contain; display: none;">
+                            </div>
+                        </div>
+
+                    </div> <!-- Tag 1: Closes #unified-card-surface-block -->
+
+                </div> <!-- Tag 2: Closes FLEX DATA ENTRY FORM LOOP -->
+
+            </div> <!-- Tag 3: Closes id="editor-workspace-green-canvas" -->
 
             <!-- DEDICATED KIOSK HIGH CONTRAST EMBEDDED TYPING PANEL -->
             <div id="editor-embedded-keyboard-panel" style="background-color: #d1d5db; border-radius: 16px; padding: 1.8vh 1vw; box-sizing: border-box; width: 100%; display: flex; flex-direction: column; gap: 1vh; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">

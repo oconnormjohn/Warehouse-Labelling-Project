@@ -841,19 +841,3 @@ body, .dashboard-wrapper {
     background-color: transparent !important;
     border: none !important;
 }
-
-/* ==========================================================================
-   PURE VIRTUAL CARET TERMINAL CURSOR PULSE ENGINE
-   ========================================================================== */
-
-@keyframes virtualCaretFlashAnimation {
-    0%, 100% { border-right-color: transparent; }
-    50% { border-right-color: #000000; }
-}
-
-/* Attach the blinking caret indicator line strictly onto the selected text entry boxes */
-#editor-workspace-green-canvas input[type="text"][style*="background-color: rgb(165, 214, 167)"],
-#editor-workspace-green-canvas input[type="text"][style*="background-color: #a5d6a7"] {
-    border-right: 4px solid #000000 !important;
-    animation: virtualCaretFlashAnimation 1s step-end infinite !important;
-}
