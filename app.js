@@ -201,12 +201,12 @@ function renderPlainLabelsMatrixContainer(consolidatedItemsArray) {
             graphicFile = "blank.png";
         }
 
-        // UK SYSTEM PROFILE OVERRIDE: Enforce crisp white cards explicitly via inline styles
+        // UK SYSTEM PROFILE OVERRIDE: Enforce crisp white cards and accessible compact typography
         plainMatrixHTML += `
             <button class="home-cat-btn" 
                     style="background-color: #FFFFFF !important; box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important;" 
                     onclick="handlePlainMatrixCellClick(this)">
-                <span class="btn-text">${displayLabelSummary}</span>
+                <span class="btn-text" style="font-size: 2.2vh !important; line-height: 1.0 !important;">${displayLabelSummary}</span>
                 <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
             </button>`;
     });
@@ -984,8 +984,11 @@ function clearQtyPadEntry() {
     multiplesCountTarget = 0;
 }
 
+/**
+ * Commits quantity selections and automates workspace routing boundaries
+ */
 function confirmMultiplesQuantityRun() {
-    // 🚀 EXECUTE PRINT LOOP NOW: Fires the target count collected by the keypad sliders
+    // 🚀 EXECUTE PRINT LOOP NOW: Fires the target count collected by the keypad
     if (lastExecutedPrintPayload) {
         executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
     }
@@ -1002,6 +1005,23 @@ function confirmMultiplesQuantityRun() {
         mainWrapper.classList.remove('printing-active-state');
     }
 
+    // 🍊 SYSTEM SWITCH: If printing plain items, bypass the trailing decision forks completely!
+    if (currentActiveWorkspaceMode === "PLAIN_MODE") {
+        console.log("📝 Plain Labels Spool Committed: Bypassing fork prompts. Closing overlay immediately.");
+        
+        // Find the quantity modal panel wrapper and dismiss it instantly
+        const multiplesModal = document.getElementById('admin-multiples-modal');
+        if (multiplesModal) {
+            multiplesModal.style.setProperty('display', 'none', 'important');
+            multiplesModal.classList.add('modal-hide');
+        }
+        
+        // Re-stabilize background state colors safely
+        syncKioskBackgroundState();
+        return;
+    }
+
+    // Standard default workflow logic for Category items (Loads Decision Fork Options)
     document.getElementById('multiples-modal-title').textContent = "Print Job Dispatched";
     document.getElementById('multiples-qty-zone').style.display = 'none';
     document.getElementById('multiples-fork-zone').style.display = 'flex';
