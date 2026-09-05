@@ -841,3 +841,10 @@ body, .dashboard-wrapper {
     background-color: transparent !important;
     border: none !important;
 }
+
+/* DIRECT COMPONENT TRACKER FIX: Eliminate startup screen pop-ins and visual flashes */
+.screen-hide, 
+#admin-list-editor-workspace.screen-hide, 
+#admin-settings-view.screen-hide {
+    display: none !important;
+}

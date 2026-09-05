@@ -53,11 +53,18 @@ function loadKioskConfigurationState() {
             
             // Rebuild matrix layout cleanly using the newly retrieved data parameters
             generateDynamicGrid();
+            
+            // 🚀 INJECTED LAYER TRIGGER: Read category values dynamically from disk immediately
+            loadHomeMatrixCategories(); 
+            
             console.log("⚙️ Kiosk configuration loaded successfully from server disk.");
         })
         .catch(e => {
             console.warn("⚠️ Local network config fetch failed, relying on defaults:", e);
             generateDynamicGrid();
+            
+            // 🚀 INJECTED LAYER FALLBACK TRIGGER: Run anyway if network drops so page doesn't open blank
+            loadHomeMatrixCategories(); 
         });
 }
 
@@ -79,6 +86,99 @@ function saveKioskConfigurationState() {
         console.error("❌ Failed to push setting changes to server storage:", error);
         showUserAlert('SYSTEM_ALERT', { message: 'FAILED TO SAVE CONFIGURATION TO DISK' }, 4000);
     });
+}
+
+// Fetch category database array and dynamically stream buttons onto the Home matrix grid
+function loadHomeMatrixCategories() {
+    const homeGrid = document.getElementById('home-category-grid');
+    if (!homeGrid) return;
+
+    fetch('http://localhost:8080/api/list?name=category')
+        .then(res => {
+            if (!res.ok) throw new Error("Category database missing or unreachable.");
+            return res.json();
+        })
+        .then(categoryDataArray => {
+            let matrixHTML = '';
+
+            // Strictly cycle through all 35 physical standalone kiosk button slots
+            for (let index = 0; index < 35; index++) {
+                // If database slot exists and has text, retrieve it; otherwise use blank layout placeholders
+                const slotItem = categoryDataArray[index] || {};
+                const line1Text = (slotItem.text1 || "").toString().trim().toUpperCase();
+                const line2Text = (slotItem.text2 || "").toString().trim().toUpperCase();
+                
+                // Combine multi-word configurations cleanly with a space to replicate historical strings
+                let displayLabelSummary = `${line1Text} ${line2Text}`.trim();
+                let graphicFile = (slotItem.image_file || "blank.jpg").toString().trim().toLowerCase();
+
+                // If the data entry slot is empty, leave it clean and blank without numbers
+                if (displayLabelSummary === "") {
+                    displayLabelSummary = "";
+                    graphicFile = "blank.png";
+                }
+
+                // Slots 27-35 stay completely inactive layout blocks
+                if (index >= 26) {
+                    matrixHTML += `
+                        <button class="home-cat-btn" style="cursor: default;">
+                            <span class="btn-text">${displayLabelSummary}</span>
+                            <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
+                        </button>`;
+                } else {
+                    matrixHTML += `
+                        <button class="home-cat-btn" onclick="handleHomeCategoryMatrixClick(this)">
+                            <span class="btn-text">${displayLabelSummary}</span>
+                            <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
+                        </button>`;
+                }
+            }
+
+            homeGrid.innerHTML = matrixHTML;
+            console.log("📦 Stage 1 Home Category Matrix populated dynamically from JSON.");
+        })
+        .catch(err => {
+            console.error("❌ Failed to stream home category database:", err);
+            showUserAlert('SYSTEM_ALERT', { message: 'FAILED TO LOAD CATEGORIES FROM DISK' }, 4000);
+        });
+}
+
+// Dedicated click handler mapping banner text splits and flipping standard green view state
+function handleHomeCategoryMatrixClick(buttonElement) {
+    const homeGrid = document.getElementById('home-category-grid');
+    const workspaceView = document.getElementById('workspace-view');
+    const homeDeck = document.getElementById('deck-home-actions');
+    const screen2Deck = document.getElementById('deck-screen2-nav');
+    
+    const slot1 = document.getElementById('cat-word1');
+    const slot2 = document.getElementById('cat-word2');
+
+    const textElement = buttonElement.querySelector('.btn-text');
+    const rawCategoryText = textElement ? textElement.textContent.trim() : '';
+
+    // Split text cleanly by spaces or hyphens to look for multi-word configurations
+    const wordsArray = rawCategoryText.split(/[\s-]+/);
+
+    if (slot1 && slot2) {
+        if (wordsArray.length > 1) {
+            slot1.textContent = wordsArray[0].toUpperCase();
+            slot2.textContent = wordsArray.slice(1).join('-').toUpperCase();
+        } else {
+            slot1.textContent = rawCategoryText.toUpperCase();
+            slot2.textContent = '';
+        }
+    }
+
+    // STATE 2 FLIP: Completely swap grid tracks cleanly using explicit style overrides
+    if (homeGrid && workspaceView && homeDeck && screen2Deck) {
+        homeGrid.style.setProperty('display', 'none', 'important');
+        homeDeck.style.setProperty('display', 'none', 'important');
+
+        workspaceView.classList.remove('screen-hide');
+        workspaceView.style.setProperty('display', 'flex', 'important'); 
+
+        screen2Deck.classList.remove('screen-hide');
+    }
 }
 
 // Call on startup pipeline immediately
@@ -187,10 +287,7 @@ function triggerManualRollOver() {
 
 // Initialize the dynamically built interface once DOM structures are loaded
 window.addEventListener('DOMContentLoaded', () => {
-    // A. Build the multi-year calendar grid instantly
-    // generateDynamicGrid(); Instruction removed to avoid building layout twice at startup
-    
-    // B. Cache our UI view elements, layout groups, and text tracks
+    // Cache our UI view elements, layout groups, and text tracks cleanly
     const homeGrid = document.getElementById('home-category-grid');
     const workspaceView = document.getElementById('workspace-view');
     const homeDeck = document.getElementById('deck-home-actions');
@@ -199,50 +296,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const slot1 = document.getElementById('cat-word1');
     const slot2 = document.getElementById('cat-word2');
     
-    const categoryButtons = document.querySelectorAll('.home-cat-btn');
-
-    // C. Attach click handlers to the active matrix category buttons
-    if (categoryButtons.length > 0) {
-        categoryButtons.forEach((button, index) => {
-            // Slots 27-35 (index 26 and above) stay completely inactive
-            if (index >= 26) {
-                button.style.cursor = 'default';
-                return; 
-            }
-
-            button.addEventListener('click', () => {
-                const textElement = button.querySelector('.btn-text');
-                const rawCategoryText = textElement ? textElement.textContent.trim() : '';
-
-                // Split text cleanly by spaces or hyphens to look for multi-word configurations
-                const wordsArray = rawCategoryText.split(/[\s-]+/);
-
-                // CORRECT COMPONENT FORMAT:
-                if (slot1 && slot2) {
-                    if (wordsArray.length > 1) {
-                        // First part goes to line 1, remaining parts go to line 2
-                        slot1.textContent = wordsArray[0].toUpperCase();
-                        slot2.textContent = wordsArray.slice(1).join('-').toUpperCase();
-                    } else {
-                        // Single word configuration
-                        slot1.textContent = rawCategoryText.toUpperCase();
-                        slot2.textContent = '';
-                    }
-                }
-
-                // D. TO VIEW STATE 2 FLIP: Completely swap grid tracks cleanly using explicit style overrides
-                if (homeGrid && workspaceView && homeDeck && screen2Deck) {
-                    homeGrid.style.setProperty('display', 'none', 'important');
-                    homeDeck.style.setProperty('display', 'none', 'important');
-    
-                    workspaceView.classList.remove('screen-hide');
-                    workspaceView.style.setProperty('display', 'flex', 'important'); 
-    
-                    screen2Deck.classList.remove('screen-hide');
-                }
-            });
-        });
-    }
+    // Core setup tracking log
+    console.log("🖥️ Kiosk DOM structures cached and ready for dynamic rendering pipelines.");
 });
 
 /**
