@@ -118,20 +118,12 @@ function loadHomeMatrixCategories() {
                     graphicFile = "blank.png";
                 }
 
-                // Slots 27-35 stay completely inactive layout blocks
-                if (index >= 26) {
-                    matrixHTML += `
-                        <button class="home-cat-btn" style="cursor: default;">
-                            <span class="btn-text">${displayLabelSummary}</span>
-                            <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
-                        </button>`;
-                } else {
-                    matrixHTML += `
-                        <button class="home-cat-btn" onclick="handleHomeCategoryMatrixClick(this)">
-                            <span class="btn-text">${displayLabelSummary}</span>
-                            <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
-                        </button>`;
-                }
+                // FUTURE-PROOF RE-CONSTRUCTION: All 35 active slots listen to database inputs natively
+                matrixHTML += `
+                    <button class="home-cat-btn" onclick="handleHomeCategoryMatrixClick(this)">
+                        <span class="btn-text">${displayLabelSummary}</span>
+                        <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
+                    </button>`;
             }
 
             homeGrid.innerHTML = matrixHTML;
@@ -141,6 +133,132 @@ function loadHomeMatrixCategories() {
             console.error("❌ Failed to stream home category database:", err);
             showUserAlert('SYSTEM_ALERT', { message: 'FAILED TO LOAD CATEGORIES FROM DISK' }, 4000);
         });
+}
+
+// Phase A: Parallel data stream combiner for unified Plain Labels mode
+function loadPlainLabelsMatrix() {
+    console.log("🔄 Initiating parallel fetch loop for Plain Labels datasets...");
+
+    // Fire all three disk storage requests simultaneously
+    Promise.all([
+        fetch('http://localhost:8080/api/list?name=toiletries').then(res => res.json()),
+        fetch('http://localhost:8080/api/list?name=christmas').then(res => res.json()),
+        fetch('http://localhost:8080/api/list?name=misc').then(res => res.json())
+    ])
+    .then(([toiletriesArray, christmasArray, miscArray]) => {
+        let consolidatedPlainItems = [];
+
+        // 1. Map Toiletries data to Slots 1-14 (Indices 0 - 13)
+        for (let i = 0; i < 14; i++) {
+            consolidatedPlainItems.push(toiletriesArray[i] || { text1: "", text2: "", image_file: "blank.jpg" });
+        }
+
+        // 2. Map Christmas data to Slots 15-28 (Indices 14 - 27)
+        for (let i = 0; i < 14; i++) {
+            consolidatedPlainItems.push(christmasArray[i] || { text1: "", text2: "", image_file: "blank.jpg" });
+        }
+
+        // 3. Map Miscellaneous data to Slots 29-35 (Indices 28 - 34)
+        for (let i = 0; i < 7; i++) {
+            consolidatedPlainItems.push(miscArray[i] || { text1: "", text2: "", image_file: "blank.jpg" });
+        }
+
+        console.log("✅ Phase A Complete: Consolidated 35 data rows securely in memory.");
+        
+        // 🔗 PHASE A TO B BRIDGE HANDOVER
+        renderPlainLabelsMatrixContainer(consolidatedPlainItems);
+
+    })
+    .catch(error => {
+        console.error("❌ Plain Labels data consolidation loop crashed:", error);
+        showUserAlert('SYSTEM_ALERT', { message: 'FAILED TO CONSOLIDATE PLAIN DATA LISTS' }, 4000);
+    });
+}
+
+// Phase B: Draw the consolidated plain items matrix directly onto the home selection grid
+function renderPlainLabelsMatrixContainer(consolidatedItemsArray) {
+    const homeGrid = document.getElementById('home-category-grid');
+    if (!homeGrid) return;
+
+    let plainMatrixHTML = '';
+
+    // Walk through all 35 allocated category slots sequentially
+    consolidatedItemsArray.forEach((slotItem, index) => {
+        const line1Text = (slotItem.text1 || "").toString().trim().toUpperCase();
+        const line2Text = (slotItem.text2 || "").toString().trim().toUpperCase();
+        
+        let displayLabelSummary = `${line1Text} ${line2Text}`.trim();
+        let graphicFile = (slotItem.image_file || "blank.png").toString().trim().toLowerCase();
+
+        // Check if the image filename points to a legacy jpg extension and swap to your new blank png track
+        if (graphicFile === "blank.jpg") {
+            graphicFile = "blank.png";
+        }
+
+        // If the database slot is empty, render it as a clean blank panel
+        if (displayLabelSummary === "") {
+            displayLabelSummary = "";
+            graphicFile = "blank.png";
+        }
+
+        // UK SYSTEM PROFILE OVERRIDE: Enforce crisp white cards explicitly via inline styles
+        plainMatrixHTML += `
+            <button class="home-cat-btn" 
+                    style="background-color: #FFFFFF !important; box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important;" 
+                    onclick="handlePlainMatrixCellClick(this)">
+                <span class="btn-text">${displayLabelSummary}</span>
+                <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
+            </button>`;
+    });
+
+    homeGrid.innerHTML = plainMatrixHTML;
+    console.log("🎨 Phase B Complete: Plain Labels matrix canvas drawn with white card properties.");
+}
+
+// Dedicated click handler for Plain Mode that captures labels and splits text fields natively
+function handlePlainMatrixCellClick(buttonElement) {
+    const textElement = buttonElement.querySelector('.btn-text');
+    const rawPlainLabelText = textElement ? textElement.textContent.trim() : '';
+    
+    // If a volunteer accidentally clicks an empty blank spacer card, halt execution instantly
+    if (rawPlainLabelText === "") return;
+
+    const slot1 = document.getElementById('cat-word1');
+    const slot2 = document.getElementById('cat-word2');
+
+    // Split text cleanly by spaces or hyphens to look for multi-word configurations
+    const wordsArray = rawPlainLabelText.split(/[\s-]+/);
+
+    if (slot1 && slot2) {
+        if (wordsArray.length > 1) {
+            slot1.textContent = wordsArray[0].toUpperCase();
+            slot2.textContent = wordsArray.slice(1).join('-').toUpperCase();
+        } else {
+            slot1.textContent = rawPlainLabelText.toUpperCase();
+            slot2.textContent = '';
+        }
+    }
+
+    // 🚀 INTERCEPT PIPELINE: Automatically bypass standard quarters and load the numeric quantity keypad
+    console.log(`📝 Plain Label [${rawPlainLabelText}] selected. Bypassing calendar steps.`);
+    
+    // For now, we will save this active selection to our print payload memory space directly
+    lastExecutedPrintPayload = {
+        color: "plain", // Instructs printing loop that this is a white profile run
+        cwrd1: slot1.textContent,
+        cwrd2: slot2.textContent,
+        q: "PL",        // Custom template layout code tracking a Plain Label script execution
+        year: " ",      // No year parameters needed for plain labels
+        m1: " ",        // No months variables needed
+        m2: " ",
+        m3: " ",
+        finalHex: "#FFFFFF",
+        finalPeriod: " "
+    };
+
+    // 🚀 INJECTED OVERLAY INTERCEPT: Force numeric input pad instantly for all print runs
+    triggerMultiplesQuantityOverlay();
+
 }
 
 // Dedicated click handler mapping banner text splits and flipping standard green view state
@@ -437,9 +555,44 @@ function sidebarAction(action) {
     const screen2Deck = document.getElementById('deck-screen2-nav');
     const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
 
+    // 🍊 PLAIN LABELS BUTTON CLICKED EVENT INTERCEPT
+    if (action === 'PLAIN_MODE') {
+        currentActiveWorkspaceMode = "PLAIN_MODE";
+        console.log("📝 Plain Labels Mode Activated. Re-routing sidebar controls.");
+        
+        // A. Swap navigation action decks smoothly to present the BACK button component
+        if (homeDeck && screen2Deck && monthsActionWrapper) {
+            homeDeck.style.setProperty('display', 'none', 'important');
+            screen2Deck.classList.remove('screen-hide');
+            
+            // Hide the MONTHS selection button entirely since plain mode uses no calendar squares
+            monthsActionWrapper.style.setProperty('display', 'none', 'important');
+        }
+        
+        // B. Fire the unified 3 parallel fetches combiner array we built in Phase A
+        loadPlainLabelsMatrix();
+        return;
+    }
+
     if (action === 'BACK') {
+        // If the volunteer is exiting Plain Mode, reload default categories and restore the top deck
+        if (currentActiveWorkspaceMode === "PLAIN_MODE") {
+            currentActiveWorkspaceMode = "STANDARD_GREEN";
+            console.log("🟩 Exiting Plain Mode. Restoring standard Category matrix list view grid.");
+            
+            if (homeDeck && screen2Deck && monthsActionWrapper) {
+                screen2Deck.classList.add('screen-hide');
+                monthsActionWrapper.style.removeProperty('display');
+                homeDeck.style.setProperty('display', 'flex', 'important');
+            }
+            
+            // Re-render your dynamic Category lists from disk seamlessly
+            loadHomeMatrixCategories();
+            return;
+        }
+
         // If on Month View, BACK returns to Date View
-        if (!monthView.classList.contains('screen-hide')) {
+        if (monthView && !monthView.classList.contains('screen-hide')) {
             monthView.style.setProperty('display', 'none', 'important');
             monthView.classList.add('screen-hide');
             
@@ -854,6 +1007,9 @@ function confirmMultiplesQuantityRun() {
     document.getElementById('multiples-fork-zone').style.display = 'flex';
 }
 
+/**
+ * Handles workflow routing after a quantity selection run is dispatched
+ */
 function handleContinuityChoice(choiceType) {
     const multiplesModal = document.getElementById('admin-multiples-modal');
     const monthView = document.getElementById('month-selection-view');
@@ -866,13 +1022,11 @@ function handleContinuityChoice(choiceType) {
     if (choiceType === 'SAME') {
         setTimeout(triggerMultiplesQuantityOverlay, 150);
     } else {
-        // For FRESH_PURPLE, EXIT_GREEN, or standard prints, clear views completely and drop cleanly to Home Screen
-        if (!monthView.classList.contains('screen-hide')) {
-            // Clear Month Selection Workspace elements
+        // Clear Month Selection Workspace elements if they were active
+        if (monthView && !monthView.classList.contains('screen-hide')) {
             monthView.style.setProperty('display', 'none', 'important');
             monthView.classList.add('screen-hide');
             
-            // Un-hide Month Action in sidebars if previously cleared out
             const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
             if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
         }
@@ -882,7 +1036,7 @@ function handleContinuityChoice(choiceType) {
             currentActiveWorkspaceMode = "STANDARD_GREEN";
         }
         
-        // Trigger a force route all the way back to main categories matrix array
+        // Trigger a force route all the way back to main matrix view layers
         const workspaceView = document.getElementById('workspace-view');
         if (workspaceView) {
             workspaceView.style.setProperty('display', 'none', 'important');
@@ -894,9 +1048,18 @@ function handleContinuityChoice(choiceType) {
         const screen2Deck = document.getElementById('deck-screen2-nav');
         
         if (homeGrid && homeDeck && screen2Deck) {
-            screen2Deck.classList.add('screen-hide');
-            homeGrid.style.setProperty('display', 'grid', 'important');
-            homeDeck.style.setProperty('display', 'flex', 'important');
+            // 📝 ADAPTIVE PLAIN MODE ROUTING CHECK
+            if (currentActiveWorkspaceMode === "PLAIN_MODE") {
+                // Keep the white plain matrix grid layout visible on screen
+                homeGrid.style.setProperty('display', 'grid', 'important');
+                // Retain the back button panel deck so they stay inside Plain Mode
+                screen2Deck.classList.remove('screen-hide');
+            } else {
+                // Standard default fallback sequence: Return to Category Matrix Home Screen
+                screen2Deck.classList.add('screen-hide');
+                homeGrid.style.setProperty('display', 'grid', 'important');
+                homeDeck.style.setProperty('display', 'flex', 'important');
+            }
         }
         
         syncKioskBackgroundState();
