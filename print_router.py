@@ -2,13 +2,15 @@ import http.server
 import json
 import os
 import subprocess
+from PIL import Image  # 🚀 Injected hardware dependency: Image pixel conversion engine
 
 # Map the color tracking string from Firefox straight to your local CUPS queues
 PRINTER_POOL = {
     'pink': 'pink_labels',
     'green': 'green_labels',
     'yellow': 'yellow_labels',
-    'blue': 'blue_labels'
+    'blue': 'blue_labels',
+    'plain': 'plain_labels'  # 🖨️ Dedicated plain printer queue mapping
 }
 
 # Direct target pathway on the Pi for persistent state synchronization layout
@@ -22,12 +24,71 @@ LIST_FILES_POOL = {
     'misc': os.path.join(os.path.dirname(__file__), 'misc.json')
 }
 
+
+# ==========================================================================
+# INDUSTRIAL MONOCHROME 1-BIT ZEBRA HEX ENCODER SUBROUTINE
+# ==========================================================================
+def convert_image_to_zpl_graphic(image_filename, base_dir=None):
+    """
+    Opens a PNG or JPG file, flattens transparency layouts, automatically rescales 
+    web assets up to standard label dimensions, handles photometric inversion,
+    and returns a standard Zebra ~DG code download block.
+    """
+    if base_dir is None:
+        base_dir = os.path.dirname(__file__)
+        
+    file_path = os.path.join(base_dir, 'label-graphics', image_filename.lower())
+    
+    # Fallback to standard blank file if image is missing
+    if not os.path.exists(file_path):
+        file_path = os.path.join(base_dir, 'label-graphics', 'blank.png')
+        if not os.path.exists(file_path):
+            return ""
+
+    try:
+        with Image.open(file_path) as img:
+            # 1. Flatten transparency chains inside web PNG files elegantly
+            if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+                background = Image.new("RGBA", img.size, (255, 255, 255, 255))
+                img = Image.alpha_composite(background, img.convert('RGBA')).convert('RGB')
+            else:
+                img = img.convert('RGB')
+
+            # 2. 🚀 ERGONOMIC SCALE TRACK: Automatically resize small web icons up to crisp label dimensions
+            # Target width of 220px preserves layout clarity beautifully on 812-dot stock
+            target_width = 400
+            w_percent = (target_width / float(img.size[0]))
+            target_height = int((float(img.size[1]) * float(w_percent)))
+            img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+
+            # 3. Force high-contrast monochrome conversion layer
+            monochrome_img = img.convert("1")
+            width_px, height_px = monochrome_img.size
+            
+            bytes_per_row = (width_px + 7) // 8
+            total_bytes = bytes_per_row * height_px
+
+            hex_data = []
+            pixel_bytes = monochrome_img.tobytes()
+            
+            # 4. 🚀 PHOTOMETRIC BIT INVERSION: Flip every byte (0xFF - byte) to fix Black-is-White inversion
+            for i in range(0, len(pixel_bytes), bytes_per_row):
+                row_slice = pixel_bytes[i:i + bytes_per_row]
+                inverted_row = bytes([255 - b for b in row_slice])
+                hex_data.append("".join(f"{b:02X}" for b in inverted_row))
+
+            return f"~DGE:IMGTEMP.GRF,{total_bytes},{bytes_per_row},{''.join(hex_data)}"
+    except Exception as ex:
+        print(f"❌ Python pixel graphic processing loop crashed: {ex}")
+        return ""
+
 class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
     
     # Unified Web Asset Router (HTML, CSS, JS, and graphics folders)
     def do_GET(self):
         # API Intercept Layer: Check if frontend is reading a multi-field list file
         if self.path.startswith('/api/list?name='):
+            # 🔧 RESTORED SAFE INDEX STRING SPLITTING
             list_key = self.path.split('name=')[1].split('&')[0].lower()
             target_path = LIST_FILES_POOL.get(list_key)
             
@@ -113,6 +174,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self._set_headers()
+
     # Process the incoming print job data payload or configuration syncing tasks
     def do_POST(self):
         try:
@@ -122,7 +184,6 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
 
             # CHECK ROUTING POINT: Handle configuration tasks safely with flexible path boundary matching
             if self.path.rstrip('/') == '/api/config':
-
                 with open(CONFIG_FILE_PATH, 'w') as config_file:
                     json.dump(payload, config_file, indent=2)
                 self._set_headers()
@@ -131,6 +192,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             
             # API Intercept Layer: Handle saving modified arrays back to disk
             if self.path.startswith('/api/list/save?name='):
+                # 🔧 FIXED: Restored complete list index slicing parameters securely
                 list_key = self.path.split('name=')[1].split('&')[0].lower()
                 target_path = LIST_FILES_POOL.get(list_key)
                 
@@ -147,53 +209,81 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"status": "success", "message": f"{list_key} list updated on disk"}).encode('utf-8'))
                 return
 
-            # STANDARD PRINT ROUTINE (Runs normally for standard labels entry points)
-            color = payload.get('color', '').lower()
-            cwrd1 = payload.get('cwrd1', '')
-            cwrd2 = payload.get('cwrd2', '')
-            q_num = payload.get('q', '')
-            year  = payload.get('year', '')
-            m1    = payload.get('m1', ' ')
-            m2    = payload.get('m2', ' ')
-            m3    = payload.get('m3', ' ')
+            # STANDARD PRINT ROUTINE (Cleaned with strip() to prevent silent routing misses)
+            color = payload.get('color', '').lower().strip() # 🧼 Strips hidden browser spaces
+            cwrd1 = payload.get('cwrd1', '').strip()        # 🧼 Strips hidden text pads
+            cwrd2 = payload.get('cwrd2', '').strip()        # 🧼 Strips hidden text pads
+            q_num = str(payload.get('q', '')).strip()
+            year  = str(payload.get('year', '')).strip()
+            m1    = payload.get('m1', ' ').strip()
+            m2    = payload.get('m2', ' ').strip()
+            m3    = payload.get('m3', ' ').strip()
 
             target_cups_printer = PRINTER_POOL.get(color)
             if not target_cups_printer:
                 raise ValueError(f"Unknown printer color requested: {color}")
 
-            is_month_mode = (str(q_num).upper() == 'MM')
-            is_full_year  = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
-            is_two_word   = (cwrd2.strip() != '')
+            # 📝 INJECTED LOGIC DIVERGENCY FOR PLAIN MODE PRINTING RUNS
+            if color == 'plain':
+                template_name = 'PlainLabel.zpl'
+                template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
+                
+                if not os.path.exists(template_path):
+                    raise FileNotFoundError(f"Missing Plain Label ZPL template file: {template_name}")
 
-            if is_month_mode:
-                template_name = 'twoWordMonthLabel.zpl' if is_two_word else 'oneWordMonthLabel.zpl'
-            elif is_full_year:
-                template_name = 'twoWordYearLabel.zpl' if is_two_word else 'oneWordYearLabel.zpl'
+                with open(template_path, 'r') as file:
+                    zpl_content = file.read()
+
+                # Execute standard textual handlebar placeholder modifications
+                zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
+                zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
+
+                # Fire the automated pixel image 1-bit monochrome converter loop
+                image_download_command = convert_image_to_zpl_graphic(m1)
+
+                # 🖨️ THE STRUCTURAL SYNTAX FIX: Ensure image commands sit inside active transmission handles
+                if image_download_command.strip() != "":
+                    final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
+                else:
+                    final_zpl_payload = zpl_content
+                
             else:
-                template_name = 'twoWordCategoryLabel.zpl' if is_two_word else 'oneWordCategoryLabel.zpl'
+                # Standard legacy temporal formatting mapping routes for rolling years calendar squares
+                is_month_mode = (str(q_num).upper() == 'MM')
+                is_full_year  = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
+                is_two_word   = (cwrd2.strip() != '')
 
-            template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
-            
-            if not os.path.exists(template_path):
-                raise FileNotFoundError(f"Missing master ZPL template file: {template_name}")
+                if is_month_mode:
+                    template_name = 'twoWordMonthLabel.zpl' if is_two_word else 'oneWordMonthLabel.zpl'
+                elif is_full_year:
+                    template_name = 'twoWordYearLabel.zpl' if is_two_word else 'oneWordYearLabel.zpl'
+                else:
+                    template_name = 'twoWordCategoryLabel.zpl' if is_two_word else 'oneWordCategoryLabel.zpl'
 
-            with open(template_path, 'r') as file:
-                zpl_content = file.read()
+                template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
+                
+                if not os.path.exists(template_path):
+                    raise FileNotFoundError(f"Missing master ZPL template file: {template_name}")
 
-            # Execute string placeholder token substitutions
-            zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
-            zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
-            zpl_content = zpl_content.replace('{{Q}}', str(q_num))
-            zpl_content = zpl_content.replace('{{YR}}', str(year))
-            zpl_content = zpl_content.replace('{{M1}}', m1 if m1 != 'x' else ' ')
-            zpl_content = zpl_content.replace('{{M2}}', m2 if m2 != 'x' else ' ')
-            zpl_content = zpl_content.replace('{{M3}}', m3 if m3 != 'x' else ' ')
-            zpl_content = zpl_content.replace('{{MONTH}}', m1)  # Exact match for your literal template token
+                with open(template_path, 'r') as file:
+                    zpl_content = file.read()
+
+                # Execute string placeholder token substitutions
+                zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
+                zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
+                zpl_content = zpl_content.replace('{{Q}}', str(q_num))
+                zpl_content = zpl_content.replace('{{YR}}', str(year))
+                zpl_content = zpl_content.replace('{{M1}}', m1 if m1 != 'x' else ' ')
+                zpl_content = zpl_content.replace('{{M2}}', m2 if m2 != 'x' else ' ')
+                zpl_content = zpl_content.replace('{{M3}}', m3 if m3 != 'x' else ' ')
+                zpl_content = zpl_content.replace('{{MONTH}}', m1)
+
+                final_zpl_payload = zpl_content
 
             # Write out a temporary file to deliver to the physical queue execution pipeline
             temp_print_file = os.path.join(os.path.dirname(__file__), 'temp_print_job.zpl')
             with open(temp_print_file, 'w') as file:
-                file.write(zpl_content)
+                file.write(final_zpl_payload)
 
             # Fire terminal command directly into the Linux CUPS system layer
             print_command = ['lp', '-d', target_cups_printer, temp_print_file]
@@ -212,9 +302,9 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.send_response(500)
             error_response = {"status": "error", "message": str(e)}
             self.wfile.write(json.dumps(error_response).encode('utf-8'))
+
+
 def run_server(port=8080):
-    # Initialize a default state configuration layout on disk if file is missing
-    # Initialize a clean configuration layout on disk if file is missing completely
     if not os.path.exists(CONFIG_FILE_PATH):
         default_config = {
             "version": "1.1.0",
@@ -222,7 +312,6 @@ def run_server(port=8080):
             "showPrintConfirmation": True,
             "securityPin": "1234"
         }
-        
         try:
             with open(CONFIG_FILE_PATH, 'w') as f:
                 json.dump(default_config, f, indent=2)
@@ -238,6 +327,7 @@ def run_server(port=8080):
     except KeyboardInterrupt:
         print("\n🛑 Shutting down print service daemon gracefully.")
         httpd.server_close()
+
 
 if __name__ == '__main__':
     run_server()

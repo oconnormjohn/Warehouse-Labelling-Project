@@ -216,12 +216,23 @@ function renderPlainLabelsMatrixContainer(consolidatedItemsArray) {
 }
 
 // Dedicated click handler for Plain Mode that captures labels and splits text fields natively
+// Phase B/C: Dedicated click handler for Plain Mode that captures labels and triggers the print pad
 function handlePlainMatrixCellClick(buttonElement) {
     const textElement = buttonElement.querySelector('.btn-text');
     const rawPlainLabelText = textElement ? textElement.textContent.trim() : '';
     
     // If a volunteer accidentally clicks an empty blank spacer card, halt execution instantly
     if (rawPlainLabelText === "") return;
+
+    // 🔍 IMAGE EXTRACTOR TRACK: Capture the active image filename directly from the button's image element
+    const imgElement = buttonElement.querySelector('.btn-icon');
+    let dynamicImageFilename = "blank.png";
+    
+    if (imgElement) {
+        // Extract the filename from the end of the source URL string (e.g., "shampoo.png")
+        const srcParts = imgElement.src.split('/');
+        dynamicImageFilename = srcParts[srcParts.length - 1];
+    }
 
     const slot1 = document.getElementById('cat-word1');
     const slot2 = document.getElementById('cat-word2');
@@ -239,26 +250,24 @@ function handlePlainMatrixCellClick(buttonElement) {
         }
     }
 
-    // 🚀 INTERCEPT PIPELINE: Automatically bypass standard quarters and load the numeric quantity keypad
-    console.log(`📝 Plain Label [${rawPlainLabelText}] selected. Bypassing calendar steps.`);
+    console.log(`📝 Plain Label [${rawPlainLabelText}] selected with image [${dynamicImageFilename}]. Loading print pad.`);
     
-    // For now, we will save this active selection to our print payload memory space directly
+    // Package payload memory space directly - passing the graphic filename into the M1 parameters slot
     lastExecutedPrintPayload = {
         color: "plain", // Instructs printing loop that this is a white profile run
         cwrd1: slot1.textContent,
         cwrd2: slot2.textContent,
         q: "PL",        // Custom template layout code tracking a Plain Label script execution
         year: " ",      // No year parameters needed for plain labels
-        m1: " ",        // No months variables needed
-        m2: " ",
+        m1: dynamicImageFilename, // 🚀 LIVE IMAGE BINDING: Feeds filename straight to Python converter
+        m2: " ",        // No months variables needed
         m3: " ",
         finalHex: "#FFFFFF",
         finalPeriod: " "
     };
 
-    // 🚀 INJECTED OVERLAY INTERCEPT: Force numeric input pad instantly for all print runs
+    // 🚀 AUTOMATED OVERLAY INTERCEPT: Force numeric input pad instantly for all plain print runs
     triggerMultiplesQuantityOverlay();
-
 }
 
 // Dedicated click handler mapping banner text splits and flipping standard green view state
