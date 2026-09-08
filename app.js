@@ -498,10 +498,10 @@ function handleCardClick(year, period, zplMonths) {
 }
 
 /**
- * Dedicated Multiples Loop Execution Engine
- * Fires network requests sequentially based on validated user numeric input.
+ * Dedicated Multiples Loop Execution Engine (Asynchronous Sequential Upgrade)
+ * Fires network requests strictly one after the other to prevent overwriting files on disk.
  */
-function executePhysicalPrintSpooler(payload, totalRuns) {
+async function executePhysicalPrintSpooler(payload, totalRuns) {
     if (!payload) return;
 
     const mainWrapper = document.getElementById('main-app-wrapper');
@@ -517,46 +517,53 @@ function executePhysicalPrintSpooler(payload, totalRuns) {
             yearText: payload.year, 
             hexColor: payload.finalHex 
         }, 3000);
-    } else {
-        const structuralPostPayload = {
-            color: payload.color,
-            cwrd1: payload.cwrd1,
-            cwrd2: payload.cwrd2,
-            q: payload.q,
-            year: payload.year,
-            m1: payload.m1,
-            m2: payload.m2,
-            m3: payload.m3
-        };
+        return;
+    }
 
-        // Fire the print loop cleanly for the exact keypad target quantity
+    const structuralPostPayload = {
+        color: payload.color,
+        cwrd1: payload.cwrd1,
+        cwrd2: payload.cwrd2,
+        q: payload.q,
+        year: payload.year,
+        m1: payload.m1,
+        m2: payload.m2,
+        m3: payload.m3
+    };
+
+    try {
+        // 🔒 SEQUENTIAL CHAINING: Wait for each network fetch to complete before starting the next
         for (let run = 0; run < totalRuns; run++) {
-            fetch('http://localhost:8080', {
+            const response = await fetch('http://localhost:8080', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(structuralPostPayload)
-            })
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
-                return response.json();
-            })
-            .then(data => {
-                console.log(`🎉 Dispatched run (${run + 1}/${totalRuns}) to local CUPS spooler:`, data);
-            })
-            .catch(error => {
-                console.error('❌ Network printing engine link broken:', error);
-                const wrapper = document.getElementById('main-app-wrapper');
-                if (wrapper) wrapper.classList.remove('printing-active-state');
-                showUserAlert('SYSTEM_ALERT', { message: 'PRINTER ROUTER CONNECTION OFFLINE' }, 5000);
             });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log(`🎉 Dispatched run (${run + 1}/${totalRuns}) to local CUPS spooler:`, data);
         }
 
+        // 🟢 CONFIRMATION GATE: Only show success if all network iterations resolve perfectly
         showUserAlert('PRINT_CONFIRM', { 
             categoryName: `${payload.cwrd1} ${payload.cwrd2}`.trim(), 
             periodText: payload.finalPeriod, 
             yearText: payload.year, 
             hexColor: payload.finalHex 
         }, 3000);
+
+    } catch (error) {
+        console.error('❌ Network printing engine link broken during spooling sequence:', error);
+        
+        // Immediate visual recovery and error reporting
+        if (mainWrapper) {
+            mainWrapper.classList.remove('printing-active-state');
+        }
+        showUserAlert('SYSTEM_ALERT', { message: 'PRINTER ROUTER CONNECTION OFFLINE' }, 5000);
     }
 }
 
@@ -591,19 +598,33 @@ function sidebarAction(action) {
     }
 
     if (action === 'BACK') {
-        // If the volunteer is exiting Plain Mode, reload default categories and restore the top deck
-        if (currentActiveWorkspaceMode === "PLAIN_MODE") {
+        // Safe exit out of Admin workspace back to Categories matrix
+        if (currentActiveWorkspaceMode === 'ADMIN_PURPLE' || isAdminMultiplesModeActive) {
             currentActiveWorkspaceMode = "STANDARD_GREEN";
-            console.log("🟩 Exiting Plain Mode. Restoring standard Category matrix list view grid.");
+            isAdminMultiplesModeActive = false;
             
-            if (homeDeck && screen2Deck && monthsActionWrapper) {
+            const adminView = document.getElementById('admin-settings-view');
+            const homeGrid = document.getElementById('home-category-grid');
+            const homeDeck = document.getElementById('deck-home-actions');
+            const screen2Deck = document.getElementById('deck-screen2-nav');
+            const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
+            const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
+            
+            if (adminView && homeGrid && homeDeck && screen2Deck && monthsActionWrapper && sidebarCloseBtn) {
+                adminView.style.setProperty('display', 'none', 'important');
+                adminView.classList.add('screen-hide');
+                
                 screen2Deck.classList.add('screen-hide');
                 monthsActionWrapper.style.removeProperty('display');
+                
+                // 🚀 INJECTED DESELECT: Securely hide the Big Red X close layout button again
+                sidebarCloseBtn.style.setProperty('display', 'none', 'important');
+                
+                homeGrid.style.setProperty('display', 'grid', 'important');
                 homeDeck.style.setProperty('display', 'flex', 'important');
             }
             
-            // Re-render your dynamic Category lists from disk seamlessly
-            loadHomeMatrixCategories();
+            syncKioskBackgroundState();
             return;
         }
 
@@ -778,6 +799,7 @@ function dismissPinPadSecurity() {
 
 /**
  * Strict 4-Digit Entry Verification Routing Pipeline
+ * (Upgraded to securely lock the Universal Sidebar on the right margin)
  */
 function verifyGatekeeperPinEntry() {
     const pinInput = document.getElementById('gatekeeper-pin-input');
@@ -790,14 +812,31 @@ function verifyGatekeeperPinEntry() {
         const homeGrid = document.getElementById('home-category-grid');
         const homeDeck = document.getElementById('deck-home-actions');
         const adminView = document.getElementById('admin-settings-view');
+        const screen2Deck = document.getElementById('deck-screen2-nav');
+        const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
+        const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
 
-        if (homeGrid && homeDeck && adminView) {
+        if (homeGrid && homeDeck && adminView && screen2Deck && monthsActionWrapper && sidebarCloseBtn) {
+            // A. Hide only the home track category contents from the master grid space cleanly
             homeGrid.style.setProperty('display', 'none', 'important');
             homeDeck.style.setProperty('display', 'none', 'important');
+            
+            // B. Activate the Settings panel viewport area securely as an independent overlay layout
             adminView.classList.remove('screen-hide');
             adminView.style.setProperty('display', 'block', 'important');
             
-                        // 🔒 BULLETPROOF SYNC: Match visual states directly to user-facing config properties
+            // C. Shift only the navigation controls deck inside the existing right sidebar track
+            screen2Deck.classList.remove('screen-hide');
+            monthsActionWrapper.style.setProperty('display', 'none', 'important');
+            
+            // D. Reveal the Big Red X close layout button right on the sidebar under the back button
+            sidebarCloseBtn.style.setProperty('display', 'block', 'important');
+            
+            // E. Set workspace tracking parameters color states
+            currentActiveWorkspaceMode = 'ADMIN_PURPLE';
+            syncKioskBackgroundState();
+            
+            // Sync checkmark switches visually to match user properties perfectly
             const row4Checkbox = document.getElementById('admin-toggle-row4');
             const confirmCheckbox = document.getElementById('admin-toggle-confirm');
             if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
@@ -839,6 +878,12 @@ function handleAdminMenuSelection(optionKey) {
     // Intercept short date definitions configuration request tracks
     if (optionKey === 'DEFINE_SHORTDATE') {
         launchShortDateConfigPanel();
+        return;
+    }
+
+    // Intercept administrative numerical door code changes requests 
+    if (optionKey === 'RESET_PASSWORD') {
+        launchAdminPinResetPanel();
         return;
     }
 
@@ -1088,6 +1133,7 @@ function confirmMultiplesQuantityRun() {
 
 /**
  * Handles workflow routing after a quantity selection run is dispatched
+ * (Syntactically corrected to resolve structural truncation layout bugs)
  */
 function handleContinuityChoice(choiceType) {
     const multiplesModal = document.getElementById('admin-multiples-modal');
@@ -1143,7 +1189,7 @@ function handleContinuityChoice(choiceType) {
         
         syncKioskBackgroundState();
     }
-}
+} // 🟢 FIX: Main function block wrapper now explicitly closed securely here
 
 /**
  * Resolves the 4-year industrial color mapping assignments
@@ -1693,4 +1739,70 @@ function exitListEditorWorkspace() {
         adminView.classList.remove('screen-hide');
         adminView.style.setProperty('display', 'block', 'important');
     }
+}
+
+// Opens the numeric PIN modification dialogue layout panel
+function launchAdminPinResetPanel() {
+    const modal = document.getElementById('admin-pin-reset-modal');
+    const displayField = document.getElementById('admin-new-pin-display');
+    const errorSlot = document.getElementById('admin-pin-reset-error-msg');
+    
+    if (displayField) displayField.value = "";
+    if (errorSlot) { errorSlot.style.display = "none"; errorSlot.textContent = ""; }
+    
+    if (modal) {
+        modal.classList.remove('modal-hide');
+        modal.style.setProperty('display', 'flex', 'important');
+    }
+}
+
+// Dismisses the PIN modifications menu canvas safely
+function dismissAdminPinResetPanel() {
+    const modal = document.getElementById('admin-pin-reset-modal');
+    if (modal) {
+        modal.style.setProperty('display', 'none', 'important');
+        modal.classList.add('modal-hide');
+    }
+}
+
+// Appends numeric entries directly into the 4-digit collection tracker bar
+function pressResetPinPadKey(digitString) {
+    const displayField = document.getElementById('admin-new-pin-display');
+    const errorSlot = document.getElementById('admin-pin-reset-error-msg');
+    if (!displayField) return;
+    
+    if (errorSlot) errorSlot.style.display = "none";
+
+    // Strictly limit pin entries to exactly 4 layout positions
+    if (displayField.value.length < 4) {
+        displayField.value += digitString;
+    }
+}
+
+function clearResetPinPadEntry() {
+    const displayField = document.getElementById('admin-new-pin-display');
+    if (displayField) displayField.value = "";
+}
+
+// Checks input compliance loops and persists the 4-digit code directly onto disk storage
+function submitAdminPinResetAdjustment() {
+    const displayField = document.getElementById('admin-new-pin-display');
+    const errorSlot = document.getElementById('admin-pin-reset-error-msg');
+    if (!displayField || !errorSlot) return;
+
+    const targetNewPin = displayField.value;
+
+    // Reject processing instantly if the string collection bounds fall short of a full PIN
+    if (targetNewPin.length !== 4) {
+        errorSlot.textContent = "Rejected: PIN must be 4 digits!";
+        errorSlot.style.display = "block";
+        return;
+    }
+
+    // Overwrite state metrics and dispatch payload directly to configuration json file
+    kioskConfig.securityPin = targetNewPin;
+    saveKioskConfigurationState();
+    
+    console.log("🔒 Security entry tracker authorization updated. New Admin PIN: [" + targetNewPin + "]");
+    dismissAdminPinResetPanel();
 }

@@ -106,6 +106,19 @@
                         </button>
                         <div class="sidebar-legend-text">BACK</div>
                     </div>
+                    
+                    <!-- Sidebar close wrapper adjusted for absolute contrast readability -->
+                    <div class="action-block" id="sidebar-close-program-wrapper" style="display: none;">
+                        <button class="side-btn" onclick="handleAdminMenuSelection('CLOSE_PROGRAM')" style="background-color: #C64B4B !important; border: 2px solid #000000; display: flex; justify-content: center; align-items: center;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="width: 3.5vh; height: 3.5vh;">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        <!-- 🎨 FIXED COMPONENT: High contrast bold black text description -->
+                        <div class="sidebar-legend-text" style="color: #000000 !important; font-weight: 900 !important;">CLOSE</div>
+                    </div>
+
                     <!-- Action Block: Months Switch Button -->
                     <div class="action-block" id="sidebar-months-action-wrapper">
                         <button class="side-btn btn-months" onclick="sidebarAction('MONTHS')">
@@ -158,83 +171,157 @@
         </div>
     </div>
 
-    <!-- STAGE 3: FULLSCREEN INDEPENDENT ADMINISTRATIVE MANAGEMENT SUITE -->
-<div id="admin-settings-view" class="screen-hide" style="display: none; background-color: #7851A9; width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; box-sizing: border-box; padding: 4vh 4vw; font-family: sans-serif; z-index: 9999999;">
+<!-- STAGE 3: POLISHED TWO-PANEL INDUSTRIAL ADMINISTRATION WORKSPACE -->
+<div id="admin-settings-view" class="screen-hide" style="display: none; width: 94.2vw; height: 100vh; position: fixed; top: 0; left: 0; background-color: #7851A9; box-sizing: border-box; padding: 5vh 2vw; padding-right: 8vw; font-family: Arial, sans-serif; z-index: 99999;">
     
-    <!-- Top Centered Header Banner Box -->
-    <div style="display: flex; justify-content: center; margin-bottom: 5vh;">
-        <div style="background-color: #FFFFFF; color: #7851A9; font-weight: bold; font-size: 4vh; padding: 1.5vh 8vw; border-radius: 50px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0,0.2); letter-spacing: 1px;">
-            ADMIN/SETTINGS PAGE
-        </div>
-    </div>
-
-    <!-- Dual Column Touch Button Menu Grid -->
-    <div class="admin-menu-grid" style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 5vw; row-gap: 3.5vh; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
+    <!-- MASTER TWIN COLUMN BOX CONFIGURATION GRID -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 3vw; width: 100%; height: 90vh; box-sizing: border-box; align-items: stretch;">
         
-        <!-- ROW 1 -->
-        <button class="admin-btn" onclick="handleAdminMenuSelection('MULTIPLES')">
-            <span>Print Labels in Multiples</span>
-        </button>
+        <!-- ======================================================================= -->
+        <!-- LEFT SLATE PANEL: SYSTEM SETTINGS                                       -->
+        <!-- ======================================================================= -->
+        <div style="background-color: #3A4454; border: 4px solid #1A202C; border-radius: 16px; padding: 4vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0 12px 25px rgba(0,0,0,0.4);">
+            <div style="color: #FFFFFF; font-weight: 900; font-size: 4vh; text-transform: uppercase; border-bottom: 3px solid #5A677C; padding-bottom: 1.5vh; letter-spacing: 2px; text-align: center;">
+                Settings
+            </div>
+            
+            <!-- Option Row 1: Multiples -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Print</span>
+                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Labels in Multiples</span>
+                </div>
+                <button onclick="handleAdminMenuSelection('MULTIPLES')" class="admin-panel-arrow-btn">➔</button>
+            </div>
 
-        <button class="admin-btn" onclick="handleAdminMenuSelection('EXIT')">
-            <span>Exit Admin / Settings Page</span>
-        </button>
+            <!-- Option Row 2: Fourth Year -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Release</span>
+                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">4th Year Buttons</span>
+                </div>
+                <label class="admin-switch">
+                    <input type="checkbox" id="admin-toggle-row4" onchange="handleAdminMenuSelection('TOGGLE_ROW4')">
+                    <span class="admin-slider"></span>
+                </label>
+            </div>
 
-        <!-- ROW 2 -->
-        <button class="admin-btn" onclick="handleAdminMenuSelection('TOGGLE_ROW4')">
-            <span>Release Fourth Year Buttons</span>
-            <label class="admin-switch">
-                <input type="checkbox" id="admin-toggle-row4">
-                <span class="admin-slider"></span>
-            </label>
-        </button>
+            <!-- Option Row 3: Confirmations -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Show</span>
+                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Print Messages</span>
+                </div>
+                <label class="admin-switch">
+                    <input type="checkbox" id="admin-toggle-confirm" onchange="handleAdminMenuSelection('TOGGLE_CONFIRM')">
+                    <span class="admin-slider"></span>
+                </label>
+            </div>
 
-        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_CATEGORY')">
-            <span>Edit Category Labels List</span>
-        </button>
+            <!-- Option Row 4: Short Date -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Define</span>
+                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Short Date Period</span>
+                </div>
+                <button onclick="handleAdminMenuSelection('DEFINE_SHORTDATE')" class="admin-panel-arrow-btn">➔</button>
+            </div>
 
-        <!-- ROW 3 -->
-        <button class="admin-btn" onclick="handleAdminMenuSelection('TOGGLE_CONFIRM')">
-            <span>Show Print Confirmation Messages</span>
-            <label class="admin-switch">
-                <input type="checkbox" id="admin-toggle-confirm">
-                <span class="admin-slider"></span>
-            </label>
-        </button>
+            <!-- Option Row 5: Pin Reset -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; flex: 1;">
+                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Reset</span>
+                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Admin PIN Number</span>
+                </div>
+                <button onclick="handleAdminMenuSelection('RESET_PASSWORD')" class="admin-panel-arrow-btn">➔</button>
+            </div>
+        </div>
 
-        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_TOILETRIES')">
-            <span>Edit Toiletries Labels List</span>
-        </button>
+        <!-- ======================================================================= -->
+        <!-- RIGHT SLATE PANEL: EDIT LABELS MANAGEMENT WORKSPACE                     -->
+        <!-- ======================================================================= -->
+        <div style="background-color: #3A4454; border: 4px solid #1A202C; border-radius: 16px; padding: 4vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0 12px 25px rgba(0,0,0,0.4);">
+            <div style="color: #FFFFFF; font-weight: 900; font-size: 4vh; text-transform: uppercase; border-bottom: 3px solid #5A677C; padding-bottom: 1.5vh; letter-spacing: 2px; text-align: center;">
+                Edit Labels
+            </div>
+            
+            <!-- Category row -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Category<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                <button onclick="handleAdminMenuSelection('EDIT_CATEGORY')" class="admin-panel-arrow-btn">➔</button>
+            </div>
 
-        <!-- ROW 4 -->
-        <button class="admin-btn" onclick="handleAdminMenuSelection('DEFINE_SHORTDATE')">
-            <span>Define Short Date Period</span>
-        </button>
+            <!-- Toiletries row -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Toiletries<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                <button onclick="handleAdminMenuSelection('EDIT_TOILETRIES')" class="admin-panel-arrow-btn">➔</button>
+            </div>
 
-        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_CHRISTMAS')">
-            <span>Edit Christmas Labels List</span>
-        </button>
+            <!-- Christmas row -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Christmas<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                <button onclick="handleAdminMenuSelection('EDIT_CHRISTMAS')" class="admin-panel-arrow-btn">➔</button>
+            </div>
 
-        <!-- ROW 5 -->
-        <button class="admin-btn" onclick="handleAdminMenuSelection('RESET_PASSWORD')">
-            <span>Reset Admin Password</span>
-        </button>
+            <!-- Miscellaneous row -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Miscellaneous<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                <button onclick="handleAdminMenuSelection('EDIT_MISC')" class="admin-panel-arrow-btn">➔</button>
+            </div>
 
-        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_MISC')">
-            <span>Edit Miscellaneous Labels List</span>
-        </button>
+            <!-- Dispatch row -->
+            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; flex: 1;">
+                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Dispatch<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                <button onclick="handleAdminMenuSelection('EDIT_DISPATCH')" class="admin-panel-arrow-btn">➔</button>
+            </div>
+        </div>
 
-        <!-- ROW 6 -->
-        <button class="admin-btn" onclick="handleAdminMenuSelection('CLOSE_PROGRAM')">
-            <span>Close Program</span>
-        </button>
+    </div> 
+</div> <!-- Closes id="admin-settings-view" outer container -->
 
-        <button class="admin-btn" onclick="handleAdminMenuSelection('EDIT_DISPATCH')">
-            <span>Edit Dispatch Labels List</span>
-        </button>
+<!-- UTILITY CONFIGURATION PANEL OVERLAY: RESET ADMIN PIN NUMBER -->
+<div id="admin-pin-reset-modal" class="modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 99999999;">
+    <div class="modal-content" style="background-color: #FFF4C2 !important; border: 4px solid #7851A9 !important; padding: 4vh 3vw; border-radius: 16px; width: 35vw; max-width: 440px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2.5vh; align-items: center; box-shadow: 0px 12px 30px rgba(0,0,0,0.4) !important;">
+        
+        <div style="font-family: Arial, sans-serif; font-size: 2.6vh; font-weight: bold; color: #000000; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">
+            Reset Admin PIN No.
+        </div>
 
+        <!-- Numeric Field Display Input Box -->
+        <div style="width: 100%; display: flex; justify-content: center;">
+            <input type="text" id="admin-new-pin-display" readonly maxlength="4" placeholder="••••"
+                   style="width: 80%; padding: 1.5vh 1vw; font-size: 3.5vh; font-weight: bold; letter-spacing: 10px; border: 3px solid #000000; border-radius: 8px; background: #FFFFFF; text-align: center; box-sizing: border-box;">
+        </div>
+
+        <!-- Inline Security Error Tracker Slot -->
+        <div id="admin-pin-reset-error-msg" style="color: #C64B4B; font-weight: bold; font-size: 1.8vh; display: none; text-align: center; text-transform: uppercase;">
+            ERROR HOLDER
+        </div>
+
+        <!-- Touch Screen Numeric Grid Panel (3x4 Layout) -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5vh; width: 100%; box-sizing: border-box; padding: 0 1vw;">
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('1')">1</button>
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('2')">2</button>
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('3')">3</button>
+            
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('4')">4</button>
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('5')">5</button>
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('6')">6</button>
+            
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('7')">7</button>
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('8')">8</button>
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('9')">9</button>
+            
+            <button class="pin-key-btn" onclick="clearResetPinPadEntry()" style="background-color: #C64B4B !important; color: #FFFFFF !important;">CLR</button>
+            <button class="pin-key-btn" onclick="pressResetPinPadKey('0')">0</button>
+            <button class="pin-key-btn" onclick="submitAdminPinResetAdjustment()" style="background-color: #4cd964 !important; color: #000000 !important; font-weight: bold;">OK</button>
+        </div>
+
+        <button class="btn-multiples-exit" onclick="dismissAdminPinResetPanel()" style="width: 80%; padding: 1.2vh 0; font-size: 2vh; border: 2px solid #000000; cursor: pointer; margin-top: 1vh;">
+            CANCEL
+        </button>
     </div>
-</div> <!-- Closes id="admin-settings-view" -->
+</div>
 
 <!-- UTILITY CONFIGURATION PANEL OVERLAY: DEFINE SHORT DATE PERIOD -->
 <div id="admin-shortdate-modal" class="modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 99999999;">

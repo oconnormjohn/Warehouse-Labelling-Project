@@ -464,7 +464,7 @@ body {
     box-shadow: 0px 1vh 0px #000000 !important;
 }
 
-/* Amended 06-08: */
+/* Amended 06-08: and again on 08-09: */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -472,8 +472,8 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5); 
-    display: flex !important; /* Centres Layout content horizontally */
-    justify-content: center;  /* Centres Layout content vertically */
+    display: flex; /* 🟢 FIX: Removed !important so .modal-hide can override it cleanly */
+    justify-content: center;  
     align-items: center;
     z-index: 999999;
 }
@@ -581,7 +581,7 @@ body {
     display: inline-block;
     width: 65px;
     height: 36px;
-    pointer-events: none;    
+    cursor: pointer; /* 🟢 FIX: Allow elements to natively catch touch responses */
 }
 
 .admin-switch input { opacity: 0; width: 0; height: 0; }
@@ -847,4 +847,81 @@ body, .dashboard-wrapper {
 #admin-list-editor-workspace.screen-hide, 
 #admin-settings-view.screen-hide {
     display: none !important;
+}
+
+/* Chunky Industrial Sized Action Buttons for Admin Submenus */
+.admin-panel-arrow-btn {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    border-radius: 12px !important;
+    width: 8.5vh !important;
+    height: 6.5vh !important;
+    cursor: pointer !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-weight: 900 !important;
+    font-size: 4.5vh !important;
+    box-shadow: 0px 4px 0px #000000 !important;
+    position: relative;
+    top: 0;
+    outline: none;
+}
+
+.admin-panel-arrow-btn:active {
+    top: 3px !important;
+    box-shadow: 0px 1px 0px #000000 !important;
+}
+
+/* Scaled Industrial Toggle Slider Components */
+.admin-switch {
+    position: relative;
+    display: inline-block;
+    width: 90px !important;
+    height: 48px !important;
+    cursor: pointer !important;
+}
+
+.admin-switch input { 
+    opacity: 0; 
+    width: 0; 
+    height: 0; 
+}
+
+.admin-slider {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #FFFFFF !important;
+    border: 3px solid #000000;
+    transition: .2s;
+    border-radius: 34px;
+    box-shadow: 0px 4px 0px rgba(0,0,0,0.3);
+}
+
+.admin-slider:before {
+    position: absolute;
+    content: "";
+    height: 34px !important; 
+    width: 34px !important; 
+    left: 4px; 
+    bottom: 2px;
+    background-color: #3A4454 !important;
+    border: 2px solid #000000;
+    transition: .2s;
+    border-radius: 50%;
+}
+
+input:checked + .admin-slider { 
+    background-color: #4cd964 !important; 
+}
+
+input:checked + .admin-slider:before { 
+    transform: translateX(42px) !important; 
+    background-color: #FFFFFF !important;
+}
+
+/* Pull the sidebar track over the admin layout layer */
+.sidebar-container {
+    z-index: 999999 !important;
 }
