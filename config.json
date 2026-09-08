@@ -2,5 +2,6 @@
   "isFourthYearReleased": false,
   "showPrintConfirmation": true,
   "securityPin": "1234",
+  "shortDatePeriod": 1,
   "version": "1.1.0"
 }

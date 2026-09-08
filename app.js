@@ -22,7 +22,8 @@ let isEditorShiftActive = false;
 let kioskConfig = {
     isFourthYearReleased: false,
     showPrintConfirmation: true,
-    securityPin: "1234"
+    securityPin: "1234",
+    shortDatePeriod: 1 // 🚀 INJECTED CONFIG LAYER: Track the boundary value dynamically
 };
 
 // ==========================================================================
@@ -51,14 +52,15 @@ function loadKioskConfigurationState() {
             // Merge file settings smoothly into the runtime blueprint
             kioskConfig = { ...kioskConfig, ...parsedConfig };
             
-            // Rebuild matrix layout cleanly using the newly retrieved data parameters
+            // 🚀 SYNC TRACKING VARIABLE: Force global variable to match config profile
+            shortDatePeriod = kioskConfig.shortDatePeriod !== undefined ? kioskConfig.shortDatePeriod : 1;
+            
+            // Rebuild matrix layouts cleanly using the newly retrieved data parameters
             generateDynamicGrid();
-            
-            // 🚀 INJECTED LAYER TRIGGER: Read category values dynamically from disk immediately
-            loadHomeMatrixCategories(); 
-            
+            loadHomeMatrixCategories();
             console.log("⚙️ Kiosk configuration loaded successfully from server disk.");
         })
+
         .catch(e => {
             console.warn("⚠️ Local network config fetch failed, relying on defaults:", e);
             generateDynamicGrid();
@@ -112,10 +114,13 @@ function loadHomeMatrixCategories() {
                 let displayLabelSummary = `${line1Text} ${line2Text}`.trim();
                 let graphicFile = (slotItem.image_file || "blank.jpg").toString().trim().toLowerCase();
 
-                // If the data entry slot is empty, leave it clean and blank without numbers
+                // If the entire data entry slot is empty, leave it clean and blank without numbers
+                let inlineHomeBgOverride = "";
                 if (displayLabelSummary === "") {
                     displayLabelSummary = "";
-                    graphicFile = "blank.png";
+                    graphicFile = "categoryblank.png";
+                    // Slide the brightness notch down a fraction specifically for empty home cells
+                    inlineHomeBgOverride = "background-color: #EFE6BA !important;";
                 }
 
                 // FUTURE-PROOF RE-CONSTRUCTION: All 35 active slots listen to database inputs natively
@@ -188,23 +193,25 @@ function renderPlainLabelsMatrixContainer(consolidatedItemsArray) {
         const line2Text = (slotItem.text2 || "").toString().trim().toUpperCase();
         
         let displayLabelSummary = `${line1Text} ${line2Text}`.trim();
-        let graphicFile = (slotItem.image_file || "blank.png").toString().trim().toLowerCase();
+        
+        // 🔒 INDUSTRIAL RESET: Default explicitly to your clean transparent file first
+        let graphicFile = "categoryblank.png";
 
-        // Check if the image filename points to a legacy jpg extension and swap to your new blank png track
-        if (graphicFile === "blank.jpg") {
-            graphicFile = "blank.png";
+        // Only look up the database filename if the slot actually contains active text labels
+        if (displayLabelSummary !== "") {
+            let rawFile = (slotItem.image_file || "categoryblank.png").toString().trim().toLowerCase();
+            if (rawFile !== "" && rawFile !== "categoryblank.jpg") {
+                graphicFile = rawFile;
+            }
         }
 
-        // If the database slot is empty, render it as a clean blank panel
-        if (displayLabelSummary === "") {
-            displayLabelSummary = "";
-            graphicFile = "blank.png";
-        }
+        // Determine the background color: Crisp white for active labels, ultra-soft grey for empty slots
+        const inlinePlainBgColor = (displayLabelSummary !== "") ? "#FFFFFF" : "#F4F4F4";
 
-        // UK SYSTEM PROFILE OVERRIDE: Enforce crisp white cards and accessible compact typography
+        // UK SYSTEM PROFILE OVERRIDE: Enforce pristine text cards and soft grey relief boundaries
         plainMatrixHTML += `
             <button class="home-cat-btn" 
-                    style="background-color: #FFFFFF !important; box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important;" 
+                    style="background-color: ${inlinePlainBgColor} !important; box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important;" 
                     onclick="handlePlainMatrixCellClick(this)">
                 <span class="btn-text" style="font-size: 2.2vh !important; line-height: 1.0 !important;">${displayLabelSummary}</span>
                 <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
@@ -212,7 +219,7 @@ function renderPlainLabelsMatrixContainer(consolidatedItemsArray) {
     });
 
     homeGrid.innerHTML = plainMatrixHTML;
-    console.log("🎨 Phase B Complete: Plain Labels matrix canvas drawn with white card properties.");
+    console.log("🎨 Phase B Complete: Plain Labels matrix canvas drawn with strict icon isolation.");
 }
 
 // Dedicated click handler for Plain Mode that captures labels and splits text fields natively
@@ -829,6 +836,12 @@ function handleAdminMenuSelection(optionKey) {
         return;
     }
 
+    // Intercept short date definitions configuration request tracks
+    if (optionKey === 'DEFINE_SHORTDATE') {
+        launchShortDateConfigPanel();
+        return;
+    }
+
     // Intercept data list editing requests and launch the workspace layout
     if (['EDIT_CATEGORY', 'EDIT_TOILETRIES', 'EDIT_CHRISTMAS', 'EDIT_MISC', 'EDIT_DISPATCH'].includes(optionKey)) {
         const listMappingKeys = {
@@ -844,6 +857,43 @@ function handleAdminMenuSelection(optionKey) {
 
     console.log(`🔓 Admin option authorized & executed instantly: [${optionKey}]`);
     executeValidatedAdminAction(optionKey);
+}
+
+// Triggers the Short Date selection overlay window open
+function launchShortDateConfigPanel() {
+    const modal = document.getElementById('admin-shortdate-modal');
+    if (modal) {
+        modal.classList.remove('modal-hide');
+        modal.style.setProperty('display', 'flex', 'important');
+    }
+}
+
+// Dismisses the Short Date overlay safely
+function dismissShortDateConfigPanel() {
+    const modal = document.getElementById('admin-shortdate-modal');
+    if (modal) {
+        modal.style.setProperty('display', 'none', 'important');
+        modal.classList.add('modal-hide');
+    }
+}
+
+// Processes the selected selection index parameter, updates configurations, and writes to disk
+// Processes the selected selection index parameter, updates configurations, and writes to disk
+function submitShortDateConfigAdjustment(selectedTargetValueInt) {
+    // 1. Commit the value change onto global workspace trackers immediately
+    shortDatePeriod = selectedTargetValueInt;
+    kioskConfig.shortDatePeriod = selectedTargetValueInt;
+    
+    console.log(`⚙️ System configuration changed: shortDatePeriod set to [${selectedTargetValueInt}]`);
+
+    // 2. Persist the changes instantly down onto your Raspberry Pi disk storage configuration file
+    saveKioskConfigurationState();
+    
+    // 🚀 FIXED LAYER: Rebuild matrix layout grids live to immediately recalculate ambient boundaries
+    generateDynamicGrid();
+    
+    // 3. Clear window layout views cleanly
+    dismissShortDateConfigPanel();
 }
 
 function pressKioskKey(keyCharacter) {
