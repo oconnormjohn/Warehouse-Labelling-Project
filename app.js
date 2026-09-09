@@ -611,7 +611,7 @@ function sidebarAction(action) {
             const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
             
             if (adminView && homeGrid && homeDeck && screen2Deck && monthsActionWrapper && sidebarCloseBtn) {
-                adminView.style.setProperty('display', 'none', 'important');
+                adminView.style.setProperty('display', 'grid', 'important');
                 adminView.classList.add('screen-hide');
                 
                 screen2Deck.classList.add('screen-hide');
@@ -858,7 +858,7 @@ function handleAdminMenuSelection(optionKey) {
         const homeDeck = document.getElementById('deck-home-actions');
         
         if (adminView && homeGrid && homeDeck) {
-            adminView.style.setProperty('display', 'none', 'important');
+            adminView.style.setProperty('display', 'grid', 'important');
             adminView.classList.add('screen-hide');
             
             homeGrid.style.removeProperty('grid-template-columns');
@@ -1737,7 +1737,7 @@ function exitListEditorWorkspace() {
     const adminView = document.getElementById('admin-settings-view');
     if (adminView) {
         adminView.classList.remove('screen-hide');
-        adminView.style.setProperty('display', 'block', 'important');
+        adminView.style.setProperty('display', 'grid', 'important'); // 🟢 FIX: Retain side-by-side columns
     }
 }
 
