@@ -823,7 +823,7 @@ function verifyGatekeeperPinEntry() {
             
             // B. Activate the Settings panel viewport area securely as an independent overlay layout
             adminView.classList.remove('screen-hide');
-            adminView.style.setProperty('display', 'block', 'important');
+            adminView.style.setProperty('display', 'flex', 'important');
             
             // C. Shift only the navigation controls deck inside the existing right sidebar track
             screen2Deck.classList.remove('screen-hide');

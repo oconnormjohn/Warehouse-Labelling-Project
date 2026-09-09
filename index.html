@@ -54,6 +54,102 @@
             </div>
         </div>
 
+        <!-- ======================================================================= -->
+        <!-- STAGE 3: POLISHED TWO-PANEL INDUSTRIAL ADMINISTRATION WORKSPACE         -->
+        <!-- ======================================================================= -->
+        <div id="admin-settings-view" class="screen-hide" style="display: none; grid-template-columns: 1fr 1fr; column-gap: 3vw; width: 100%; max-width: 72vw; height: 90vh; box-sizing: border-box; padding: 2vh 0 0 0; margin: 2vh auto 0 calc(auto + 3.2vw); font-family: Arial, sans-serif; align-items: stretch;">
+            
+                <!-- Left Container Box ("Settings") -->
+                <div style="background-color: #3A4454; border: 4px solid #1A202C; border-radius: 16px; padding: 4vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0 12px 25px rgba(0,0,0,0.4);">
+                    <div style="color: #FFFFFF; font-weight: 900; font-size: 4vh; text-transform: uppercase; border-bottom: 3px solid #5A677C; padding-bottom: 1.5vh; letter-spacing: 2px; text-align: center;">
+                        Settings
+                    </div>
+                    
+                    <!-- Option Row 1: Multiples -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                            <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Print</span>
+                            <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Labels in Multiples</span>
+                        </div>
+                        <button onclick="handleAdminMenuSelection('MULTIPLES')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+
+                    <!-- Option Row 2: Fourth Year -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                            <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Release</span>
+                            <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">4th Year Buttons</span>
+                        </div>
+                        <label class="admin-switch">
+                            <input type="checkbox" id="admin-toggle-row4" onchange="handleAdminMenuSelection('TOGGLE_ROW4')">
+                            <span class="admin-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Option Row 3: Confirmations -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                            <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Show</span>
+                            <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Print Messages</span>
+                        </div>
+                        <label class="admin-switch">
+                            <input type="checkbox" id="admin-toggle-confirm" onchange="handleAdminMenuSelection('TOGGLE_CONFIRM')">
+                            <span class="admin-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Option Row 4: Short Date -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                            <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Define</span>
+                            <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Short Date Period</span>
+                        </div>
+                        <button onclick="handleAdminMenuSelection('DEFINE_SHORTDATE')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+
+                    <!-- Option Row 5: Pin Reset -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5vh;">
+                            <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Reset</span>
+                            <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Admin PIN Number</span>
+                        </div>
+                        <button onclick="handleAdminMenuSelection('RESET_PASSWORD')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+                </div>
+
+                <!-- Right Container Box ("Edit Labels") -->
+                <div style="background-color: #3A4454; border: 4px solid #1A202C; border-radius: 16px; padding: 4vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0 12px 25px rgba(0,0,0,0.4);">
+                    <div style="color: #FFFFFF; font-weight: 900; font-size: 4vh; text-transform: uppercase; border-bottom: 3px solid #5A677C; padding-bottom: 1.5vh; letter-spacing: 2px; text-align: center;">
+                        Edit Labels
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Category<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                        <button onclick="handleAdminMenuSelection('EDIT_CATEGORY')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Toiletries<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                        <button onclick="handleAdminMenuSelection('EDIT_TOILETRIES')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Christmas<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                        <button onclick="handleAdminMenuSelection('EDIT_CHRISTMAS')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
+                        <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Miscellaneous<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                        <button onclick="handleAdminMenuSelection('EDIT_MISC')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; flex: 1;">
+                        <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Dispatch<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
+                        <button onclick="handleAdminMenuSelection('EDIT_DISPATCH')" class="admin-panel-arrow-btn">➔</button>
+                    </div>
+                </div>
+        </div>
+
         <!-- UNIVERSAL GLOBAL SIDEBAR (Occupies 5.8% width on all screens) -->
         <div class="sidebar-container">
             <div class="sidebar">
@@ -170,114 +266,6 @@
             <h1 class="modal-caption">Please take your label</h1>
         </div>
     </div>
-
-<!-- STAGE 3: POLISHED TWO-PANEL INDUSTRIAL ADMINISTRATION WORKSPACE -->
-<div id="admin-settings-view" class="screen-hide" style="display: none; width: 94.2vw; height: 100vh; position: fixed; top: 0; left: 0; background-color: #7851A9; box-sizing: border-box; padding: 5vh 2vw; padding-right: 8vw; font-family: Arial, sans-serif; z-index: 99999;">
-    
-    <!-- MASTER TWIN COLUMN BOX CONFIGURATION GRID -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 3vw; width: 100%; height: 90vh; box-sizing: border-box; align-items: stretch;">
-        
-        <!-- ======================================================================= -->
-        <!-- LEFT SLATE PANEL: SYSTEM SETTINGS                                       -->
-        <!-- ======================================================================= -->
-        <div style="background-color: #3A4454; border: 4px solid #1A202C; border-radius: 16px; padding: 4vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0 12px 25px rgba(0,0,0,0.4);">
-            <div style="color: #FFFFFF; font-weight: 900; font-size: 4vh; text-transform: uppercase; border-bottom: 3px solid #5A677C; padding-bottom: 1.5vh; letter-spacing: 2px; text-align: center;">
-                Settings
-            </div>
-            
-            <!-- Option Row 1: Multiples -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
-                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Print</span>
-                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Labels in Multiples</span>
-                </div>
-                <button onclick="handleAdminMenuSelection('MULTIPLES')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-
-            <!-- Option Row 2: Fourth Year -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
-                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Release</span>
-                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">4th Year Buttons</span>
-                </div>
-                <label class="admin-switch">
-                    <input type="checkbox" id="admin-toggle-row4" onchange="handleAdminMenuSelection('TOGGLE_ROW4')">
-                    <span class="admin-slider"></span>
-                </label>
-            </div>
-
-            <!-- Option Row 3: Confirmations -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
-                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Show</span>
-                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Print Messages</span>
-                </div>
-                <label class="admin-switch">
-                    <input type="checkbox" id="admin-toggle-confirm" onchange="handleAdminMenuSelection('TOGGLE_CONFIRM')">
-                    <span class="admin-slider"></span>
-                </label>
-            </div>
-
-            <!-- Option Row 4: Short Date -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
-                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Define</span>
-                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Short Date Period</span>
-                </div>
-                <button onclick="handleAdminMenuSelection('DEFINE_SHORTDATE')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-
-            <!-- Option Row 5: Pin Reset -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; flex: 1;">
-                <div style="display: flex; flex-direction: column; gap: 0.5vh;">
-                    <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Reset</span>
-                    <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Admin PIN Number</span>
-                </div>
-                <button onclick="handleAdminMenuSelection('RESET_PASSWORD')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-        </div>
-
-        <!-- ======================================================================= -->
-        <!-- RIGHT SLATE PANEL: EDIT LABELS MANAGEMENT WORKSPACE                     -->
-        <!-- ======================================================================= -->
-        <div style="background-color: #3A4454; border: 4px solid #1A202C; border-radius: 16px; padding: 4vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0 12px 25px rgba(0,0,0,0.4);">
-            <div style="color: #FFFFFF; font-weight: 900; font-size: 4vh; text-transform: uppercase; border-bottom: 3px solid #5A677C; padding-bottom: 1.5vh; letter-spacing: 2px; text-align: center;">
-                Edit Labels
-            </div>
-            
-            <!-- Category row -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Category<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
-                <button onclick="handleAdminMenuSelection('EDIT_CATEGORY')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-
-            <!-- Toiletries row -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Toiletries<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
-                <button onclick="handleAdminMenuSelection('EDIT_TOILETRIES')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-
-            <!-- Christmas row -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Christmas<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
-                <button onclick="handleAdminMenuSelection('EDIT_CHRISTMAS')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-
-            <!-- Miscellaneous row -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
-                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Miscellaneous<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
-                <button onclick="handleAdminMenuSelection('EDIT_MISC')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-
-            <!-- Dispatch row -->
-            <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; flex: 1;">
-                <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase;">Dispatch<br><span style="font-size: 2.2vh; color: #B0BEC5; font-weight: bold;">Labels</span></span>
-                <button onclick="handleAdminMenuSelection('EDIT_DISPATCH')" class="admin-panel-arrow-btn">➔</button>
-            </div>
-        </div>
-
-    </div> 
-</div> <!-- Closes id="admin-settings-view" outer container -->
 
 <!-- UTILITY CONFIGURATION PANEL OVERLAY: RESET ADMIN PIN NUMBER -->
 <div id="admin-pin-reset-modal" class="modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 99999999;">
