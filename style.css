@@ -925,3 +925,16 @@ input:checked + .admin-slider:before {
 .sidebar-container {
     z-index: 999999 !important;
 }
+
+/* ==========================================================================
+   TWIN-COLUMN SETTINGS PANEL VISUAL ALIGNMENT PASS
+   ========================================================================== */
+#admin-settings-view {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3vw;
+    max-width: 72vw;
+    height: 90vh;
+    margin: 2vh auto 0 auto;
+    align-items: stretch;
+}

@@ -12,9 +12,21 @@
         <!-- ======================================================================= -->
         <!-- STAGE 1: NEW HOME SCREEN / CATEGORY SELECTION MATRIX WORKSPACE          -->
         <!-- ======================================================================= -->
-        <div id="home-category-grid">
-            <!-- Dynamic button cells from category.json stream in here automatically -->
+        <div class="main-container" id="home-category-workspace-track" style="width: 100%; height: 100%;">
+            <div id="home-category-grid">
+                <!-- Dynamic button cells from category.json stream in here automatically -->
+            </div>
         </div>
+
+        <!-- ======================================================================= -->
+        <!-- FUTURE PATHWAY: DISPATCH LABELS SCREEN WORKSPACE                        -->
+        <!-- ======================================================================= -->
+        <div class="main-container screen-hide" id="dispatch-labels-view">
+            <!-- Dynamic button cells from dispatch.json will stream in here later -->
+        </div>
+
+        <!-- Left Workspace View Panel Component Area -->
+        <div class="main-container screen-hide" id="workspace-view">
 
         <!-- Left Workspace View Panel Component Area -->
         <div class="main-container screen-hide" id="workspace-view">
@@ -57,8 +69,8 @@
         <!-- ======================================================================= -->
         <!-- STAGE 3: POLISHED TWO-PANEL INDUSTRIAL ADMINISTRATION WORKSPACE         -->
         <!-- ======================================================================= -->
-        <div id="admin-settings-view" class="screen-hide" style="display: none; grid-template-columns: 1fr 1fr; column-gap: 3vw; max-width: 72vw; height: 90vh; box-sizing: border-box; padding: 2vh 0 0 0; margin: 2vh auto 0 auto; font-family: Arial, sans-serif; align-items: stretch;">
-            
+        <div class="main-container screen-hide" id="admin-settings-view" style="display: none; grid-template-columns: 1fr 1fr; column-gap: 3vw; max-width: 72vw; height: 90vh; box-sizing: border-box; padding: 2vh 0 0 0; margin: 2vh auto 0 auto; font-family: Arial, sans-serif; align-items: stretch;">
+    
                 <!-- Left Container Box ("Settings") -->
                 <div style="background-color: #3A4454; border: 4px solid #1A202C; border-radius: 16px; padding: 4vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0 12px 25px rgba(0,0,0,0.4);">
                     <div style="color: #FFFFFF; font-weight: 900; font-size: 4vh; text-transform: uppercase; border-bottom: 3px solid #5A677C; padding-bottom: 1.5vh; letter-spacing: 2px; text-align: center;">

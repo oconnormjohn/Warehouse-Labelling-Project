@@ -279,7 +279,7 @@ function handlePlainMatrixCellClick(buttonElement) {
 
 // Dedicated click handler mapping banner text splits and flipping standard green view state
 function handleHomeCategoryMatrixClick(buttonElement) {
-    const homeGrid = document.getElementById('home-category-grid');
+    const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
     const workspaceView = document.getElementById('workspace-view');
     const homeDeck = document.getElementById('deck-home-actions');
     const screen2Deck = document.getElementById('deck-screen2-nav');
@@ -303,9 +303,9 @@ function handleHomeCategoryMatrixClick(buttonElement) {
         }
     }
 
-    // STATE 2 FLIP: Completely swap grid tracks cleanly using explicit style overrides
-    if (homeGrid && workspaceView && homeDeck && screen2Deck) {
-        homeGrid.style.setProperty('display', 'none', 'important');
+    // STATE 2 FLIP: Completely hide Home Track and bring up Date Matrix flawlessly
+    if (homeWorkspaceTrack && workspaceView && homeDeck && screen2Deck) {
+        homeWorkspaceTrack.style.setProperty('display', 'none', 'important');
         homeDeck.style.setProperty('display', 'none', 'important');
 
         workspaceView.classList.remove('screen-hide');
@@ -568,7 +568,7 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
 }
 
 /**
- * Universal Navigation Sidebar Action Manager
+ * Universal Navigation Sidebar Action Manager (Syntactically Sealed Pass)
  */
 function sidebarAction(action) {
     const homeGrid = document.getElementById('home-category-grid');
@@ -583,46 +583,38 @@ function sidebarAction(action) {
         currentActiveWorkspaceMode = "PLAIN_MODE";
         console.log("📝 Plain Labels Mode Activated. Re-routing sidebar controls.");
         
-        // A. Swap navigation action decks smoothly to present the BACK button component
         if (homeDeck && screen2Deck && monthsActionWrapper) {
             homeDeck.style.setProperty('display', 'none', 'important');
             screen2Deck.classList.remove('screen-hide');
-            
-            // Hide the MONTHS selection button entirely since plain mode uses no calendar squares
             monthsActionWrapper.style.setProperty('display', 'none', 'important');
         }
         
-        // B. Fire the unified 3 parallel fetches combiner array we built in Phase A
         loadPlainLabelsMatrix();
         return;
     }
 
     if (action === 'BACK') {
-        // Safe exit out of Admin workspace back to Categories matrix
         if (currentActiveWorkspaceMode === 'ADMIN_PURPLE' || isAdminMultiplesModeActive) {
             currentActiveWorkspaceMode = "STANDARD_GREEN";
             isAdminMultiplesModeActive = false;
             
+            // A. Turn off Admin container elements completely
             const adminView = document.getElementById('admin-settings-view');
-            const homeGrid = document.getElementById('home-category-grid');
-            const homeDeck = document.getElementById('deck-home-actions');
-            const screen2Deck = document.getElementById('deck-screen2-nav');
-            const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
-            const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
-            
-            if (adminView && homeGrid && homeDeck && screen2Deck && monthsActionWrapper && sidebarCloseBtn) {
-                adminView.style.setProperty('display', 'grid', 'important');
+            if (adminView) {
+                adminView.style.setProperty('display', 'none', 'important');
                 adminView.classList.add('screen-hide');
-                
-                screen2Deck.classList.add('screen-hide');
-                monthsActionWrapper.style.removeProperty('display');
-                
-                // 🚀 INJECTED DESELECT: Securely hide the Big Red X close layout button again
-                sidebarCloseBtn.style.setProperty('display', 'none', 'important');
-                
-                homeGrid.style.setProperty('display', 'grid', 'important');
-                homeDeck.style.setProperty('display', 'flex', 'important');
             }
+            
+            // B. Hide admin close options and clean up right sidebar decks
+            const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
+            if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'none', 'important');
+            if (screen2Deck) screen2Deck.classList.add('screen-hide');
+            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
+            
+            // C. Reveal main categories matrix home track smoothly
+            const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
+            if (homeWorkspaceTrack) homeWorkspaceTrack.style.setProperty('display', 'block', 'important');
+            if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
             
             syncKioskBackgroundState();
             return;
@@ -633,24 +625,28 @@ function sidebarAction(action) {
             monthView.style.setProperty('display', 'none', 'important');
             monthView.classList.add('screen-hide');
             
-            workspaceView.classList.remove('screen-hide');
-            workspaceView.style.setProperty('display', 'flex', 'important');
+            if (workspaceView) {
+                workspaceView.classList.remove('screen-hide');
+                workspaceView.style.setProperty('display', 'flex', 'important');
+            }
             
             if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
             return;
         }
 
         // Standard exit out of Date Selection view back to Categories matrix
-        if (workspaceView && homeGrid && homeDeck && screen2Deck) {
+        const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
+        if (workspaceView && homeWorkspaceTrack && homeDeck && screen2Deck) {
             workspaceView.style.setProperty('display', 'none', 'important');
             workspaceView.classList.add('screen-hide');
             screen2Deck.classList.add('screen-hide');
             
-            homeGrid.style.setProperty('display', 'grid', 'important');
+            homeWorkspaceTrack.style.setProperty('display', 'block', 'important');
             homeDeck.style.setProperty('display', 'flex', 'important');
             
             syncKioskBackgroundState();
         }
+        
     } else if (action === 'MONTHS') {
         // Route from Date selection workspace into Months screen layout
         if (workspaceView && monthView) {
@@ -661,13 +657,11 @@ function sidebarAction(action) {
             document.getElementById('month-cat-word1').textContent = document.getElementById('cat-word1').textContent;
             document.getElementById('month-cat-word2').textContent = document.getElementById('cat-word2').textContent;
             
-            // Hide the MONTHS switcher trigger button out of the sidebar view safely
             if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
             
             monthView.classList.remove('screen-hide');
             monthView.style.setProperty('display', 'flex', 'important');
             
-            // Automatically select current system calendar year on load execution
             selectMonthTargetYear('CURRENT');
         }
     }
@@ -806,6 +800,7 @@ function verifyGatekeeperPinEntry() {
     const errorSlot = document.getElementById('gatekeeper-pin-error');
     if (!pinInput) return;
 
+    // 🔒 THE CRITICAL CHECK: Verify input matches security PIN parameters natively
     if (pinInput.value === kioskConfig.securityPin) {
         dismissPinPadSecurity();
         
@@ -821,9 +816,9 @@ function verifyGatekeeperPinEntry() {
             homeGrid.style.setProperty('display', 'none', 'important');
             homeDeck.style.setProperty('display', 'none', 'important');
             
-            // B. Activate the Settings panel viewport area securely as an independent overlay layout
+            // B. Activate the Settings panel viewport area purely by lifting the visibility shield
             adminView.classList.remove('screen-hide');
-            adminView.style.setProperty('display', 'flex', 'important');
+            adminView.style.setProperty('display', 'grid', 'important'); // Locks columns side-by-side cleanly
             
             // C. Shift only the navigation controls deck inside the existing right sidebar track
             screen2Deck.classList.remove('screen-hide');
@@ -1000,8 +995,8 @@ function syncKioskBackgroundState() {
     
     document.body.style.backgroundColor = targetColor;
     if (mainWrapper) {
+        // 🟢 FIX: Update the background color ONLY, preserving your structural grid tracks perfectly
         mainWrapper.style.setProperty('background-color', targetColor, 'important');
-        mainWrapper.style.setProperty('background', targetColor, 'important');
     }
 }
 
@@ -1729,11 +1724,14 @@ function saveActiveListEditorDataToDisk() {
 }
 
 function exitListEditorWorkspace() {
+    // 1. Hide the three-pane manager completely
     const editorWorkspace = document.getElementById('admin-list-editor-workspace');
     if (editorWorkspace) {
         editorWorkspace.style.setProperty('display', 'none', 'important');
         editorWorkspace.classList.add('screen-hide');
     }
+
+    // 2. Return safely to Admin panels, forcing it back into its twin-column layout
     const adminView = document.getElementById('admin-settings-view');
     if (adminView) {
         adminView.classList.remove('screen-hide');
