@@ -26,26 +26,57 @@ body {
     transition: background-color 0.4s ease;
 }
 
-/* Master Layout Grid */
+/* Master Layout Grid Constraints */
 .dashboard-wrapper {
-    display: grid;
-    grid-template-columns: 94.2% 5.8%; /* Math locked to exactly 100% to stop layout shifting */
+    display: grid !important;
+    grid-template-columns: 94.2% 5.8% !important; /* Math locked to prevent layout shifting */
     justify-content: space-between;
     width: 100vw;
     height: 100vh;
     background-color: #357844; 
-    padding: 3.0vh 0.6vw;      /* Perfectly symmetric 0.6vw padding on both left and right edges */
+    padding: 3.0vh 0.6vw;      
     box-sizing: border-box;
     overflow: hidden;
-    transition: background 0.4s ease;
 }
 
-.main-container {
+/* Enforce Strict Grid Alignment for the Right Sidebar Track */
+.sidebar-container {
+    grid-column: 2 !important; /* Locks the sidebar track permanently to the 5.8% right margin */
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding-right: 0.6vw !important; /* DIRECT FIX: Uniform screen cushion mirroring the left bezel */
+    justify-content: flex-start;
+}
+
+.sidebar {
+    width: 100% !important;
+    height: 100%; 
+    background-color: #c2c2c2;
+    border: 0.4vh solid #000000;
+    border-radius: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3.0vh 0.4vw;
     box-sizing: border-box;
+}
+
+/* ==========================================================================
+   IRONCLAD UNIFORM 94.2% CONTAINER PARTITION TRACKS
+   ========================================================================== */
+.main-container,
+#home-category-workspace-track {
+    grid-column: 1; /* 🟢 STRICT COMPLIANCE: Forces layout entirely inside the left 94.2% grid partition */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 0.6vw !important;
+    box-sizing: border-box;
+}
+
+/* Ensure the layout block acts as a standard viewport box when visible */
+#home-category-workspace-track:not(.screen-hide) {
+    display: flex !important;
 }
 
 .header-title {

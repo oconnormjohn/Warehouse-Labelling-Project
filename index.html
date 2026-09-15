@@ -12,7 +12,7 @@
         <!-- ======================================================================= -->
         <!-- STAGE 1: NEW HOME SCREEN / CATEGORY SELECTION MATRIX WORKSPACE          -->
         <!-- ======================================================================= -->
-        <div class="main-container" id="home-category-workspace-track" style="width: 100%; height: 100%;">
+        <div class="main-container" id="home-category-workspace-track">
             <div id="home-category-grid">
                 <!-- Dynamic button cells from category.json stream in here automatically -->
             </div>
@@ -27,14 +27,10 @@
 
         <!-- Left Workspace View Panel Component Area -->
         <div class="main-container screen-hide" id="workspace-view">
-
-        <!-- Left Workspace View Panel Component Area -->
-        <div class="main-container screen-hide" id="workspace-view">
             <div class="header-title" id="category-header">
                 <span id="cat-word1"></span><span id="cat-word2"></span>
             </div>
-            <div class="grid-container" id="master-grid"></div>
-        </div>
+        </div> <!-- Closes the Left Workspace View Panel -->
 
         <!-- STAGE 4: MONTH SELECTION SCREEN MATRIX WORKSPACE -->
         <div class="main-container screen-hide" id="month-selection-view">
@@ -726,7 +722,6 @@
     </div>
 </div>
 
-</div> <!--  RE-INJECTED LAYER FIX: Closes id="main-app-wrapper" here instead -->
 <script src="app.js?v=4"></script>
 </body>
 </html>
