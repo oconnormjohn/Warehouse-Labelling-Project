@@ -279,6 +279,7 @@ function handlePlainMatrixCellClick(buttonElement) {
 
 // Dedicated click handler mapping banner text splits and flipping standard green view state
 function handleHomeCategoryMatrixClick(buttonElement) {
+
     const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
     const workspaceView = document.getElementById('workspace-view');
     const homeDeck = document.getElementById('deck-home-actions');
@@ -289,6 +290,8 @@ function handleHomeCategoryMatrixClick(buttonElement) {
 
     const textElement = buttonElement.querySelector('.btn-text');
     const rawCategoryText = textElement ? textElement.textContent.trim() : '';
+    // Instantly block clicks if the button is a placeholder spacer or blank text slot
+    if (rawCategoryText === "" || rawCategoryText.toUpperCase().includes("SPACER") || rawCategoryText.toUpperCase() === "BLANK") return;
 
     // Split text cleanly by spaces or hyphens to look for multi-word configurations
     const wordsArray = rawCategoryText.split(/[\s-]+/);
@@ -634,15 +637,55 @@ function sidebarAction(action) {
             return;
         }
 
-        // Standard exit out of Date Selection view back to Categories matrix
+        // 🔒 PLAIN LABELS ESCAPE GATE: Clean up and hide the plain matrix grid on BACK click
+        if (currentActiveWorkspaceMode === 'PLAIN_MODE') {
+            currentActiveWorkspaceMode = "STANDARD_GREEN";
+            
+            // Hide the workspace panel cleanly if it shares the active viewport container
+            const workspaceView = document.getElementById('workspace-view');
+            if (workspaceView) {
+                workspaceView.style.setProperty('display', 'none', 'important');
+                workspaceView.classList.add('screen-hide');
+            }
+            
+            // Wake up your outer wrapped home category workspace track container box natively
+            const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
+            const homeDeck = document.getElementById('deck-home-actions');
+            const screen2Deck = document.getElementById('deck-screen2-nav');
+            
+            if (homeWorkspaceTrack) {
+                homeWorkspaceTrack.classList.remove('screen-hide');
+                homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
+            }
+            if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
+            if (screen2Deck) screen2Deck.classList.add('screen-hide');
+            
+            // 🔄 RESTORE HOME DATA: Re-stream the buttermilk category buttons back into the wiped HTML grid
+            loadHomeMatrixCategories();
+            
+            syncKioskBackgroundState();
+            return; // Exit early to prevent layout collisions down the line
+        }
+
+        // Standard exit out of Date Selection view or Plain Labels view back to Categories matrix
         const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-        if (workspaceView && homeWorkspaceTrack && homeDeck && screen2Deck) {
+        // 🟢 FIX: Remove screen2Deck from this if-statement so it clears the workspace view for BOTH screens!
+        if (workspaceView && homeWorkspaceTrack && homeDeck) {
             workspaceView.style.setProperty('display', 'none', 'important');
             workspaceView.classList.add('screen-hide');
-            screen2Deck.classList.add('screen-hide');
             
-            homeWorkspaceTrack.style.setProperty('display', 'block', 'important');
-            homeDeck.style.setProperty('display', 'flex', 'important');
+            // Make sure the 2-button deck hides if it was visible
+            const screen2Deck = document.getElementById('deck-screen2-nav');
+            if (screen2Deck) screen2Deck.classList.add('screen-hide');
+            
+            if (homeWorkspaceTrack) {
+                homeWorkspaceTrack.classList.remove('screen-hide');
+                homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
+            }
+            if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
+            
+            // 🔄 RESTORE HOME DATA: Ensure categories re-stream on standard date backing out as well
+            loadHomeMatrixCategories();
             
             syncKioskBackgroundState();
         }
@@ -713,7 +756,7 @@ function showUserAlert(type, data = {}, duration = 3000) {
 
     setTimeout(() => {
         // 🔒 SAFETY CHECK: If admin multiples selection overlay is open on screen, halt auto-dismiss entirely!
-        if (isAdminMultiplesModeActive) {
+        if (isAdminMultiplesModeActive && currentActiveWorkspaceMode !== "PLAIN_MODE") {
             console.log("🔒 Admin Multiples Mode active: Halting automatic alert dashboard dismiss countdown.");
             return;
         }
@@ -726,6 +769,11 @@ function showUserAlert(type, data = {}, duration = 3000) {
             if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
             
             if (type === 'PRINT_CONFIRM') {
+                // 🍊 PROBLEM 4 ADAPTIVE ROUTING: If in Plain Mode, completely halt and do not force a BACK routine
+                if (currentActiveWorkspaceMode === 'PLAIN_MODE') {
+                    return; 
+                }
+
                 const monthView = document.getElementById('month-selection-view');
                 if (monthView && !monthView.classList.contains('screen-hide')) {
                     handleContinuityChoice('EXIT_TO_HOME_SCREEN_DIRECTLY');
