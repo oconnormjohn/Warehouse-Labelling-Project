@@ -616,9 +616,16 @@ function sidebarAction(action) {
             
             // C. Reveal main categories matrix home track smoothly
             const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-            if (homeWorkspaceTrack) homeWorkspaceTrack.style.setProperty('display', 'block', 'important');
+            if (homeWorkspaceTrack) {
+                homeWorkspaceTrack.classList.remove('screen-hide');
+                homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
+            }
+            if (homeGrid) {
+                homeGrid.style.removeProperty('display');
+            }
             if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
             
+            loadHomeMatrixCategories();
             syncKioskBackgroundState();
             return;
         }
@@ -642,7 +649,6 @@ function sidebarAction(action) {
             currentActiveWorkspaceMode = "STANDARD_GREEN";
             
             // Hide the workspace panel cleanly if it shares the active viewport container
-            const workspaceView = document.getElementById('workspace-view');
             if (workspaceView) {
                 workspaceView.style.setProperty('display', 'none', 'important');
                 workspaceView.classList.add('screen-hide');
@@ -650,12 +656,13 @@ function sidebarAction(action) {
             
             // Wake up your outer wrapped home category workspace track container box natively
             const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-            const homeDeck = document.getElementById('deck-home-actions');
-            const screen2Deck = document.getElementById('deck-screen2-nav');
             
             if (homeWorkspaceTrack) {
                 homeWorkspaceTrack.classList.remove('screen-hide');
                 homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
+            }
+            if (homeGrid) {
+                homeGrid.style.removeProperty('display');
             }
             if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
             if (screen2Deck) screen2Deck.classList.add('screen-hide');
@@ -667,20 +674,21 @@ function sidebarAction(action) {
             return; // Exit early to prevent layout collisions down the line
         }
 
-        // Standard exit out of Date Selection view or Plain Labels view back to Categories matrix
+        // Standard exit out of Date Selection view back to Categories matrix
         const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-        // 🟢 FIX: Remove screen2Deck from this if-statement so it clears the workspace view for BOTH screens!
         if (workspaceView && homeWorkspaceTrack && homeDeck) {
             workspaceView.style.setProperty('display', 'none', 'important');
             workspaceView.classList.add('screen-hide');
             
             // Make sure the 2-button deck hides if it was visible
-            const screen2Deck = document.getElementById('deck-screen2-nav');
             if (screen2Deck) screen2Deck.classList.add('screen-hide');
             
             if (homeWorkspaceTrack) {
                 homeWorkspaceTrack.classList.remove('screen-hide');
                 homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
+            }
+            if (homeGrid) {
+                homeGrid.style.removeProperty('display');
             }
             if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
             
@@ -689,7 +697,6 @@ function sidebarAction(action) {
             
             syncKioskBackgroundState();
         }
-        
     } else if (action === 'MONTHS') {
         // Route from Date selection workspace into Months screen layout
         if (workspaceView && monthView) {
@@ -1054,22 +1061,30 @@ function executeValidatedAdminAction(actionKey) {
         return;
     }
     
+    // 🍊 DEMONSTRATION MODE ENGINE: Toggles execution tracking, when On printing is completely simulated
+    if (actionKey === 'TOGGLE_DEMO') {
+        isDemoModeActive = !isDemoModeActive;
+        kioskConfig.isDemoModeActive = isDemoModeActive; // Sync into persistent configurations
+        
+        const demoCheckbox = document.getElementById('admin-toggle-demo');
+        if (demoCheckbox) demoCheckbox.checked = isDemoModeActive;
+        
+        saveKioskConfigurationState();
+        return;
+    }
+    
     if (actionKey === 'TOGGLE_ROW4') {
-    // Toggle the release parameter directly
-    kioskConfig.isFourthYearReleased = !kioskConfig.isFourthYearReleased;
+        kioskConfig.isFourthYearReleased = !kioskConfig.isFourthYearReleased;
+        const row4Checkbox = document.getElementById('admin-toggle-row4');
+        if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
         
-    // Sync checkmark visually to match the user's intent perfectly
-    const row4Checkbox = document.getElementById('admin-toggle-row4');
-    if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
-        
-    generateDynamicGrid(); 
-    saveKioskConfigurationState();
-    return;
+        generateDynamicGrid(); 
+        saveKioskConfigurationState();
+        return;
     }
    
     if (actionKey === 'TOGGLE_CONFIRM') {
         kioskConfig.showPrintConfirmation = !kioskConfig.showPrintConfirmation;
-        
         const confirmCheckbox = document.getElementById('admin-toggle-confirm');
         if (confirmCheckbox) confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
         
@@ -1077,14 +1092,51 @@ function executeValidatedAdminAction(actionKey) {
         return;
     }
 
+    // 🍇 MULTI-PRINT ACTION INTERCEPT: Opens Category grid panel with absolute purple environment properties
     if (actionKey === 'MULTIPLES') {
         isAdminMultiplesModeActive = true;
         currentActiveWorkspaceMode = "ADMIN_PURPLE";
-        handleAdminMenuSelection('EXIT');
+        
+        // A. Turn off Admin twin settings panels container box completely out of the way
+        const adminView = document.getElementById('admin-settings-view');
+        if (adminView) {
+            adminView.style.setProperty('display', 'none', 'important');
+            adminView.classList.add('screen-hide');
+        }
+        
+        // B. Re-route the universal sidebar button matrix decks cleanly
+        const homeDeck = document.getElementById('deck-home-actions');
+        const backDeck = document.getElementById('deck-screen2-nav');
+        const multiprintBtn = document.getElementById('sidebar-btn-multiprint');
+        const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
+        const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
+        
+        if (homeDeck) homeDeck.style.setProperty('display', 'none', 'important');
+        if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'none', 'important');
+        if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
+        
+        if (backDeck) backDeck.classList.remove('screen-hide');
+        if (multiprintBtn) multiprintBtn.classList.remove('screen-hide'); // Show purple action layout icon
+        
+        // C. Wake up your categories tracking matrix home track box cleanly under a purple ambient shade
+        const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
+        const homeGrid = document.getElementById('home-category-grid'); // 🟢 ADD THIS LINE
+        
+        if (homeWorkspaceTrack) {
+            homeWorkspaceTrack.classList.remove('screen-hide');
+            homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
+        }
+        // THIS BLOCK REMOVES THE PIN-PAD VISIBILITY OVERRIDE INSTANTLY:
+        if (homeGrid) {
+            homeGrid.style.removeProperty('display');
+        }
+        
+        // Re-stream the main category buttons natively to clear out any residual layouts
+        loadHomeMatrixCategories();
+
         syncKioskBackgroundState();
         return;
     }
-
 }
 
 function triggerMultiplesQuantityOverlay() {
