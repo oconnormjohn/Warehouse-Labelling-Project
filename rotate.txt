@@ -1,0 +1,2 @@
+! U1 setvar "zpl.label_orientation" "90"
+
