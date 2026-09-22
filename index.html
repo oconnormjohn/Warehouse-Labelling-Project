@@ -74,13 +74,16 @@
                         Settings
                     </div>
                     
-                    <!-- Option Row 1: Multiples -->
+                    <!-- Option Row 1: Demo Mode (Replaces old Multiples selection row) -->
                     <div style="display: flex; justify-content: space-between; align-items: center; color: #FFFFFF; background: rgba(0,0,0,0.2); padding: 2vh 1.5vw; border-radius: 8px; border-bottom: 2px solid rgba(255,255,255,0.1); flex: 1;">
                         <div style="display: flex; flex-direction: column; gap: 0.5vh;">
-                            <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">Print</span>
-                            <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Labels in Multiples</span>
+                            <span style="font-size: 2.8vh; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">DEMO Mode</span>
+                            <span style="font-size: 2.2vh; font-weight: bold; color: #B0BEC5;">Non-Printing</span>
                         </div>
-                        <button onclick="handleAdminMenuSelection('MULTIPLES')" class="admin-panel-arrow-btn">➔</button>
+                        <label class="admin-switch">
+                            <input type="checkbox" id="admin-toggle-demo" onchange="handleAdminMenuSelection('TOGGLE_DEMO')">
+                            <span class="admin-slider"></span>
+                        </label>
                     </div>
 
                     <!-- Option Row 2: Fourth Year -->
@@ -211,7 +214,21 @@
                         </button>
                         <div class="sidebar-legend-text">BACK</div>
                     </div>
-                    
+
+                    <!-- Action Block: Multi-Print Launcher (Injected between BACK and CLOSE) -->
+                    <div class="action-block" id="sidebar-btn-multiprint" style="display: none;">
+                        <button class="side-btn" onclick="handleAdminMenuSelection('MULTIPLES')" style="background-color: #7851A9 !important; border: 0.4vh solid #000000; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;">
+                            <!-- 🎨 INDUSTRIAL UNIFORMITY: Crisp white line-art printer icon matching screen 1 shapes perfectly -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- Printer Chassis Body Layout -->
+                                <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                                <!-- Lower Label Feed Tray Slot -->
+                                <path d="M6 14h12v8H6z"/>
+                            </svg>
+                        </button>
+                        <div class="sidebar-legend-text" style="color: #000000 !important; font-weight: 900 !important;">MULTI<br>PRINT</div>
+                    </div>
+
                     <!-- Sidebar close wrapper adjusted for absolute contrast readability -->
                     <div class="action-block" id="sidebar-close-program-wrapper" style="display: none;">
                         <button class="side-btn" onclick="handleAdminMenuSelection('CLOSE_PROGRAM')" style="background-color: #C64B4B !important; border: 2px solid #000000; display: flex; justify-content: center; align-items: center;">

@@ -969,3 +969,18 @@ input:checked + .admin-slider:before {
     margin: 2vh auto 0 auto;
     align-items: stretch;
 }
+
+/* ==========================================================================
+   ADMINISTRATIVE SIDEBAR MULTI-PRINT ACTION BUTTON ALIGNMENT
+   ========================================================================== */
+#sidebar-btn-multiprint {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#sidebar-btn-multiprint .side-btn:active {
+    top: 0.3vh !important;
+    box-shadow: 0px 0.2vh 0px #000000 !important;
+}

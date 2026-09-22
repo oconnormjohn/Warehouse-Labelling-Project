@@ -23,10 +23,11 @@ let isEditorShiftActive = false;
 
 // Base runtime configuration layer blueprint matching config.json keys exactly
 let kioskConfig = {
-    isFourthYearReleased: false,
+    isFourthYearReleased: true,
     showPrintConfirmation: true,
     securityPin: "1234",
-    shortDatePeriod: 1
+    shortDatePeriod: 1,
+    isDemoModeActive: false // 🌟 NEW PARAMETER BOUND TO THE SERVER CORE CONFIG DATA OBJECT
 };
 
 // ==========================================================================
@@ -82,7 +83,7 @@ function switchKioskScreenLayout(targetScreenName) {
     if (screen2Deck) screen2Deck.classList.add('screen-hide');
     if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
     if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'none', 'important');
-    if (multiprintBtn) multiprintBtn.classList.add('screen-hide');
+    if (multiprintBtn) multiprintBtn.style.setProperty('display', 'none', 'important'); // 🌟 CLEAR DEFAULT VISIBILITY
 
     // 🎨 PHASE 2: DETERMINISTIC ENVIRONMENT & PATHWAY RESOLUTION
     if (["1A", "2A", "3A", "6", "7"].includes(targetScreenName)) {
@@ -98,6 +99,7 @@ function switchKioskScreenLayout(targetScreenName) {
     const targetBgColor = (currentActiveWorkspaceMode === "ADMIN_PURPLE") ? '#7851A9' : '#1b5e20';
     document.body.style.backgroundColor = targetBgColor;
     if (mainWrapper) mainWrapper.style.setProperty('background-color', targetBgColor, 'important');
+
     // 🎛️ PHASE 3: SCREEN-SPECIFIC STRUCTURAL INJECTION MATCHING SITEMAP TRANSITIONS
     switch (targetScreenName) {
         case "1": // Screen 1 Home Screen (Standard Single Categories Selection)
@@ -109,10 +111,10 @@ function switchKioskScreenLayout(targetScreenName) {
         case "1A": // Screen 1A Category Selection Screen (Administrative Multi-Print Run)
             if (homeTrack) homeTrack.classList.remove('screen-hide');
             if (screen2Deck) screen2Deck.classList.remove('screen-hide');
-            if (multiprintBtn) multiprintBtn.classList.remove('screen-hide');
+            // ✨ FIXED: Multi Print button left to hidden state default automatically
             isAdminMultiplesModeActive = true;
-            // 🔒 MONTHS BUTTON OMITTED: Left explicitly at display: none per sitemap rule
             break;
+
 
         case "2": // Screen 2 Qtr-Year Selection Screen (Standard Single-Print Matrix)
             if (workspaceView) workspaceView.classList.remove('screen-hide');
@@ -162,13 +164,14 @@ function switchKioskScreenLayout(targetScreenName) {
             if (adminView) adminView.style.setProperty('display', 'grid', 'important');
             if (screen2Deck) screen2Deck.classList.remove('screen-hide');
             if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'block', 'important');
+            if (multiprintBtn) multiprintBtn.style.setProperty('display', 'block', 'important'); // 🌟 UNHIDE ON SCREEN 6
             isAdminMultiplesModeActive = false;
             break;
 
         case "7": // Screen 7 Fullscreen Three-Pane Management List Editing Suite
             if (editorWorkspace) editorWorkspace.classList.remove('screen-hide');
             if (editorWorkspace) editorWorkspace.style.setProperty('display', 'block', 'important');
-            if (sidebarContainer) sidebarContainer.classList.add('screen-hide'); // 🔒 DROP SIDEBAR COMPLETELY
+            if (sidebarContainer) sidebarContainer.classList.add('screen-hide');
             isAdminMultiplesModeActive = false;
             break;
     }
@@ -185,9 +188,14 @@ function loadKioskConfigurationState() {
             // Merge file settings smoothly into the runtime blueprint
             kioskConfig = { ...kioskConfig, ...parsedConfig };
             
-            // SYNC TRACKING VARIABLE: Force global variable to match config profile
+            // SYNC TRACKING VARIABLE: Force global variables to match config profile
             shortDatePeriod = kioskConfig.shortDatePeriod !== undefined ? kioskConfig.shortDatePeriod : 1;
+            isDemoModeActive = kioskConfig.isDemoModeActive !== undefined ? kioskConfig.isDemoModeActive : false; // 🌟 SYNC GLOBAL VARIABLE FROM DISK
             
+            // Automatically set the graphical checkbox switch check mark handle on startup
+            const demoCheckbox = document.getElementById('admin-toggle-demo');
+            if (demoCheckbox) demoCheckbox.checked = isDemoModeActive;
+
             // Rebuild matrix layouts cleanly using the newly retrieved data parameters
             generateDynamicGrid();
             loadHomeMatrixCategories();
@@ -195,6 +203,12 @@ function loadKioskConfigurationState() {
         })
         .catch(e => {
             console.warn("⚠️ Local network config fetch failed, relying on defaults:", e);
+            
+            // Reassign tracking variables from defaults if server drops
+            isDemoModeActive = kioskConfig.isDemoModeActive;
+            const demoCheckbox = document.getElementById('admin-toggle-demo');
+            if (demoCheckbox) demoCheckbox.checked = isDemoModeActive;
+
             generateDynamicGrid();
             
             // RUN FALLBACK TRIGGER: Run anyway if network drops so page doesn't open blank
@@ -1049,10 +1063,13 @@ function executeValidatedAdminAction(actionKey) {
     
     if (actionKey === 'TOGGLE_DEMO') {
         isDemoModeActive = !isDemoModeActive;
-        kioskConfig.isDemoModeActive = isDemoModeActive;
+        kioskConfig.isDemoModeActive = isDemoModeActive; // Commit state directly to the core data configuration layer
+        
         const demoCheckbox = document.getElementById('admin-toggle-demo');
         if (demoCheckbox) demoCheckbox.checked = isDemoModeActive;
-        saveKioskConfigurationState();
+        
+        console.log(`⚙️ Demo Mode state toggled: [${isDemoModeActive}]`);
+        saveKioskConfigurationState(); // 💾 WRITE SELECTION PERSISTENTLY TO SERVER DISK IMMEDIATELY
         return;
     }
     
@@ -1064,6 +1081,7 @@ function executeValidatedAdminAction(actionKey) {
         saveKioskConfigurationState();
         return;
     }
+
     if (actionKey === 'TOGGLE_CONFIRM') {
         kioskConfig.showPrintConfirmation = !kioskConfig.showPrintConfirmation;
         const confirmCheckbox = document.getElementById('admin-toggle-confirm');
