@@ -1,13 +1,16 @@
-// 1. Establish the base starting calendar year dynamically using the PC system clock
-let currentYear = new Date().getFullYear();
+// ==========================================================================
+// CORE STATE-AWARE KIOSK CORE SYSTEM TRACKERS
+// ==========================================================================
+// 🚀 STATE ENGINE RECONSTRUCTION: Explicit page index tracker matching the sitemap
+let currentActiveScreen = "1"; // Options: "1", "2", "3", "1A", "2A", "3A", "4", "5", "6", "7"
+let currentActiveWorkspaceMode = "STANDARD_GREEN"; // Options: STANDARD_GREEN, ADMIN_PURPLE, PLAIN_MODE, DISPATCH_MODE
 
-// Global control variables for kiosk run modes
+// Global calendar tracking parameters
+let currentYear = new Date().getFullYear();
 let shortDatePeriod = 1;
+let monthActiveTargetYearInt = null;
 let isKioskShiftActive = false; 
 
-// Month View Architecture Management Trackers
-let currentActiveWorkspaceMode = "STANDARD_GREEN"; // Options: STANDARD_GREEN, ADMIN_PURPLE, PLAIN_MODE, DISPATCH_MODE
-let monthActiveTargetYearInt = null;
 const fullMonthNamesMap = [
     "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
     "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
@@ -23,13 +26,13 @@ let kioskConfig = {
     isFourthYearReleased: false,
     showPrintConfirmation: true,
     securityPin: "1234",
-    shortDatePeriod: 1 // 🚀 INJECTED CONFIG LAYER: Track the boundary value dynamically
+    shortDatePeriod: 1
 };
 
 // ==========================================================================
 // WORKSPACE MODES & PROCESSING TRACKERS
 // ==========================================================================
-let isDemoModeActive = false;           // Prevents system timing drops during testing runs
+let isDemoModeActive = false;           
 let isAdminMultiplesModeActive = false; 
 let multiplesCountTarget = 1;          
 let lastExecutedPrintPayload = null;    
@@ -40,6 +43,136 @@ let pendingAdminOptionKey = null;
 
 // Structural row class names matching your palette mappings
 const colorCycle = ['row-2026', 'row-2027', 'row-2028', 'row-2029'];
+
+// ==========================================================================
+// CENTRALIZED STATE ENGINE CONTROLLER (THE CENTRAL STATE ROUTER)
+// ==========================================================================
+function switchKioskScreenLayout(targetScreenName) {
+    currentActiveScreen = targetScreenName;
+    console.log(`🎛️ State Machine Transition: Moving to Screen [${targetScreenName}]`);
+
+    const mainWrapper = document.getElementById('main-app-wrapper');
+    const sidebarContainer = document.querySelector('.sidebar-container');
+    
+    const homeTrack = document.getElementById('home-category-workspace-track');
+    const workspaceView = document.getElementById('workspace-view');
+    const monthView = document.getElementById('month-selection-view');
+    const adminView = document.getElementById('admin-settings-view');
+    const editorWorkspace = document.getElementById('admin-list-editor-workspace');
+    const dispatchView = document.getElementById('dispatch-labels-view');
+
+    const homeDeck = document.getElementById('deck-home-actions');
+    const screen2Deck = document.getElementById('deck-screen2-nav');
+    const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
+    const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
+    const multiprintBtn = document.getElementById('sidebar-btn-multiprint');
+
+    // 🧼 PHASE 1: IRONCLAD UNIFORM SCREEN CLEANUP SWEEP
+    const allContainers = [homeTrack, workspaceView, monthView, adminView, editorWorkspace, dispatchView];
+    allContainers.forEach(container => {
+        if (container) {
+            container.classList.add('screen-hide');
+            container.style.removeProperty('display');
+        }
+    });
+
+    // Reset baseline sidebar element visibility defaults
+    if (sidebarContainer) sidebarContainer.classList.remove('screen-hide');
+    if (homeDeck) homeDeck.style.setProperty('display', 'none', 'important');
+    if (screen2Deck) screen2Deck.classList.add('screen-hide');
+    if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
+    if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'none', 'important');
+    if (multiprintBtn) multiprintBtn.classList.add('screen-hide');
+
+    // 🎨 PHASE 2: DETERMINISTIC ENVIRONMENT & PATHWAY RESOLUTION
+    if (["1A", "2A", "3A", "6", "7"].includes(targetScreenName)) {
+        currentActiveWorkspaceMode = "ADMIN_PURPLE";
+    } else if (targetScreenName === "4") {
+        currentActiveWorkspaceMode = "PLAIN_MODE";
+    } else if (targetScreenName === "5") {
+        currentActiveWorkspaceMode = "DISPATCH_MODE";
+    } else {
+        currentActiveWorkspaceMode = "STANDARD_GREEN";
+    }
+
+    const targetBgColor = (currentActiveWorkspaceMode === "ADMIN_PURPLE") ? '#7851A9' : '#1b5e20';
+    document.body.style.backgroundColor = targetBgColor;
+    if (mainWrapper) mainWrapper.style.setProperty('background-color', targetBgColor, 'important');
+    // 🎛️ PHASE 3: SCREEN-SPECIFIC STRUCTURAL INJECTION MATCHING SITEMAP TRANSITIONS
+    switch (targetScreenName) {
+        case "1": // Screen 1 Home Screen (Standard Single Categories Selection)
+            if (homeTrack) homeTrack.classList.remove('screen-hide');
+            if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
+            isAdminMultiplesModeActive = false;
+            break;
+
+        case "1A": // Screen 1A Category Selection Screen (Administrative Multi-Print Run)
+            if (homeTrack) homeTrack.classList.remove('screen-hide');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            if (multiprintBtn) multiprintBtn.classList.remove('screen-hide');
+            isAdminMultiplesModeActive = true;
+            // 🔒 MONTHS BUTTON OMITTED: Left explicitly at display: none per sitemap rule
+            break;
+
+        case "2": // Screen 2 Qtr-Year Selection Screen (Standard Single-Print Matrix)
+            if (workspaceView) workspaceView.classList.remove('screen-hide');
+            if (workspaceView) workspaceView.style.setProperty('display', 'flex', 'important');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
+            isAdminMultiplesModeActive = false;
+            break;
+
+        case "2A": // Screen 2A Qtr-Year Selection Screen (Administrative Multi-Print Matrix)
+            if (workspaceView) workspaceView.classList.remove('screen-hide');
+            if (workspaceView) workspaceView.style.setProperty('display', 'flex', 'important');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
+            isAdminMultiplesModeActive = true;
+            break;
+
+        case "3": // Screen 3 Month Selection Screen (Standard Single-Print View)
+            if (monthView) monthView.classList.remove('screen-hide');
+            if (monthView) monthView.style.setProperty('display', 'flex', 'important');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            isAdminMultiplesModeActive = false;
+            break;
+
+        case "3A": // Screen 3A Month Selection Screen (Administrative Multi-Print View)
+            if (monthView) monthView.classList.remove('screen-hide');
+            if (monthView) monthView.style.setProperty('display', 'flex', 'important');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            isAdminMultiplesModeActive = true;
+            break;
+
+        case "4": // Screen 4 Plain Labels Selection Workspace
+            if (homeTrack) homeTrack.classList.remove('screen-hide');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            isAdminMultiplesModeActive = false;
+            break;
+
+        case "5": // Screen 5 Dispatch Labels Grid Workspace (Pale Ice-Blue Profiles)
+            if (dispatchView) dispatchView.classList.remove('screen-hide');
+            if (dispatchView) dispatchView.style.setProperty('display', 'flex', 'important');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            isAdminMultiplesModeActive = false;
+            break;
+
+        case "6": // Screen 6 Administrative Control Twin-Settings Panels Dashboard
+            if (adminView) adminView.classList.remove('screen-hide');
+            if (adminView) adminView.style.setProperty('display', 'grid', 'important');
+            if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'block', 'important');
+            isAdminMultiplesModeActive = false;
+            break;
+
+        case "7": // Screen 7 Fullscreen Three-Pane Management List Editing Suite
+            if (editorWorkspace) editorWorkspace.classList.remove('screen-hide');
+            if (editorWorkspace) editorWorkspace.style.setProperty('display', 'block', 'important');
+            if (sidebarContainer) sidebarContainer.classList.add('screen-hide'); // 🔒 DROP SIDEBAR COMPLETELY
+            isAdminMultiplesModeActive = false;
+            break;
+    }
+}
 
 // Fetch configuration profile asynchronously from the live Python server disk file
 function loadKioskConfigurationState() {
@@ -52,7 +185,7 @@ function loadKioskConfigurationState() {
             // Merge file settings smoothly into the runtime blueprint
             kioskConfig = { ...kioskConfig, ...parsedConfig };
             
-            // 🚀 SYNC TRACKING VARIABLE: Force global variable to match config profile
+            // SYNC TRACKING VARIABLE: Force global variable to match config profile
             shortDatePeriod = kioskConfig.shortDatePeriod !== undefined ? kioskConfig.shortDatePeriod : 1;
             
             // Rebuild matrix layouts cleanly using the newly retrieved data parameters
@@ -60,12 +193,11 @@ function loadKioskConfigurationState() {
             loadHomeMatrixCategories();
             console.log("⚙️ Kiosk configuration loaded successfully from server disk.");
         })
-
         .catch(e => {
             console.warn("⚠️ Local network config fetch failed, relying on defaults:", e);
             generateDynamicGrid();
             
-            // 🚀 INJECTED LAYER FALLBACK TRIGGER: Run anyway if network drops so page doesn't open blank
+            // RUN FALLBACK TRIGGER: Run anyway if network drops so page doesn't open blank
             loadHomeMatrixCategories(); 
         });
 }
@@ -123,9 +255,9 @@ function loadHomeMatrixCategories() {
                     inlineHomeBgOverride = "background-color: #EFE6BA !important;";
                 }
 
-                // FUTURE-PROOF RE-CONSTRUCTION: All 35 active slots listen to database inputs natively
+                // ALL 35 active slots listen to database inputs natively and feed state tracker
                 matrixHTML += `
-                    <button class="home-cat-btn" onclick="handleHomeCategoryMatrixClick(this)">
+                    <button class="home-cat-btn" style="${inlineHomeBgOverride}" onclick="handleHomeCategoryMatrixClick(this)">
                         <span class="btn-text">${displayLabelSummary}</span>
                         <img src="label-graphics/${graphicFile}" class="btn-icon" alt="Icon">
                     </button>`;
@@ -139,8 +271,7 @@ function loadHomeMatrixCategories() {
             showUserAlert('SYSTEM_ALERT', { message: 'FAILED TO LOAD CATEGORIES FROM DISK' }, 4000);
         });
 }
-
-// Phase A: Parallel data stream combiner for unified Plain Labels mode
+// Phase A: Parallel data stream combiner for unified Plain Labels mode (Screen 4)
 function loadPlainLabelsMatrix() {
     console.log("🔄 Initiating parallel fetch loop for Plain Labels datasets...");
 
@@ -221,30 +352,21 @@ function renderPlainLabelsMatrixContainer(consolidatedItemsArray) {
     homeGrid.innerHTML = plainMatrixHTML;
     console.log("🎨 Phase B Complete: Plain Labels matrix canvas drawn with strict icon isolation.");
 }
-
 // Dedicated click handler for Plain Mode that captures labels and splits text fields natively
-// Phase B/C: Dedicated click handler for Plain Mode that captures labels and triggers the print pad
 function handlePlainMatrixCellClick(buttonElement) {
     const textElement = buttonElement.querySelector('.btn-text');
     const rawPlainLabelText = textElement ? textElement.textContent.trim() : '';
-    
-    // If a volunteer accidentally clicks an empty blank spacer card, halt execution instantly
     if (rawPlainLabelText === "") return;
 
-    // 🔍 IMAGE EXTRACTOR TRACK: Capture the active image filename directly from the button's image element
     const imgElement = buttonElement.querySelector('.btn-icon');
     let dynamicImageFilename = "blank.png";
-    
     if (imgElement) {
-        // Extract the filename from the end of the source URL string (e.g., "shampoo.png")
         const srcParts = imgElement.src.split('/');
         dynamicImageFilename = srcParts[srcParts.length - 1];
     }
 
     const slot1 = document.getElementById('cat-word1');
     const slot2 = document.getElementById('cat-word2');
-
-    // Split text cleanly by spaces or hyphens to look for multi-word configurations
     const wordsArray = rawPlainLabelText.split(/[\s-]+/);
 
     if (slot1 && slot2) {
@@ -257,43 +379,31 @@ function handlePlainMatrixCellClick(buttonElement) {
         }
     }
 
-    console.log(`📝 Plain Label [${rawPlainLabelText}] selected with image [${dynamicImageFilename}]. Loading print pad.`);
-    
-    // Package payload memory space directly - passing the graphic filename into the M1 parameters slot
     lastExecutedPrintPayload = {
-        color: "plain", // Instructs printing loop that this is a white profile run
+        color: "plain",
         cwrd1: slot1.textContent,
         cwrd2: slot2.textContent,
-        q: "PL",        // Custom template layout code tracking a Plain Label script execution
-        year: " ",      // No year parameters needed for plain labels
-        m1: dynamicImageFilename, // 🚀 LIVE IMAGE BINDING: Feeds filename straight to Python converter
-        m2: " ",        // No months variables needed
+        q: "PL",
+        year: " ",
+        m1: dynamicImageFilename,
+        m2: " ",
         m3: " ",
         finalHex: "#FFFFFF",
         finalPeriod: " "
     };
 
-    // 🚀 AUTOMATED OVERLAY INTERCEPT: Force numeric input pad instantly for all plain print runs
     triggerMultiplesQuantityOverlay();
 }
 
-// Dedicated click handler mapping banner text splits and flipping standard green view state
+// Dedicated click handler mapping banner text splits and driving state transitions cleanly
 function handleHomeCategoryMatrixClick(buttonElement) {
-
-    const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-    const workspaceView = document.getElementById('workspace-view');
-    const homeDeck = document.getElementById('deck-home-actions');
-    const screen2Deck = document.getElementById('deck-screen2-nav');
-    
     const slot1 = document.getElementById('cat-word1');
     const slot2 = document.getElementById('cat-word2');
 
     const textElement = buttonElement.querySelector('.btn-text');
     const rawCategoryText = textElement ? textElement.textContent.trim() : '';
-    // Instantly block clicks if the button is a placeholder spacer or blank text slot
     if (rawCategoryText === "" || rawCategoryText.toUpperCase().includes("SPACER") || rawCategoryText.toUpperCase() === "BLANK") return;
 
-    // Split text cleanly by spaces or hyphens to look for multi-word configurations
     const wordsArray = rawCategoryText.split(/[\s-]+/);
 
     if (slot1 && slot2) {
@@ -306,15 +416,11 @@ function handleHomeCategoryMatrixClick(buttonElement) {
         }
     }
 
-    // STATE 2 FLIP: Completely hide Home Track and bring up Date Matrix flawlessly
-    if (homeWorkspaceTrack && workspaceView && homeDeck && screen2Deck) {
-        homeWorkspaceTrack.style.setProperty('display', 'none', 'important');
-        homeDeck.style.setProperty('display', 'none', 'important');
-
-        workspaceView.classList.remove('screen-hide');
-        workspaceView.style.setProperty('display', 'flex', 'important'); 
-
-        screen2Deck.classList.remove('screen-hide');
+    // 🚀 STATE SWITCH: Check mode and transition to the correct Date Grid seamlessly
+    if (isAdminMultiplesModeActive) {
+        switchKioskScreenLayout("2A"); // Move to Screen 2A (Admin Multi-Print Date Matrix)
+    } else {
+        switchKioskScreenLayout("2");  // Move to Screen 2 (Standard Single-Print Date Matrix)
     }
 }
 
@@ -370,7 +476,6 @@ function generateDynamicGrid() {
                 } else if (targetYear === systemYear) {
                     if (mIdx < systemMonthIndex) isMonthExpired = true;
                 }
-
                 if (!isMonthExpired) {
                     const yearDiff = targetYear - systemYear;
                     const absoluteMonthOffset = (yearDiff * 12) + mIdx - systemMonthIndex;
@@ -416,27 +521,16 @@ function generateDynamicGrid() {
     }
     gridContainer.innerHTML = gridHTML;
 }
+
 // Direct click handler function linked to your simulation testing tools
 function triggerManualRollOver() {
     currentYear += 1;
     generateDynamicGrid();
 }
 
-// Initialize the dynamically built interface once DOM structures are loaded
 window.addEventListener('DOMContentLoaded', () => {
-    // Cache our UI view elements, layout groups, and text tracks cleanly
-    const homeGrid = document.getElementById('home-category-grid');
-    const workspaceView = document.getElementById('workspace-view');
-    const homeDeck = document.getElementById('deck-home-actions');
-    const screen2Deck = document.getElementById('deck-screen2-nav');
-    
-    const slot1 = document.getElementById('cat-word1');
-    const slot2 = document.getElementById('cat-word2');
-    
-    // Core setup tracking log
     console.log("🖥️ Kiosk DOM structures cached and ready for dynamic rendering pipelines.");
 });
-
 /**
  * Core Touch Event Processors & Network Print Router Pipeline
  * INTERCEPT LAYER: Prepares data payload and halts instant printing if Multiples Mode is active.
@@ -462,7 +556,7 @@ function handleCardClick(year, period, zplMonths) {
 
     let month1 = ' ', month2 = ' ', month3 = ' ';
     if (zplMonths && zplMonths.length === 3) {
-        month1 = zplMonths[0]; month2 = zplMonths[1]; month3 = zplMonths[2];
+        month1 = zplMonths; month2 = zplMonths; month3 = zplMonths;
     }
 
     const printPayload = {
@@ -507,11 +601,11 @@ function handleCardClick(year, period, zplMonths) {
 async function executePhysicalPrintSpooler(payload, totalRuns) {
     if (!payload) return;
 
+    // ANIMATION FIX: Explicitly remove animation tracker layout states cleanly
     const mainWrapper = document.getElementById('main-app-wrapper');
     if (mainWrapper) {
-        mainWrapper.classList.add('printing-active-state');
+        mainWrapper.classList.remove('printing-active-state');
     }
-
     if (isDemoModeActive) {
         console.log(`✈️ DEMO MODE ACTIVE: Bypassing print daemon for ${totalRuns} labels.`);
         showUserAlert('PRINT_CONFIRM', { 
@@ -535,7 +629,7 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
     };
 
     try {
-        // 🔒 SEQUENTIAL CHAINING: Wait for each network fetch to complete before starting the next
+        // SEQUENTIAL CHAINING: Wait for each network fetch to complete before starting the next
         for (let run = 0; run < totalRuns; run++) {
             const response = await fetch('http://localhost:8080', {
                 method: 'POST',
@@ -551,7 +645,7 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
             console.log(`🎉 Dispatched run (${run + 1}/${totalRuns}) to local CUPS spooler:`, data);
         }
 
-        // 🟢 CONFIRMATION GATE: Only show success if all network iterations resolve perfectly
+        // CONFIRMATION GATE: Only show success if all network iterations resolve perfectly
         showUserAlert('PRINT_CONFIRM', { 
             categoryName: `${payload.cwrd1} ${payload.cwrd2}`.trim(), 
             periodText: payload.finalPeriod, 
@@ -562,7 +656,6 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
     } catch (error) {
         console.error('❌ Network printing engine link broken during spooling sequence:', error);
         
-        // Immediate visual recovery and error reporting
         if (mainWrapper) {
             mainWrapper.classList.remove('printing-active-state');
         }
@@ -571,158 +664,101 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
 }
 
 /**
- * Universal Navigation Sidebar Action Manager (Syntactically Sealed Pass)
+ * Universal Navigation Sidebar Action Manager (Explicit State Machine Engine)
+ * 🎛️ SYSTEM OVERHAUL: All transitions strictly evaluate currentActiveScreen
+ * to guarantee robust layout cleanup and fulfill sitemap routing paths.
  */
 function sidebarAction(action) {
-    const homeGrid = document.getElementById('home-category-grid');
-    const workspaceView = document.getElementById('workspace-view');
-    const monthView = document.getElementById('month-selection-view');
-    const homeDeck = document.getElementById('deck-home-actions');
-    const screen2Deck = document.getElementById('deck-screen2-nav');
-    const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
-
     // 🍊 PLAIN LABELS BUTTON CLICKED EVENT INTERCEPT
     if (action === 'PLAIN_MODE') {
-        currentActiveWorkspaceMode = "PLAIN_MODE";
         console.log("📝 Plain Labels Mode Activated. Re-routing sidebar controls.");
-        
-        if (homeDeck && screen2Deck && monthsActionWrapper) {
-            homeDeck.style.setProperty('display', 'none', 'important');
-            screen2Deck.classList.remove('screen-hide');
-            monthsActionWrapper.style.setProperty('display', 'none', 'important');
-        }
-        
         loadPlainLabelsMatrix();
+        switchKioskScreenLayout("4");
+        return;
+    }
+    if (action === 'BACK') {
+        console.log(`↩️ Back Button Clicked. Processing from Screen State: [${currentActiveScreen}]`);
+
+        switch (currentActiveScreen) {
+            case "1A": // Screen 1A Back to Screen 6 Admin Settings (Fulfills 6A Back)
+                switchKioskScreenLayout("6");
+                break;
+
+            case "2": // Screen 2 Back to Screen 1 Home Screen (Fulfills 1 Back)
+                // Clear category words text parameters natively on escape
+                const slot1 = document.getElementById('cat-word1');
+                const slot2 = document.getElementById('cat-word2');
+                if (slot1) slot1.textContent = '';
+                if (slot2) slot2.textContent = '';
+                switchKioskScreenLayout("1");
+                break;
+
+            case "2A": // Screen 2A Back to Screen 1A Multiples Matrix (Fulfills 1A Back)
+                switchKioskScreenLayout("1A");
+                break;
+
+            case "3": // Screen 3 Back to Screen 2 Date Grid (Fulfills 2 Back)
+                switchKioskScreenLayout("2");
+                break;
+
+            case "3A": // Screen 3A Back to Screen 2A Multiples Date Grid (Fulfills 2A Back)
+                switchKioskScreenLayout("2A");
+                break;
+
+            case "4": // Screen 4 Plain Labels Back to Screen 1 Home Screen (Fulfills 4 Back)
+                loadHomeMatrixCategories(); // 🌟 LIVE WIPE: Instantly re-stream the buttermilk food category matrix buttons
+                switchKioskScreenLayout("1");
+                break;
+
+            case "5": // Screen 5 Dispatch Labels Back to Screen 1 Home Screen (Fulfills 5 Back)
+                switchKioskScreenLayout("1");
+                break;
+
+            case "6": // Screen 6 Admin Dashboard Back to Screen 1 Home Screen (Fulfills 6 Back)
+                switchKioskScreenLayout("1");
+                break;
+
+            default:
+                console.warn(`⚠️ Unhandled Back transition requested out of Screen state: [${currentActiveScreen}]. Falling back safely.`);
+                switchKioskScreenLayout("1");
+                break;
+        }
         return;
     }
 
-    if (action === 'BACK') {
-        if (currentActiveWorkspaceMode === 'ADMIN_PURPLE' || isAdminMultiplesModeActive) {
-            currentActiveWorkspaceMode = "STANDARD_GREEN";
-            isAdminMultiplesModeActive = false;
-            
-            // A. Turn off Admin container elements completely
-            const adminView = document.getElementById('admin-settings-view');
-            if (adminView) {
-                adminView.style.setProperty('display', 'none', 'important');
-                adminView.classList.add('screen-hide');
-            }
-            
-            // B. Hide admin close options and clean up right sidebar decks
-            const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
-            if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'none', 'important');
-            if (screen2Deck) screen2Deck.classList.add('screen-hide');
-            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
-            
-            // C. Reveal main categories matrix home track smoothly
-            const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-            if (homeWorkspaceTrack) {
-                homeWorkspaceTrack.classList.remove('screen-hide');
-                homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
-            }
-            if (homeGrid) {
-                homeGrid.style.removeProperty('display');
-            }
-            if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
-            
-            loadHomeMatrixCategories();
-            syncKioskBackgroundState();
-            return;
-        }
+    if (action === 'MONTHS') {
+        // Route active category from date range views into monthly matrices
+        const systemYear = new Date().getFullYear();
+        monthActiveTargetYearInt = monthActiveTargetYearInt || systemYear;
 
-        // If on Month View, BACK returns to Date View
-        if (monthView && !monthView.classList.contains('screen-hide')) {
-            monthView.style.setProperty('display', 'none', 'important');
-            monthView.classList.add('screen-hide');
-            
-            if (workspaceView) {
-                workspaceView.classList.remove('screen-hide');
-                workspaceView.style.setProperty('display', 'flex', 'important');
-            }
-            
-            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
-            return;
-        }
+        // 🌟 ARCHITECTURAL PASS: Mirror category text strings over to Month header nodes
+        const sourceWord1 = document.getElementById('cat-word1');
+        const sourceWord2 = document.getElementById('cat-word2');
+        const monthWord1 = document.getElementById('month-cat-word1');
+        const monthWord2 = document.getElementById('month-cat-word2');
 
-        // 🔒 PLAIN LABELS ESCAPE GATE: Clean up and hide the plain matrix grid on BACK click
-        if (currentActiveWorkspaceMode === 'PLAIN_MODE') {
-            currentActiveWorkspaceMode = "STANDARD_GREEN";
-            
-            // Hide the workspace panel cleanly if it shares the active viewport container
-            if (workspaceView) {
-                workspaceView.style.setProperty('display', 'none', 'important');
-                workspaceView.classList.add('screen-hide');
-            }
-            
-            // Wake up your outer wrapped home category workspace track container box natively
-            const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-            
-            if (homeWorkspaceTrack) {
-                homeWorkspaceTrack.classList.remove('screen-hide');
-                homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
-            }
-            if (homeGrid) {
-                homeGrid.style.removeProperty('display');
-            }
-            if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
-            if (screen2Deck) screen2Deck.classList.add('screen-hide');
-            
-            // 🔄 RESTORE HOME DATA: Re-stream the buttermilk category buttons back into the wiped HTML grid
-            loadHomeMatrixCategories();
-            
-            syncKioskBackgroundState();
-            return; // Exit early to prevent layout collisions down the line
-        }
+        if (sourceWord1 && monthWord1) monthWord1.textContent = sourceWord1.textContent;
+        if (sourceWord2 && monthWord2) monthWord2.textContent = sourceWord2.textContent;
 
-        // Standard exit out of Date Selection view back to Categories matrix
-        const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-        if (workspaceView && homeWorkspaceTrack && homeDeck) {
-            workspaceView.style.setProperty('display', 'none', 'important');
-            workspaceView.classList.add('screen-hide');
-            
-            // Make sure the 2-button deck hides if it was visible
-            if (screen2Deck) screen2Deck.classList.add('screen-hide');
-            
-            if (homeWorkspaceTrack) {
-                homeWorkspaceTrack.classList.remove('screen-hide');
-                homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
-            }
-            if (homeGrid) {
-                homeGrid.style.removeProperty('display');
-            }
-            if (homeDeck) homeDeck.style.setProperty('display', 'flex', 'important');
-            
-            // 🔄 RESTORE HOME DATA: Ensure categories re-stream on standard date backing out as well
-            loadHomeMatrixCategories();
-            
-            syncKioskBackgroundState();
-        }
-    } else if (action === 'MONTHS') {
-        // Route from Date selection workspace into Months screen layout
-        if (workspaceView && monthView) {
-            workspaceView.style.setProperty('display', 'none', 'important');
-            workspaceView.classList.add('screen-hide');
-            
-            // Sync up word banners to Month workspace view slots
-            document.getElementById('month-cat-word1').textContent = document.getElementById('cat-word1').textContent;
-            document.getElementById('month-cat-word2').textContent = document.getElementById('cat-word2').textContent;
-            
-            if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
-            
-            monthView.classList.remove('screen-hide');
-            monthView.style.setProperty('display', 'flex', 'important');
-            
+        if (currentActiveScreen === "2") {
+            switchKioskScreenLayout("3");
+            selectMonthTargetYear('CURRENT');
+        } else if (currentActiveScreen === "2A") {
+            switchKioskScreenLayout("3A");
             selectMonthTargetYear('CURRENT');
         }
+        return;
     }
+
 }
 
 /**
  * Universal Inform User Alert Canvas Component
+ * 🎛️ UPGRADED: Leverages the Central State Engine to enforce flawless post-print layout safety rules.
  */
 function showUserAlert(type, data = {}, duration = 3000) {
     if (type === 'PRINT_CONFIRM' && !kioskConfig.showPrintConfirmation) {
-        // Strip active background animation queue instantly if modals are turned off
+        // Strip active background animation queue instantly if confirmations are bypassed
         const mainWrapper = document.getElementById('main-app-wrapper');
         if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
         sidebarAction('BACK');
@@ -731,7 +767,6 @@ function showUserAlert(type, data = {}, duration = 3000) {
 
     const oldModal = document.getElementById('kiosk-universal-overlay');
     if (oldModal) oldModal.remove();
-
     let modalHtml = '';
     if (type === 'PRINT_CONFIRM') {
         modalHtml = `
@@ -762,12 +797,6 @@ function showUserAlert(type, data = {}, duration = 3000) {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 
     setTimeout(() => {
-        // 🔒 SAFETY CHECK: If admin multiples selection overlay is open on screen, halt auto-dismiss entirely!
-        if (isAdminMultiplesModeActive && currentActiveWorkspaceMode !== "PLAIN_MODE") {
-            console.log("🔒 Admin Multiples Mode active: Halting automatic alert dashboard dismiss countdown.");
-            return;
-        }
-
         const activeModal = document.getElementById('kiosk-universal-overlay');
         if (activeModal) {
             activeModal.remove();
@@ -776,22 +805,24 @@ function showUserAlert(type, data = {}, duration = 3000) {
             if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
             
             if (type === 'PRINT_CONFIRM') {
-                // 🍊 PROBLEM 4 ADAPTIVE ROUTING: If in Plain Mode, completely halt and do not force a BACK routine
                 if (currentActiveWorkspaceMode === 'PLAIN_MODE') {
+                    // Plain labels flow loop: Keep user locked into screen 4
                     return; 
                 }
 
-                const monthView = document.getElementById('month-selection-view');
-                if (monthView && !monthView.classList.contains('screen-hide')) {
-                    handleContinuityChoice('EXIT_TO_HOME_SCREEN_DIRECTLY');
+                // 🚀 STATE ENGINE RE-ROUTING COMPLIANCE
+                if (isAdminMultiplesModeActive) {
+                    console.log("🍇 Admin Multi-Print Complete: Bypassing overlay prompts. Routing cleanly back to Screen 1A.");
+                    switchKioskScreenLayout("1A");
                 } else {
-                    sidebarAction('BACK');
+                    console.log("🟢 User Single-Print Complete: Routing control straight back to Screen 1 Home Screen.");
+                    switchKioskScreenLayout("1");
                 }
             }
         }
     }, duration);
-
 }
+
 /**
  * Intercepts the settings cog click event right at the front gate
  */
@@ -832,7 +863,6 @@ function pressPinPadKey(digitString) {
         setTimeout(verifyGatekeeperPinEntry, 200);
     }
 }
-
 function clearPinPadEntry() {
     const pinInput = document.getElementById('gatekeeper-pin-input');
     if (pinInput) pinInput.value = '';
@@ -848,7 +878,6 @@ function dismissPinPadSecurity() {
 
 /**
  * Strict 4-Digit Entry Verification Routing Pipeline
- * (Upgraded to securely lock the Universal Sidebar on the right margin)
  */
 function verifyGatekeeperPinEntry() {
     const pinInput = document.getElementById('gatekeeper-pin-input');
@@ -859,39 +888,14 @@ function verifyGatekeeperPinEntry() {
     if (pinInput.value === kioskConfig.securityPin) {
         dismissPinPadSecurity();
         
-        const homeGrid = document.getElementById('home-category-grid');
-        const homeDeck = document.getElementById('deck-home-actions');
-        const adminView = document.getElementById('admin-settings-view');
-        const screen2Deck = document.getElementById('deck-screen2-nav');
-        const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
-        const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
-
-        if (homeGrid && homeDeck && adminView && screen2Deck && monthsActionWrapper && sidebarCloseBtn) {
-            // A. Hide only the home track category contents from the master grid space cleanly
-            homeGrid.style.setProperty('display', 'none', 'important');
-            homeDeck.style.setProperty('display', 'none', 'important');
-            
-            // B. Activate the Settings panel viewport area purely by lifting the visibility shield
-            adminView.classList.remove('screen-hide');
-            adminView.style.setProperty('display', 'grid', 'important'); // Locks columns side-by-side cleanly
-            
-            // C. Shift only the navigation controls deck inside the existing right sidebar track
-            screen2Deck.classList.remove('screen-hide');
-            monthsActionWrapper.style.setProperty('display', 'none', 'important');
-            
-            // D. Reveal the Big Red X close layout button right on the sidebar under the back button
-            sidebarCloseBtn.style.setProperty('display', 'block', 'important');
-            
-            // E. Set workspace tracking parameters color states
-            currentActiveWorkspaceMode = 'ADMIN_PURPLE';
-            syncKioskBackgroundState();
-            
-            // Sync checkmark switches visually to match user properties perfectly
-            const row4Checkbox = document.getElementById('admin-toggle-row4');
-            const confirmCheckbox = document.getElementById('admin-toggle-confirm');
-            if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
-            if (confirmCheckbox) confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
-        }
+        // 🚀 STATE SWITCH: Navigate cleanly to Screen 6 Admin Settings Panel
+        switchKioskScreenLayout("6");
+        
+        // Synchronise checkmark switches visually to match data states perfectly
+        const row4Checkbox = document.getElementById('admin-toggle-row4');
+        const confirmCheckbox = document.getElementById('admin-toggle-confirm');
+        if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
+        if (confirmCheckbox) confirmCheckbox.checked = kioskConfig.showPrintConfirmation;
     } else {
         if (errorSlot) {
             errorSlot.textContent = "INVALID PIN - ACCESS DENIED";
@@ -903,20 +907,7 @@ function verifyGatekeeperPinEntry() {
 
 function handleAdminMenuSelection(optionKey) {
     if (optionKey === 'EXIT') {
-        const adminView = document.getElementById('admin-settings-view');
-        const homeGrid = document.getElementById('home-category-grid');
-        const homeDeck = document.getElementById('deck-home-actions');
-        
-        if (adminView && homeGrid && homeDeck) {
-            adminView.style.setProperty('display', 'grid', 'important');
-            adminView.classList.add('screen-hide');
-            
-            homeGrid.style.removeProperty('grid-template-columns');
-            homeGrid.style.setProperty('display', 'grid', 'important');
-            
-            homeDeck.style.setProperty('display', 'flex', 'important');
-            document.body.style.backgroundColor = isAdminMultiplesModeActive ? '#7851A9' : '#1b5e20';
-        }
+        switchKioskScreenLayout("1");
         return;
     }
 
@@ -953,7 +944,6 @@ function handleAdminMenuSelection(optionKey) {
     console.log(`🔓 Admin option authorized & executed instantly: [${optionKey}]`);
     executeValidatedAdminAction(optionKey);
 }
-
 // Triggers the Short Date selection overlay window open
 function launchShortDateConfigPanel() {
     const modal = document.getElementById('admin-shortdate-modal');
@@ -972,7 +962,6 @@ function dismissShortDateConfigPanel() {
     }
 }
 
-// Processes the selected selection index parameter, updates configurations, and writes to disk
 // Processes the selected selection index parameter, updates configurations, and writes to disk
 function submitShortDateConfigAdjustment(selectedTargetValueInt) {
     // 1. Commit the value change onto global workspace trackers immediately
@@ -1002,7 +991,6 @@ function backspaceKioskKey() {
     const inputField = document.getElementById('admin-password-input');
     if (inputField && inputField.value.length > 0) inputField.value = inputField.value.slice(0, -1);
 }
-
 function toggleKioskShift() {
     isKioskShiftActive = !isKioskShiftActive;
     const shiftBtn = document.getElementById('kbd-shift-btn');
@@ -1045,12 +1033,10 @@ function cancelAdminPasswordVerification() {
 
 function syncKioskBackgroundState() {
     const mainWrapper = document.getElementById('main-app-wrapper');
-    // Maintain deep purple for admin modes, and return to standard rich green for your home matrix screen
     const targetColor = (currentActiveWorkspaceMode === 'ADMIN_PURPLE' || isAdminMultiplesModeActive) ? '#7851A9' : '#1b5e20';
     
     document.body.style.backgroundColor = targetColor;
     if (mainWrapper) {
-        // 🟢 FIX: Update the background color ONLY, preserving your structural grid tracks perfectly
         mainWrapper.style.setProperty('background-color', targetColor, 'important');
     }
 }
@@ -1061,14 +1047,11 @@ function executeValidatedAdminAction(actionKey) {
         return;
     }
     
-    // 🍊 DEMONSTRATION MODE ENGINE: Toggles execution tracking, when On printing is completely simulated
     if (actionKey === 'TOGGLE_DEMO') {
         isDemoModeActive = !isDemoModeActive;
-        kioskConfig.isDemoModeActive = isDemoModeActive; // Sync into persistent configurations
-        
+        kioskConfig.isDemoModeActive = isDemoModeActive;
         const demoCheckbox = document.getElementById('admin-toggle-demo');
         if (demoCheckbox) demoCheckbox.checked = isDemoModeActive;
-        
         saveKioskConfigurationState();
         return;
     }
@@ -1077,12 +1060,10 @@ function executeValidatedAdminAction(actionKey) {
         kioskConfig.isFourthYearReleased = !kioskConfig.isFourthYearReleased;
         const row4Checkbox = document.getElementById('admin-toggle-row4');
         if (row4Checkbox) row4Checkbox.checked = kioskConfig.isFourthYearReleased;
-        
         generateDynamicGrid(); 
         saveKioskConfigurationState();
         return;
     }
-   
     if (actionKey === 'TOGGLE_CONFIRM') {
         kioskConfig.showPrintConfirmation = !kioskConfig.showPrintConfirmation;
         const confirmCheckbox = document.getElementById('admin-toggle-confirm');
@@ -1092,49 +1073,15 @@ function executeValidatedAdminAction(actionKey) {
         return;
     }
 
-    // 🍇 MULTI-PRINT ACTION INTERCEPT: Opens Category grid panel with absolute purple environment properties
+    // 🍇 MULTI-PRINT ACTION INTERCEPT: Routed smoothly through the Central State Machine
     if (actionKey === 'MULTIPLES') {
         isAdminMultiplesModeActive = true;
-        currentActiveWorkspaceMode = "ADMIN_PURPLE";
         
-        // A. Turn off Admin twin settings panels container box completely out of the way
-        const adminView = document.getElementById('admin-settings-view');
-        if (adminView) {
-            adminView.style.setProperty('display', 'none', 'important');
-            adminView.classList.add('screen-hide');
-        }
+        // Load Screen 1A Category Selection workspace inside the purple paradigm context
+        switchKioskScreenLayout("1A");
         
-        // B. Re-route the universal sidebar button matrix decks cleanly
-        const homeDeck = document.getElementById('deck-home-actions');
-        const backDeck = document.getElementById('deck-screen2-nav');
-        const multiprintBtn = document.getElementById('sidebar-btn-multiprint');
-        const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
-        const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
-        
-        if (homeDeck) homeDeck.style.setProperty('display', 'none', 'important');
-        if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'none', 'important');
-        if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
-        
-        if (backDeck) backDeck.classList.remove('screen-hide');
-        if (multiprintBtn) multiprintBtn.classList.remove('screen-hide'); // Show purple action layout icon
-        
-        // C. Wake up your categories tracking matrix home track box cleanly under a purple ambient shade
-        const homeWorkspaceTrack = document.getElementById('home-category-workspace-track');
-        const homeGrid = document.getElementById('home-category-grid'); // 🟢 ADD THIS LINE
-        
-        if (homeWorkspaceTrack) {
-            homeWorkspaceTrack.classList.remove('screen-hide');
-            homeWorkspaceTrack.style.setProperty('display', 'flex', 'important');
-        }
-        // THIS BLOCK REMOVES THE PIN-PAD VISIBILITY OVERRIDE INSTANTLY:
-        if (homeGrid) {
-            homeGrid.style.removeProperty('display');
-        }
-        
-        // Re-stream the main category buttons natively to clear out any residual layouts
+        // Re-stream the main category buttons natively to populate the grid workspace
         loadHomeMatrixCategories();
-
-        syncKioskBackgroundState();
         return;
     }
 }
@@ -1145,16 +1092,17 @@ function triggerMultiplesQuantityOverlay() {
     if (qtyDisplay) qtyDisplay.value = "";
     
     document.getElementById('multiples-modal-title').textContent = "Set Print Quantity";
-    document.getElementById('multiples-qty-zone').style.display = 'flex';
-    document.getElementById('multiples-fork-zone').style.display = 'none';
     
+    // Explicitly unhide the master modal container along with the numerical input layout
     const multiplesModal = document.getElementById('admin-multiples-modal');
     if (multiplesModal) {
         multiplesModal.classList.remove('modal-hide');
         multiplesModal.style.setProperty('display', 'flex', 'important');
     }
+    
+    const qtyZone = document.getElementById('multiples-qty-zone');
+    if (qtyZone) qtyZone.style.setProperty('display', 'flex', 'important');
 }
-
 function pressQtyPadKey(digitString) {
     const qtyDisplay = document.getElementById('admin-qty-display');
     if (!qtyDisplay) return;
@@ -1185,6 +1133,7 @@ function clearQtyPadEntry() {
 
 /**
  * Commits quantity selections and automates workspace routing boundaries
+ * UPGRADED: Bypasses continuity prompts and returns directly to the category screen.
  */
 function confirmMultiplesQuantityRun() {
     // 🚀 EXECUTE PRINT LOOP NOW: Fires the target count collected by the keypad
@@ -1204,35 +1153,31 @@ function confirmMultiplesQuantityRun() {
         mainWrapper.classList.remove('printing-active-state');
     }
 
-    // 🍊 SYSTEM SWITCH: If printing plain items, bypass the trailing decision forks completely!
-    if (currentActiveWorkspaceMode === "PLAIN_MODE") {
-        console.log("📝 Plain Labels Spool Committed: Bypassing fork prompts. Closing overlay immediately.");
-        
-        // Find the quantity modal panel wrapper and dismiss it instantly
-        const multiplesModal = document.getElementById('admin-multiples-modal');
-        if (multiplesModal) {
-            multiplesModal.style.setProperty('display', 'none', 'important');
-            multiplesModal.classList.add('modal-hide');
-        }
-        
-        // Re-stabilize background state colors safely
-        syncKioskBackgroundState();
-        return;
+    console.log("🚀 Multi-Print Spool Committed: Bypassing fork prompts. Closing overlay instantly.");
+    
+    // Find the quantity modal panel wrapper and dismiss it instantly for ALL modes
+    const multiplesModal = document.getElementById('admin-multiples-modal');
+    if (multiplesModal) {
+        multiplesModal.style.setProperty('display', 'none', 'important');
+        multiplesModal.classList.add('modal-hide');
+    }
+    
+    // 🌟 STRICT PATHWAY INTEGRITY: Re-stabilize state using the explicit State Machine
+    if (currentActiveScreen === "4") {
+        loadPlainLabelsMatrix(); // Keep the white text label cards matrix cleanly populated
+        switchKioskScreenLayout("4");
+    } else {
+        switchKioskScreenLayout("1A");
     }
 
-    // Standard default workflow logic for Category items (Loads Decision Fork Options)
-    document.getElementById('multiples-modal-title').textContent = "Print Job Dispatched";
-    document.getElementById('multiples-qty-zone').style.display = 'none';
-    document.getElementById('multiples-fork-zone').style.display = 'flex';
 }
 
 /**
  * Handles workflow routing after a quantity selection run is dispatched
- * (Syntactically corrected to resolve structural truncation layout bugs)
+ * (Maintained for legacy interface hooks, now safely bound to the explicit state architecture)
  */
 function handleContinuityChoice(choiceType) {
     const multiplesModal = document.getElementById('admin-multiples-modal');
-    const monthView = document.getElementById('month-selection-view');
     
     if (multiplesModal) {
         multiplesModal.style.setProperty('display', 'none', 'important');
@@ -1242,50 +1187,13 @@ function handleContinuityChoice(choiceType) {
     if (choiceType === 'SAME') {
         setTimeout(triggerMultiplesQuantityOverlay, 150);
     } else {
-        // Clear Month Selection Workspace elements if they were active
-        if (monthView && !monthView.classList.contains('screen-hide')) {
-            monthView.style.setProperty('display', 'none', 'important');
-            monthView.classList.add('screen-hide');
-            
-            const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
-            if (monthsActionWrapper) monthsActionWrapper.style.removeProperty('display');
-        }
-        
         if (choiceType === 'EXIT_GREEN') {
-            isAdminMultiplesModeActive = false;
-            currentActiveWorkspaceMode = "STANDARD_GREEN";
+            switchKioskScreenLayout("1");
+        } else {
+            switchKioskScreenLayout("1A");
         }
-        
-        // Trigger a force route all the way back to main matrix view layers
-        const workspaceView = document.getElementById('workspace-view');
-        if (workspaceView) {
-            workspaceView.style.setProperty('display', 'none', 'important');
-            workspaceView.classList.add('screen-hide');
-        }
-        
-        const homeGrid = document.getElementById('home-category-grid');
-        const homeDeck = document.getElementById('deck-home-actions');
-        const screen2Deck = document.getElementById('deck-screen2-nav');
-        
-        if (homeGrid && homeDeck && screen2Deck) {
-            // 📝 ADAPTIVE PLAIN MODE ROUTING CHECK
-            if (currentActiveWorkspaceMode === "PLAIN_MODE") {
-                // Keep the white plain matrix grid layout visible on screen
-                homeGrid.style.setProperty('display', 'grid', 'important');
-                // Retain the back button panel deck so they stay inside Plain Mode
-                screen2Deck.classList.remove('screen-hide');
-            } else {
-                // Standard default fallback sequence: Return to Category Matrix Home Screen
-                screen2Deck.classList.add('screen-hide');
-                homeGrid.style.setProperty('display', 'grid', 'important');
-                homeDeck.style.setProperty('display', 'flex', 'important');
-            }
-        }
-        
-        syncKioskBackgroundState();
     }
-} // 🟢 FIX: Main function block wrapper now explicitly closed securely here
-
+}
 /**
  * Resolves the 4-year industrial color mapping assignments
  */
@@ -1354,7 +1262,7 @@ function rebuildMonthCellsValidationAesthetics() {
             if (offset >= 0 && offset <= shortDatePeriod) isShortDate = true;
         }
         
-                cellButton.classList.remove('month-inactive');
+        cellButton.classList.remove('month-inactive');
         
         // Force every cell to take the active year color first
         cellButton.style.backgroundColor = themeColor;
@@ -1363,10 +1271,8 @@ function rebuildMonthCellsValidationAesthetics() {
         if (isExpired || isShortDate) {
             cellButton.classList.add('month-inactive');
         }
-
     }
 }
-
 /**
  * Formats data models and coordinates submissions to physical printer channels
  */
@@ -1375,7 +1281,6 @@ function handleMonthGridCellClick(monthIndexInt) {
     const word2 = document.getElementById('month-cat-word2').textContent.trim();
     const monthName = fullMonthNamesMap[monthIndexInt];
     
-    const isPurpleActive = (currentActiveWorkspaceMode === 'ADMIN_PURPLE' || isAdminMultiplesModeActive);
     let targetColorTrackingString = "green";
     const yearColorHex = resolveYearThemeHexColor(monthActiveTargetYearInt);
     
@@ -1399,7 +1304,7 @@ function handleMonthGridCellClick(monthIndexInt) {
         finalPeriod: monthName
     };
 
-    if (isPurpleActive) {
+    if (isAdminMultiplesModeActive) {
         console.log("📌 Admin Months Intercept: Loading quantity matrix keypad panels.");
         triggerMultiplesQuantityOverlay();
     } else {
@@ -1408,14 +1313,11 @@ function handleMonthGridCellClick(monthIndexInt) {
     }
 }
 
-/**
- * Fetches targeted array content from server storage and populates editor input forms
- */
-
-// Universal JSON Multi-Field State Trackers
-let currentListSchemaDataArray = []; // Stores live array of objects fetched from disk
-let activeFocusedFieldKey = "line1"; // Active sub-field typing path: 'line1', 'line2', 'image'
-
+// Universal JSON Multi-Field State Trackers for Screen 7 List Suite
+currentListSchemaDataArray = []; // Stores live array of objects fetched from disk
+activeFocusedFieldKey = "line1"; // Active sub-field typing path: 'line1', 'line2', 'image'
+activeFocusedInputId = null; 
+activeEditorFileKey = "";
 /**
  * Stage 5 Suite Launcher: Streams object schemas, maps lengths, and updates label colors
  */
@@ -1485,11 +1387,8 @@ function launchListEditorWorkspace(listFileKey) {
             // Re-render the right pane selection list stream seamlessly
             rebuildPlaylistVisualStreamContainer();
 
-            // Toggle dashboard screen states safely
-            document.getElementById('admin-settings-view').style.setProperty('display', 'none', 'important');
-            const workspace = document.getElementById('admin-list-editor-workspace');
-            workspace.classList.remove('screen-hide');
-            workspace.style.setProperty('display', 'block', 'important');
+            // 🚀 STATE SWITCH: Route operations safely to Screen 7 (Drop sidebar via tracker definitions)
+            switchKioskScreenLayout("7");
 
             // Default focus the very first index cell automatically on interface generation
             setEditorInputFocus(0);
@@ -1505,7 +1404,6 @@ function launchListEditorWorkspace(listFileKey) {
  */
 function setEditorInputFocus(targetSlotIndex) {
     if (targetSlotIndex < 0 || targetSlotIndex >= currentListSchemaDataArray.length) return;
-
     // Drop historical focus outlines across all row buttons smoothly
     const historicElements = document.querySelectorAll('.playlist-stream-row-btn');
     historicElements.forEach(el => {
@@ -1603,7 +1501,6 @@ function pressEditorKey(keyChar) {
         refreshLiveWorkspaceCanvasPreviews();
     }
 }
-
 /**
  * Backspace Processor: Remaps truncation requests down to active data strings
  */
@@ -1704,7 +1601,6 @@ function rebuildPlaylistVisualStreamContainer() {
 
     container.innerHTML = playlistHTML;
 }
-
 /**
  * Text Synchronizer: Fast local update wrapper to refresh labels during live typing
  */
@@ -1824,19 +1720,8 @@ function saveActiveListEditorDataToDisk() {
 }
 
 function exitListEditorWorkspace() {
-    // 1. Hide the three-pane manager completely
-    const editorWorkspace = document.getElementById('admin-list-editor-workspace');
-    if (editorWorkspace) {
-        editorWorkspace.style.setProperty('display', 'none', 'important');
-        editorWorkspace.classList.add('screen-hide');
-    }
-
-    // 2. Return safely to Admin panels, forcing it back into its twin-column layout
-    const adminView = document.getElementById('admin-settings-view');
-    if (adminView) {
-        adminView.classList.remove('screen-hide');
-        adminView.style.setProperty('display', 'grid', 'important'); // 🟢 FIX: Retain side-by-side columns
-    }
+    // 🚀 STATE SWITCH: Navigate cleanly back to Screen 6 Admin Settings Panel
+    switchKioskScreenLayout("6");
 }
 
 // Opens the numeric PIN modification dialogue layout panel
