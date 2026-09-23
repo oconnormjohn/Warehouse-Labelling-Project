@@ -67,6 +67,9 @@ function switchKioskScreenLayout(targetScreenName) {
     const monthsActionWrapper = document.getElementById('sidebar-months-action-wrapper');
     const sidebarCloseBtn = document.getElementById('sidebar-close-program-wrapper');
     const multiprintBtn = document.getElementById('sidebar-btn-multiprint');
+    
+    // 🚚 DECLARED ONCE HERE: Prevents duplicate variable definition crashes
+    const dispatchBlankBtn = document.getElementById('sidebar-dispatch-blank-wrapper');
 
     // 🧼 PHASE 1: IRONCLAD UNIFORM SCREEN CLEANUP SWEEP
     const allContainers = [homeTrack, workspaceView, monthView, adminView, editorWorkspace, dispatchView];
@@ -83,7 +86,10 @@ function switchKioskScreenLayout(targetScreenName) {
     if (screen2Deck) screen2Deck.classList.add('screen-hide');
     if (monthsActionWrapper) monthsActionWrapper.style.setProperty('display', 'none', 'important');
     if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'none', 'important');
-    if (multiprintBtn) multiprintBtn.style.setProperty('display', 'none', 'important'); // 🌟 CLEAR DEFAULT VISIBILITY
+    if (multiprintBtn) multiprintBtn.style.setProperty('display', 'none', 'important');
+    
+    // Default the blank dispatch button to hidden state across baseline transitions
+    if (dispatchBlankBtn) dispatchBlankBtn.style.setProperty('display', 'none', 'important');
 
     // 🎨 PHASE 2: DETERMINISTIC ENVIRONMENT & PATHWAY RESOLUTION
     if (["1A", "2A", "3A", "6", "7"].includes(targetScreenName)) {
@@ -111,10 +117,8 @@ function switchKioskScreenLayout(targetScreenName) {
         case "1A": // Screen 1A Category Selection Screen (Administrative Multi-Print Run)
             if (homeTrack) homeTrack.classList.remove('screen-hide');
             if (screen2Deck) screen2Deck.classList.remove('screen-hide');
-            // ✨ FIXED: Multi Print button left to hidden state default automatically
             isAdminMultiplesModeActive = true;
             break;
-
 
         case "2": // Screen 2 Qtr-Year Selection Screen (Standard Single-Print Matrix)
             if (workspaceView) workspaceView.classList.remove('screen-hide');
@@ -152,10 +156,14 @@ function switchKioskScreenLayout(targetScreenName) {
             isAdminMultiplesModeActive = false;
             break;
 
-        case "5": // Screen 5 Dispatch Labels Grid Workspace (Pale Ice-Blue Profiles)
+        case "5": // Screen 5 Dispatch Labels Grid Workspace
             if (dispatchView) dispatchView.classList.remove('screen-hide');
             if (dispatchView) dispatchView.style.setProperty('display', 'flex', 'important');
             if (screen2Deck) screen2Deck.classList.remove('screen-hide');
+            
+            // 🚛 VISIBILITY CONTROL: Unhide the blank print controller ONLY on screen 5
+            if (dispatchBlankBtn) dispatchBlankBtn.style.setProperty('display', 'block', 'important');
+            
             isAdminMultiplesModeActive = false;
             break;
 
@@ -164,7 +172,7 @@ function switchKioskScreenLayout(targetScreenName) {
             if (adminView) adminView.style.setProperty('display', 'grid', 'important');
             if (screen2Deck) screen2Deck.classList.remove('screen-hide');
             if (sidebarCloseBtn) sidebarCloseBtn.style.setProperty('display', 'block', 'important');
-            if (multiprintBtn) multiprintBtn.style.setProperty('display', 'block', 'important'); // 🌟 UNHIDE ON SCREEN 6
+            if (multiprintBtn) multiprintBtn.style.setProperty('display', 'block', 'important');
             isAdminMultiplesModeActive = false;
             break;
 
@@ -677,6 +685,62 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
     }
 }
 
+// Fetch dispatch database array and dynamically stream buttons onto the 6x7 Screen 5 matrix grid
+function loadDispatchLabelsMatrix() {
+    const dispatchGrid = document.getElementById('dispatch-labels-grid');
+    if (!dispatchGrid) return;
+
+    fetch('http://localhost:8080/api/list?name=dispatch')
+        .then(res => {
+            if (!res.ok) throw new Error("Dispatch database missing or unreachable.");
+            return res.json();
+        })
+        .then(dispatchDataArray => {
+            let matrixHTML = '';
+
+            // Strictly cycle through all 42 physical layout slots (6 rows x 7 columns)
+            for (let index = 0; index < 42; index++) {
+                const slotItem = dispatchDataArray[index] || {};
+                const line1Text = (slotItem.text1 || "").toString().trim().toUpperCase();
+                const line2Text = (slotItem.text2 || "").toString().trim().toUpperCase();
+                
+                // Keep the postcode safely stowed away in memory objects for next-stage printing overlays
+                const hiddenPostcode = (slotItem.postcode || "").toString().trim().toUpperCase();
+
+                // Check if the current slot contains active label records
+                if (line1Text !== "" || line2Text !== "") {
+                    matrixHTML += `
+                        <button class="dispatch-cat-btn" data-index="${index}" data-postcode="${hiddenPostcode}" onclick="handleDispatchMatrixCellClick(this)">
+                            <div class="btn-text">${line1Text}<br>${line2Text}</div>
+                        </button>`;
+                } else {
+                    // Apply the visual de-saturation filter class natively onto empty cells
+                    matrixHTML += `
+                        <button class="dispatch-cat-btn dispatch-inactive">
+                            <div class="btn-text"></div>
+                        </button>`;
+                }
+            }
+
+            dispatchGrid.innerHTML = matrixHTML;
+            console.log("📦 Stage 5 Dispatch Matrix populated dynamically from JSON.");
+        })
+        .catch(err => {
+            console.error("❌ Failed to stream dispatch database:", err);
+            showUserAlert('SYSTEM_ALERT', { message: 'FAILED TO LOAD DISPATCH DATA FROM DISK' }, 4000);
+        });
+}
+
+// Temporary placeholder click handler for testing active cell interactions
+function handleDispatchMatrixCellClick(buttonElement) {
+    const index = buttonElement.getAttribute('data-index');
+    const postcode = buttonElement.getAttribute('data-postcode');
+    const labelLines = buttonElement.querySelector('.btn-text').innerHTML.split('<br>');
+    
+    console.log(`🎯 Active Dispatch Destination Selected — Slot: ${parseInt(index) + 1}, Destination: ${labelLines.join(' ')}, Postcode: ${postcode}`);
+    // Next stage overlay logic will hook in here securely later
+}
+
 /**
  * Universal Navigation Sidebar Action Manager (Explicit State Machine Engine)
  * 🎛️ SYSTEM OVERHAUL: All transitions strictly evaluate currentActiveScreen
@@ -690,6 +754,15 @@ function sidebarAction(action) {
         switchKioskScreenLayout("4");
         return;
     }
+    
+    // 🚛 DISPATCH LABELS BUTTON CLICKED EVENT INTERCEPT (Screen 5 Grid Activation Hook)
+    if (action === 'DISPATCH_MODE') {
+        console.log("🚛 Dispatch Labels Mode Activated. Streaming logistics matrix.");
+        loadDispatchLabelsMatrix();
+        switchKioskScreenLayout("5");
+        return;
+    }
+
     if (action === 'BACK') {
         console.log(`↩️ Back Button Clicked. Processing from Screen State: [${currentActiveScreen}]`);
 
@@ -1184,6 +1257,10 @@ function confirmMultiplesQuantityRun() {
     if (currentActiveScreen === "4") {
         loadPlainLabelsMatrix(); // Keep the white text label cards matrix cleanly populated
         switchKioskScreenLayout("4");
+    } else if (currentActiveScreen === "5") {
+        // 🚛 LOGISTICS PERSISTENCE TRIGGER: Keeps the user firmly locked inside the Screen 5 grid
+        loadDispatchLabelsMatrix();
+        switchKioskScreenLayout("5");
     } else {
         switchKioskScreenLayout("1A");
     }
@@ -1884,4 +1961,28 @@ function submitAdminPinResetAdjustment() {
     
     console.log("🔒 Security entry tracker authorization updated. New Admin PIN: [" + targetNewPin + "]");
     dismissAdminPinResetPanel();
+}
+
+/**
+ * Intercepts the sidebar BLANK button touch event and launches the quantity pad.
+ */
+function handleBlankDispatchLabelsClick() {
+    console.log("🚛 Blank Dispatch Labels requested. Preparing print quantity overlay.");
+    
+    // Package a clean placeholder print payload targeting the blank template
+    lastExecutedPrintPayload = {
+        color: "plain", // Routes dynamically to the targeted direct direct direct thermal queue
+        cwrd1: "BLANK DISPATCH STOCK",
+        cwrd2: "",
+        q: "BLANK_DISPATCH", // Unique signature key flag for backend routing separation
+        year: " ",
+        m1: "blankDispatchLabel.zpl", // Direct template descriptor filename pointer
+        m2: " ",
+        m3: " ",
+        finalHex: "#e1f5fe", // Soft ice-blue confirmation card profile
+        finalPeriod: "MANUAL FILL"
+    };
+
+    // Fire the existing quantitative keypad layout overlay instantly
+    triggerMultiplesQuantityOverlay();
 }

@@ -4,13 +4,14 @@ import os
 import subprocess
 from PIL import Image  # 🚀 Injected hardware dependency: Image pixel conversion engine
 
-# Map the color tracking string from Firefox straight to your local CUPS queues
+# Map the color tracking string straight to your local CUPS queues
 PRINTER_POOL = {
     'pink': 'pink_labels',
     'green': 'green_labels',
     'yellow': 'yellow_labels',
     'blue': 'blue_labels',
-    'plain': 'plain_labels'  # 🖨️ Dedicated plain printer queue mapping
+    'plain': 'plain_labels',
+    'dispatch': 'dispatch_labels'  # 🚛 Added dedicated dispatch hardware queue mapping
 }
 
 # Direct target pathway on the Pi for persistent state synchronization layout
@@ -234,18 +235,29 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                 with open(template_path, 'r') as file:
                     zpl_content = file.read()
 
-                # Execute standard textual handlebar placeholder modifications
-                zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
-                zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
+                # 🚛 NEW ROUTINE FOR DISPATCH MODE LOGISTICS RUNS
+                if color == 'dispatch':
+                    if payload.get('q') == 'BLANK_DISPATCH':
+                        template_name = 'blankDispatchLabel.zpl'
+                        template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
+                        if os.path.exists(template_path):
+                            with open(template_path, 'r') as file:
+                                final_zpl_payload = file.read()
+                        else:
+                            final_zpl_payload = "^XA^FO50,50^A0N,50,50^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
+                    else:
+                        final_zpl_payload = "^XA^FO50,50^A0N,50,50^FDDISPATCH ENTRY ROUTE PENDING^XZ"
 
-                # Fire the automated pixel image 1-bit monochrome converter loop
-                image_download_command = convert_image_to_zpl_graphic(m1)
+                # 📝 IF COLOR IS PLAIN, FALLBACK SEAMLESSLY TO STANDARD PLAIN MODE TEXT PROCESSING
+                elif color == 'plain':
+                    zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
+                    zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
+                    image_download_command = convert_image_to_zpl_graphic(m1)
 
-                # 🖨️ THE STRUCTURAL SYNTAX FIX: Ensure image commands sit inside active transmission handles
-                if image_download_command.strip() != "":
-                    final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
-                else:
-                    final_zpl_payload = zpl_content
+                    if image_download_command.strip() != "":
+                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
+                    else:
+                        final_zpl_payload = zpl_content
                 
             else:
                 # Standard legacy temporal formatting mapping routes for rolling years calendar squares

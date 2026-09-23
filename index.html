@@ -19,10 +19,12 @@
         </div>
 
         <!-- ======================================================================= -->
-        <!-- FUTURE PATHWAY: DISPATCH LABELS SCREEN WORKSPACE                        -->
+        <!-- PATHWAY ESTABLISHED: DISPATCH LABELS SCREEN WORKSPACE                   -->
         <!-- ======================================================================= -->
         <div class="main-container screen-hide" id="dispatch-labels-view">
-            <!-- Dynamic button cells from dispatch.json will stream in here later -->
+            <div id="dispatch-labels-grid">
+                <!-- Dynamic 6x7 pale ice-blue button cells stream here via app.js -->
+            </div>
         </div>
 
         <!-- Left Workspace View Panel Component Area -->
@@ -213,6 +215,18 @@
                             </svg>
                         </button>
                         <div class="sidebar-legend-text">BACK</div>
+                    </div>
+
+                    <!-- Action Block: Blank Dispatch Labels Launcher -->
+                    <div class="action-block" id="sidebar-dispatch-blank-wrapper">
+                        <button class="side-btn" onclick="handleBlankDispatchLabelsClick()" style="background-color: var(--ice-blue) !important; border: 0.4vh solid #000000; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;">
+                            <!-- White line-art printer icon scaled with sharp black outline -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 4.2vh; height: 4.2vh;">
+                                <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                                <path d="M6 14h12v8H6z"/>
+                            </svg>
+                        </button>
+                        <div class="sidebar-legend-text" style="color: #000000 !important; font-weight: 900 !important;">BLANK<br>LABELS</div>
                     </div>
 
                     <!-- Action Block: Multi-Print Launcher (Injected between BACK and CLOSE) -->
