@@ -1336,8 +1336,10 @@ currentListSchemaDataArray = []; // Stores live array of objects fetched from di
 activeFocusedFieldKey = "line1"; // Active sub-field typing path: 'line1', 'line2', 'image'
 activeFocusedInputId = null; 
 activeEditorFileKey = "";
+
 /**
- * Stage 5 Suite Launcher: Streams object schemas, maps lengths, and updates label colors
+ * Stage 5 Suite Launcher: Streams object schemas, maps lengths, updates label colors,
+ * and dynamically swaps text labels between standard lists and dispatch formats.
  */
 function launchListEditorWorkspace(listFileKey) {
     activeEditorFileKey = listFileKey;
@@ -1360,6 +1362,21 @@ function launchListEditorWorkspace(listFileKey) {
         'dispatch': 'DISPATCH LABELS LIST'
     };
     document.getElementById('list-editor-title-banner').textContent = visualHeaderTitles[listFileKey] || "LABELS LIST";
+
+    // Dynamic Form Helper Labels Swap Engine
+    const row1Label = document.getElementById('editor-label-row1');
+    const row2Label = document.getElementById('editor-label-row2');
+    const row3Label = document.getElementById('editor-label-row3');
+
+    if (listFileKey === 'dispatch') {
+        if (row1Label) row1Label.textContent = "Address Line 1";
+        if (row2Label) row2Label.textContent = "Address Line 2";
+        if (row3Label) row3Label.textContent = "Postcode";
+    } else {
+        if (row1Label) row1Label.textContent = "Line 1 Text";
+        if (row2Label) row2Label.textContent = "Line 2 Text";
+        if (row3Label) row3Label.textContent = "Image Filename";
+    }
 
     // Set rigid length caps matching industrial device specifications
     const maxBoundaryCaps = { 'category': 35, 'toiletries': 14, 'christmas': 14, 'misc': 7, 'dispatch': 48 };
@@ -1395,10 +1412,17 @@ function launchListEditorWorkspace(listFileKey) {
             // Guarantee perfect structural formatting and cushion padding up to max bounds
             for (let i = 0; i < currentTargetListCap; i++) {
                 const item = serverPayloadArray[i] || {};
+                
+                // Read from dispatch keys (text1, text2, postcode) or fallback to (text1, text2, image_file)
+                let text3Value = item.image_file !== undefined ? item.image_file : "";
+                if (listFileKey === 'dispatch' && item.postcode !== undefined) {
+                    text3Value = item.postcode;
+                }
+
                 currentListSchemaDataArray.push({
                     text1: (item.text1 || "").toString().trim().toUpperCase(),
                     text2: (item.text2 || "").toString().trim().toUpperCase(),
-                    image_file: (item.image_file || (listFileKey === 'dispatch' ? "" : "blank.jpg")).toString().trim()
+                    image_file: text3Value.toString().trim() // Maps structural data seamlessly to form slots
                 });
             }
             
@@ -1547,7 +1571,8 @@ function backspaceEditorKey() {
 }
 
 /**
- * Canvas Graphic Sync Controller: Drives real-time image asset previews inside the canvas
+ * Canvas Graphic Sync Controller: Drives real-time image asset previews inside the canvas.
+ * Logistics Lorry Graphic Anchor: Locks permanent delivery van image when inside dispatch list mode.
  */
 function refreshLiveWorkspaceCanvasPreviews() {
     if (activeFocusedInputId === null) return;
@@ -1558,9 +1583,24 @@ function refreshLiveWorkspaceCanvasPreviews() {
     
     if (!frame1) return;
     
+    // Explicitly strip any accidental leftover borders or backgrounds from the frames
+    frame1.style.border = "none";
+    frame1.style.backgroundColor = "transparent";
+    
+    if (activeEditorFileKey === 'dispatch') {
+        // Enforce rigid asset lock for logistics operations with correct PNG path extension
+        frame1.src = "label-graphics/dispatch-van.png";
+        if (frame2) frame2.style.display = "none";
+        
+        frame1.onerror = function() {
+            frame1.src = "label-graphics/blank.jpg";
+        };
+        return;
+    }
+    
     let rawFilename = (currentObject.image_file || "").toString().trim();
 
-    if (rawFilename === "" || rawFilename.toUpperCase() === "BLANK.JPG" || activeEditorFileKey === 'dispatch') {
+    if (rawFilename === "" || rawFilename.toUpperCase() === "BLANK.JPG") {
         frame1.src = "label-graphics/blank.jpg";
         if (frame2) frame2.style.display = "none";
     } else {
@@ -1713,23 +1753,61 @@ function executePlaylistItemDelete() {
 }
 
 /**
- * Master API Sync: Posts multi-field arrays to backend storage daemon
+ * Master API Sync: Normalizes object fields relative to list type and posts to background database.
+ * Non-Blocking Feedback: Displays a temporary toast notification upon successful save completion.
  */
 function saveActiveListEditorDataToDisk() {
     if (!activeEditorFileKey) return;
 
+    // Build standard or custom payload depending on operational modes
+    const cleanOutputPayload = currentListSchemaDataArray.map(item => {
+        if (activeEditorFileKey === 'dispatch') {
+            return {
+                text1: item.text1,
+                text2: item.text2,
+                postcode: item.image_file // Normalise form space value onto target storage key name
+            };
+        } else {
+            return {
+                text1: item.text1,
+                text2: item.text2,
+                image_file: item.image_file
+            };
+        }
+    });
+
     fetch(`http://localhost:8080/api/list/save?name=${activeEditorFileKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(currentListSchemaDataArray)
+        body: JSON.stringify(cleanOutputPayload)
     })
     .then(response => {
         if (!response.ok) throw new Error("Disk stream channel transmission timeout failure");
         return response.json();
     })
     .then(syncDataConfirmation => {
-        console.log(`💾 Data-Driven array sync successful for [${activeEditorFileKey}]:`, syncDataConfirmation);
-        exitListEditorWorkspace();
+        console.log(`💾 Data sync successful for [${activeEditorFileKey}].`);
+        
+        // 🍞 INDUSTRIAL TOAST NOTIFICATION GENERATOR
+        // Remove any historical lingering save alert toast block first
+        const oldToast = document.getElementById('kiosk-save-toast-alert');
+        if (oldToast) oldToast.remove();
+
+        // Inject the visual feedback banner directly into the active viewport stream
+        const toastHtml = `
+            <div id="kiosk-save-toast-alert" style="position: fixed; top: 3vh; left: 50vw; transform: translateX(-50%); background-color: #4cd964; color: #000000; font-family: Arial, sans-serif; font-size: 2.6vh; font-weight: 900; padding: 2vh 4vw; border: 3px solid #000000; border-radius: 12px; box-shadow: 0px 8px 20px rgba(0,0,0,0.4); z-index: 9999999999; text-transform: uppercase; letter-spacing: 1px; pointer-events: none; transition: opacity 0.3s ease;">
+                CHANGES SAVED
+            </div>`;
+        document.body.insertAdjacentHTML('beforeend', toastHtml);
+
+        // Automate a clean fading destruction sequence after 1500 milliseconds
+        setTimeout(() => {
+            const activeToast = document.getElementById('kiosk-save-toast-alert');
+            if (activeToast) {
+                activeToast.style.opacity = '0';
+                setTimeout(() => activeToast.remove(), 300);
+            }
+        }, 1500);
     })
     .catch(err => {
         console.error("❌ Critical server write sync error:", err);
