@@ -1,59 +1,55 @@
 ^XA
+^FX ==== Blank Dispatch Label - Landscape ====
+^LL1218
 
-^FX ==== Dispatch Label  ====
 ^FX ==== Graphic Box ====
-^FO380,120^GB800,320,3^FS
+^FO430,380^GB320,800,3^FS
 
+^FX ==== Text fields rotated using 'Caret'A0R  ====
+^FX ==== 'Caret'A0R = (Font 0, Rotated 90 deg) ====
 ^CF0,80
-^FO20,200
-^FD Deliver to: ^FS
 
-^FX ==== Address Line 1 ====
-^CF0,80
-^FO0,150
-^FB1218,1,0,C,0
-^FD{{ADDR1}}\&^FS
+^FX ==== 1st line of Address ====
+^FO650,400
+^A0R,80,80^FD{{ADDR1}}^FS
 
-^FX ==== Address Line 2 ====
-^CF0,80
-^FO0,250
-^FB1218,1,0,C,0
-^FD{{ADDR2}}\&^FS
+^FX ==== 2nd line of Address ====
+^FO550,400
+^A0R,80,80^FD{{ADDR2}}^FS
 
 ^FX ==== Postcode ====
-^CF0,80
-^FO750,350
-^FD{{PCODE}}^FS
+^FO450,750
+^A0R,80,80^FD{{PCODE}}^FS
 
-^FX ==== Trolleys ====
-^CF0,80
-^FO20,450
-^FD Trolley ^FS
+^FX ==== Top Line: Deliver to ====
+^FO530,40
+^A0R,80,80^FDDeliver to:^FS
 
-^CF0,80
-^FO320,450
-^FD{{TRLY}}^FS
+^FX ==== Second Line: Trolleys ====
+^FO300,40
+^A0R,80,80^FDTrolley^FS
 
-^CF0,80
-^FO675,450
-^FDof^FS
+^FO300,320
+^A0R,80,80^FD{{TRLY}}^FS
 
-^CF0,80
-^FO750,450
-^FD{{TRLYS}}^FS
+^FO300,675
+^A0R,80,80^FDof^FS
 
-^FX ==== Trays ====
-^CF0,80
-^FO20,580
-^FD Total No. of trays ^FS
-^FO750,580
-^FD{{TRAYS}}^FS
+^FO300,750
+^A0R,80,80^FD{{TRLYS}}^FS
 
-^FX ==== Delivery Date ====
-^CF0,80
-^FO20,710
-^FD Delivery Date ^FS
-^FO750,710
-^FD{{DDATE}}^FS
+^FX ==== Third Line: Trays ====
+^FO170,40
+^A0R,80,80^FDTotal trays in order^FS
+
+^FO170,750
+^A0R,80,80^FD{{TRAYS}}^FS
+
+^FX ==== Bottom Line: Delivery Date ====
+^FO40,40
+^A0R,80,80^FDDelivery Date^FS
+
+^FO40,750
+^A0R,80,80^FD{{DDATE}}^FS
 
 ^XZ

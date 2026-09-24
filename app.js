@@ -731,14 +731,31 @@ function loadDispatchLabelsMatrix() {
         });
 }
 
-// Temporary placeholder click handler for testing active cell interactions
+// Handles workflow routing when a destination cell button is clicked on Screen 5.
 function handleDispatchMatrixCellClick(buttonElement) {
-    const index = buttonElement.getAttribute('data-index');
-    const postcode = buttonElement.getAttribute('data-postcode');
+    const postcode = buttonElement.getAttribute('data-postcode') || " ";
     const labelLines = buttonElement.querySelector('.btn-text').innerHTML.split('<br>');
+    const addr1 = (labelLines[0] || "").trim().toUpperCase();
+    const addr2 = (labelLines[1] || "").trim().toUpperCase();
     
-    console.log(`🎯 Active Dispatch Destination Selected — Slot: ${parseInt(index) + 1}, Destination: ${labelLines.join(' ')}, Postcode: ${postcode}`);
-    // Next stage overlay logic will hook in here securely later
+    console.log(`🚛 Destination Chosen: [${addr1} ${addr2}], Postcode: [${postcode}]. Launching print loop.`);
+    
+    // Package data matching logistics payload schemas exactly
+    lastExecutedPrintPayload = {
+        color: "dispatch",    // Routes straight to the dedicated dispatch_labels queue
+        cwrd1: addr1,         // Passed as text1 parameters
+        cwrd2: addr2,         // Passed as text2 parameters
+        q: "ACTIVE_DISPATCH", // Unique signature tracking flag for active destination runs
+        year: " ",
+        m1: postcode,         // Send postcode variable through the m1 slot for backend collection
+        m2: " ",
+        m3: " ",
+        finalHex: "#e1f5fe",  // Keeps visual palette alignment consistent
+        finalPeriod: "DISPATCH RUN"
+    };
+
+    // Open the quantitative overlay pad cleanly
+    triggerMultiplesQuantityOverlay();
 }
 
 /**

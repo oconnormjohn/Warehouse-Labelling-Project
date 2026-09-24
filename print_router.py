@@ -234,10 +234,24 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                         with open(template_path, 'r') as file:
                             final_zpl_payload = file.read()
                     else:
-                        final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
+                        final_zpl_payload = "^XA^FO50,50^A0N,50,50^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
                 else:
-                    # Legacy dynamic placeholder tracking for dispatch entries will link in here later
-                    final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDDISPATCH ENTRY ROUTE PENDING^XZ"
+                    # 🚚 ACTIVE DESTINATION RUN: Load your prepared dispatch template file
+                    template_name = 'dispatchLabel.zpl'
+                    template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
+                    
+                    if os.path.exists(template_path):
+                        with open(template_path, 'r') as file:
+                            zpl_content = file.read()
+                        
+                        # Execute targeted logistics placeholder substitutions natively
+                        zpl_content = zpl_content.replace('{{ADDR1}}', cwrd1)
+                        zpl_content = zpl_content.replace('{{ADDR2}}', cwrd2)
+                        zpl_content = zpl_content.replace('{{PCODE}}', m1)
+                        
+                        final_zpl_payload = zpl_content
+                    else:
+                        final_zpl_payload = f"^XA^FO50,50^A0N,50,50^FDERROR: MISSING TEMPLATE {template_name}^XZ"
 
             # 📝 INJECTED LOGIC DIVERGENCY FOR PLAIN MODE PRINTING RUNS
             elif color == 'plain':
@@ -261,9 +275,9 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
                 else:
                     final_zpl_payload = zpl_content
-
+            
+            # 🗓️ STANDARD FALLBACK ROUTINE FOR BASELINE CALENDAR YEARS STOCKS
             else:
-                # Standard legacy temporal formatting mapping routes for rolling years calendar squares
                 is_month_mode = (str(q_num).upper() == 'MM')
                 is_full_year  = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
                 is_two_word   = (cwrd2.strip() != '')
