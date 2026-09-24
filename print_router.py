@@ -224,8 +224,23 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             if not target_cups_printer:
                 raise ValueError(f"Unknown printer color requested: {color}")
 
+            # 🚛 NEW ROUTINE FOR DISPATCH MODE LOGISTICS RUNS
+            if color == 'dispatch':
+                # Check if this is a blank warehouse stock run bypassing context arrays
+                if payload.get('q') == 'BLANK_DISPATCH':
+                    template_name = 'blankDispatchLabel.zpl'
+                    template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
+                    if os.path.exists(template_path):
+                        with open(template_path, 'r') as file:
+                            final_zpl_payload = file.read()
+                    else:
+                        final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
+                else:
+                    # Legacy dynamic placeholder tracking for dispatch entries will link in here later
+                    final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDDISPATCH ENTRY ROUTE PENDING^XZ"
+
             # 📝 INJECTED LOGIC DIVERGENCY FOR PLAIN MODE PRINTING RUNS
-            if color == 'plain':
+            elif color == 'plain':
                 template_name = 'PlainLabel.zpl'
                 template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
                 
@@ -235,30 +250,18 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                 with open(template_path, 'r') as file:
                     zpl_content = file.read()
 
-                # 🚛 NEW ROUTINE FOR DISPATCH MODE LOGISTICS RUNS
-                if color == 'dispatch':
-                    if payload.get('q') == 'BLANK_DISPATCH':
-                        template_name = 'blankDispatchLabel.zpl'
-                        template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
-                        if os.path.exists(template_path):
-                            with open(template_path, 'r') as file:
-                                final_zpl_payload = file.read()
-                        else:
-                            final_zpl_payload = "^XA^FO50,50^A0N,50,50^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
-                    else:
-                        final_zpl_payload = "^XA^FO50,50^A0N,50,50^FDDISPATCH ENTRY ROUTE PENDING^XZ"
+                # Execute standard textual handlebar placeholder modifications
+                zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
+                zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
 
-                # 📝 IF COLOR IS PLAIN, FALLBACK SEAMLESSLY TO STANDARD PLAIN MODE TEXT PROCESSING
-                elif color == 'plain':
-                    zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
-                    zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
-                    image_download_command = convert_image_to_zpl_graphic(m1)
+                # Fire the automated pixel image 1-bit monochrome converter loop
+                image_download_command = convert_image_to_zpl_graphic(m1)
 
-                    if image_download_command.strip() != "":
-                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
-                    else:
-                        final_zpl_payload = zpl_content
-                
+                if image_download_command.strip() != "":
+                    final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
+                else:
+                    final_zpl_payload = zpl_content
+
             else:
                 # Standard legacy temporal formatting mapping routes for rolling years calendar squares
                 is_month_mode = (str(q_num).upper() == 'MM')

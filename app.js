@@ -848,7 +848,15 @@ function showUserAlert(type, data = {}, duration = 3000) {
         // Strip active background animation queue instantly if confirmations are bypassed
         const mainWrapper = document.getElementById('main-app-wrapper');
         if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
-        sidebarAction('BACK');
+        
+        // 🚛 BYPASS GATE INTERCEPT: If this is a blank dispatch run, preserve Screen 5 focus instead of falling back
+        if (lastExecutedPrintPayload && lastExecutedPrintPayload.q === 'BLANK_DISPATCH') {
+            console.log("🚛 Blank Dispatch Run (Bypassed Alert): Retaining active focus safely on Screen 5.");
+            loadDispatchLabelsMatrix();
+            switchKioskScreenLayout("5");
+        } else {
+            sidebarAction('BACK');
+        }
         return;
     }
 
@@ -897,7 +905,15 @@ function showUserAlert(type, data = {}, duration = 3000) {
                     return; 
                 }
 
-                // 🚀 STATE ENGINE RE-ROUTING COMPLIANCE
+                // 🚛 BLANK DISPATCH RUN INTERCEPT: Freeze state completely and remain on Screen 5
+                if (lastExecutedPrintPayload && lastExecutedPrintPayload.q === 'BLANK_DISPATCH') {
+                    console.log("🚛 Blank Dispatch Run Complete: Retaining active focus safely on Screen 5.");
+                    loadDispatchLabelsMatrix();
+                    switchKioskScreenLayout("5");
+                    return;
+                }
+
+                // 🚀 STATE ENGINE RE-ROUTING COMPLIANCE FOR BASELINE CATEGORIES
                 if (isAdminMultiplesModeActive) {
                     console.log("🍇 Admin Multi-Print Complete: Bypassing overlay prompts. Routing cleanly back to Screen 1A.");
                     switchKioskScreenLayout("1A");
@@ -906,6 +922,7 @@ function showUserAlert(type, data = {}, duration = 3000) {
                     switchKioskScreenLayout("1");
                 }
             }
+
         }
     }, duration);
 }
@@ -1967,11 +1984,11 @@ function submitAdminPinResetAdjustment() {
  * Intercepts the sidebar BLANK button touch event and launches the quantity pad.
  */
 function handleBlankDispatchLabelsClick() {
-    console.log("🚛 Blank Dispatch Labels requested. Preparing print quantity overlay.");
+    console.log("Committed Logistics Run: Preparing blank dispatch print quantity overlay.");
     
-    // Package a clean placeholder print payload targeting the blank template
+    // Package a clean placeholder print payload targeting the blank logistics template stock
     lastExecutedPrintPayload = {
-        color: "plain", // Routes dynamically to the targeted direct direct direct thermal queue
+        color: "dispatch", // 🚛 FIXED: Correctly routes directly to the dedicated dispatch printer queue
         cwrd1: "BLANK DISPATCH STOCK",
         cwrd2: "",
         q: "BLANK_DISPATCH", // Unique signature key flag for backend routing separation
