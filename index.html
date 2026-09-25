@@ -764,45 +764,16 @@
 </div>
 
 <!-- ==========================================================================
-     SCREEN 5 SUITE: 2-COLUMN x 7-ROW ROLLING DELIVERY DATE PICKER OVERLAY
+     SHARED SUITE: POSITIONED RIGHT LIGHT-GREY NUMERICAL KEYPAD OVERLAY
      ========================================================================== -->
-<div id="dispatch-calendar-modal" class="modal-overlay modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.75); justify-content: center; align-items: center; z-index: 9999999999; font-family: sans-serif; pointer-events: auto;">
-    
-    <!-- CENTRAL CALENDAR PANEL CARD -->
-    <div style="background-color: #333333; border: 0.4vh solid #000000; border-radius: 20px; width: 45vw; max-height: 94vh; padding: 2.5vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0px 1.5vh 4px rgba(0,0,0,0.6); align-items: center;">
-        
-        <!-- HEADER HEADER TITLE BARS -->
-        <div style="display: flex; justify-content: space-between; width: 100%; border-bottom: 2px dashed rgba(255,255,255,0.2); padding-bottom: 1vh; box-sizing: border-box;">
-            <div style="color: #FFFFFF; font-size: 2.2vh; font-weight: bold; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">THIS WEEK</div>
-            <div style="color: #FFFFFF; font-size: 2.2vh; font-weight: bold; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">NEXT WEEK</div>
-        </div>
-
-        <!-- 2-COLUMN x 7-ROW INDUSTRIAL DAY MATRIX TRACK CONTAINER -->
-        <div id="calendar-picker-grid-matrix" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(7, 1fr); gap: 1vh 1vw; width: 100%; height: 70vh; box-sizing: border-box;">
-            <!-- Dynamic 14 date selector button pairs populate here via JavaScript loop -->
-        </div>
-
-        <!-- LOWER FINAL ESCAPE ACTION BAR -->
-        <div style="width: 100%; display: flex; justify-content: center; margin-top: 1vh; box-sizing: border-box;">
-            <button type="button" onclick="dismissDispatchCalendarOverlay()" style="width: 40%; height: 6.5vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
-                <span style="font-size: 1.8vh; font-weight: 900; color: #C64B4B; letter-spacing: 0.5px; text-transform: uppercase;">CLOSE CALENDAR</span>
-            </button>
-        </div>
-
-    </div>
-</div>
-
-<!-- ==========================================================================
-     SHARED SUITE: GENERIC HIGH-CONTRAST NUMERICAL KEYPAD OVERLAY
-     ========================================================================== -->
-<div id="admin-multiples-modal" class="modal-overlay modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.75); justify-content: center; align-items: center; z-index: 999999999; font-family: sans-serif; pointer-events: auto;">
+<div id="admin-multiples-modal" class="modal-overlay modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: transparent !important; justify-content: flex-end; align-items: flex-start; padding-top: 12vh; padding-right: 5vw; z-index: 999999999; font-family: sans-serif; pointer-events: auto;">
     
     <!-- KEYPAD CENTRAL BODY CARD -->
-    <div style="background-color: #333333; border: 0.4vh solid #000000; border-radius: 20px; width: 34vw; padding: 3vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2.5vh; box-shadow: 0px 1.5vh 4px rgba(0,0,0,0.6); align-items: center;">
+    <div style="background-color: #F5F5F5; border: 0.4vh solid #000000; border-radius: 20px; width: 34vw; padding: 3vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2.5vh; box-shadow: 0px 1.5vh 4px rgba(0,0,0,0.4); align-items: center;">
         
-        <!-- HEADER QUANTITY SELECTION DATA ELEMENT DISPLAY TRACK -->
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 2px dashed rgba(255,255,255,0.2); padding-bottom: 1.5vh; box-sizing: border-box;">
-            <span id="multiples-modal-title" style="color: #FFFFFF; font-size: 2.4vh; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">SET PRINT QUANTITY</span>
+        <!-- HEADER ELEMENT DISPLAY TRACK (No dashed line, black text) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 0.5vh; box-sizing: border-box;">
+            <span id="multiples-modal-title" style="color: #000000; font-size: 2.4vh; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;">SET PRINT QUANTITY</span>
             <input type="text" id="admin-multiples-count-badge" value="1" readonly
                    style="width: 7vw; height: 6vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 8px; text-align: center; font-size: 3vh; font-weight: 900; color: #000000; outline: none;">
         </div>
@@ -822,23 +793,48 @@
             <button type="button" class="kbd-key" onclick="pressMultiplesKey('8')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">8</button>
             <button type="button" class="kbd-key" onclick="pressMultiplesKey('9')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">9</button>
             <!-- Row 4 -->
-            <button type="button" class="kbd-key" onclick="backspaceMultiplesKey()" style="height: 7.5vh; font-size: 1.8vh; font-weight: 900; background-color: #C64B4B; color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #702828; cursor: pointer; text-transform: uppercase;">BACKSPACE</button>
+            <button type="button" class="kbd-key" onclick="backspaceMultiplesKey()" style="height: 7.5vh; font-size: 2vh; font-weight: 900; background-color: #C64B4B; color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #702828; cursor: pointer; text-transform: uppercase;">BACKSPACE</button>
             <button type="button" class="kbd-key" onclick="pressMultiplesKey('0')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">0</button>
             <button type="button" class="kbd-key" onclick="clearMultiplesKey()" style="height: 7.5vh; font-size: 2.2vh; font-weight: 900; background-color: #FFB300; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #9e6f00; cursor: pointer; text-transform: uppercase;">CLEAR</button>
         </div>
 
-        <!-- LOWER FINAL COMMIT ACTION ACTION BAR (Clean side-by-side uniform layout) -->
+        <!-- LOWER FINAL COMMIT ACTION ACTION BAR -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vw; width: 100%; margin-top: 1vh; box-sizing: border-box;">
-            <!-- Square Cancel Button -->
             <button type="button" onclick="dismissMultiplesQuantityOverlay()" style="height: 7.5vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
                 <span style="font-size: 2vh; font-weight: 900; color: #C64B4B; letter-spacing: 0.5px; text-transform: uppercase;">CANCEL</span>
             </button>
-            <!-- Square Green Submit Button -->
             <button type="button" onclick="confirmMultiplesQuantityRun()" style="height: 7.5vh; background-color: #4cd964; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
                 <span id="multiples-modal-submit-text" style="font-size: 2vh; font-weight: 900; color: #000000; letter-spacing: 0.5px; text-transform: uppercase;">SEND</span>
             </button>
         </div>
+    </div>
+</div>
 
+<!-- ==========================================================================
+     SCREEN 5 SUITE: POSITIONED LEFT LIGHT-GREY CALENDAR PICKER OVERLAY
+     ========================================================================== -->
+<div id="dispatch-calendar-modal" class="modal-overlay modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: transparent !important; justify-content: flex-start; align-items: flex-start; padding-top: 5vh; padding-left: 3vw; z-index: 9999999999; font-family: sans-serif; pointer-events: auto;">
+    
+    <!-- CENTRAL CALENDAR PANEL CARD -->
+    <div style="background-color: #F5F5F5; border: 0.4vh solid #000000; border-radius: 20px; width: 45vw; max-height: 94vh; padding: 2.5vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0px 1.5vh 4px rgba(0,0,0,0.4); align-items: center;">
+        
+        <!-- HEADER HEADER TITLE BARS (No dashed line, black text) -->
+        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 0.5vh; box-sizing: border-box;">
+            <div style="color: #000000; font-size: 2.2vh; font-weight: 900; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">THIS WEEK</div>
+            <div style="color: #000000; font-size: 2.2vh; font-weight: 900; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">NEXT WEEK</div>
+        </div>
+
+        <!-- 2-COLUMN x 7-ROW INDUSTRIAL DAY MATRIX TRACK CONTAINER -->
+        <div id="calendar-picker-grid-matrix" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(7, 1fr); gap: 1vh 1vw; width: 100%; height: 70vh; box-sizing: border-box;">
+            <!-- Dynamic 14 date selector selector button pairs populate here via JavaScript loop -->
+        </div>
+
+        <!-- LOWER FINAL ESCAPE ACTION BAR -->
+        <div style="width: 100%; display: flex; justify-content: center; margin-top: 1vh; box-sizing: border-box;">
+            <button type="button" onclick="dismissDispatchCalendarOverlay()" style="width: 50%; height: 6.5vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
+                <span style="font-size: 1.8vh; font-weight: 900; color: #C64B4B; letter-spacing: 0.5px; text-transform: uppercase;">CLOSE CALENDAR</span>
+            </button>
+        </div>
     </div>
 </div>
 

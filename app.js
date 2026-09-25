@@ -787,8 +787,21 @@ function launchDispatchDataCollectionOverlay(addr1, addr2, postcode) {
         modalFrame.style.setProperty('display', 'flex', 'important');
     }
 
-    // 4. 🧼 STABLE BASELINE: Clear past highlights and wait for the user to touch a row explicitly
-    clearAllDispatchCollectionFocus();
+    // 4. 🚀 PROACTIVE HIGHLIGHT FOCUS STATE: Light up the Trolleys row instantly upon presentation
+    activeDispatchFocusedInputKey = "trolleys";
+    
+    // Reset all rows to neutral grey first
+    const targetingKeys = ['trolleys', 'trays', 'date'];
+    targetingKeys.forEach(key => {
+        const inputEl = document.getElementById(`dispatch-input-${key}`);
+        if (inputEl) inputEl.style.backgroundColor = "#F4F4F4";
+    });
+
+    // Explicitly shade the Trolleys input row background container to green right at startup
+    const trolleyInput = document.getElementById('dispatch-input-trolleys');
+    if (trolleyInput) {
+        trolleyInput.style.backgroundColor = "#a5d6a7";
+    }
 }
 
 /**
