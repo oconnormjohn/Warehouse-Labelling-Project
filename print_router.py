@@ -210,17 +210,31 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"status": "success", "message": f"{list_key} list updated on disk"}).encode('utf-8'))
                 return
 
-            # STANDARD PRINT ROUTINE (Cleaned with strip() to prevent silent routing misses)
-            color = payload.get('color', '').lower().strip() # 🧼 Strips hidden browser spaces
-            cwrd1 = payload.get('cwrd1', '').strip()        # 🧼 Strips hidden text pads
-            cwrd2 = payload.get('cwrd2', '').strip()        # 🧼 Strips hidden text pads
+            # STANDARD PRINT ROUTINE (Cleaned with list structural array checking)
+            color = payload.get('color', '').lower().strip() 
+            cwrd1 = payload.get('cwrd1', '').strip()        
+            cwrd2 = payload.get('cwrd2', '').strip()        
             q_num = str(payload.get('q', '')).strip()
             year  = str(payload.get('year', '')).strip()
-            m1    = payload.get('m1', ' ').strip()
-            m2    = payload.get('m2', ' ').strip()
-            m3    = payload.get('m3', ' ').strip()
+
+            # 🛠️ INTELLIGENT ROUTING CHECK: Parse month lists if they are arrays, otherwise pass as raw strings
+            raw_m1 = payload.get('m1', ' ')
+            raw_m2 = payload.get('m2', ' ')
+            raw_m3 = payload.get('m3', ' ')
+
+            if isinstance(raw_m1, list):
+                # Category multi-print month check loop array assignment pass
+                m1 = raw_m1[0] if len(raw_m1) > 0 else ' '
+                m2 = raw_m1[1] if len(raw_m1) > 1 else ' '
+                m3 = raw_m1[2] if len(raw_m1) > 2 else ' '
+            else:
+                # Standard explicit plain string assignment pass for Dispatch and Plain modes
+                m1 = str(raw_m1).strip()
+                m2 = str(raw_m2).strip()
+                m3 = str(raw_m3).strip()
 
             target_cups_printer = PRINTER_POOL.get(color)
+
             if not target_cups_printer:
                 raise ValueError(f"Unknown printer color requested: {color}")
 
@@ -234,7 +248,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                         with open(template_path, 'r') as file:
                             final_zpl_payload = file.read()
                     else:
-                        final_zpl_payload = "^XA^FO50,50^A0N,50,50^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
+                        final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
                 else:
                     # 🚚 ACTIVE DESTINATION RUN: Load your prepared dispatch template file
                     template_name = 'dispatchLabel.zpl'
@@ -244,37 +258,41 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                         with open(template_path, 'r') as file:
                             zpl_content = file.read()
                         
-                        # Execute targeted logistics placeholder substitutions natively
+                        # Execute baseline address and postcode substitutions
                         zpl_content = zpl_content.replace('{{ADDR1}}', cwrd1)
                         zpl_content = zpl_content.replace('{{ADDR2}}', cwrd2)
                         zpl_content = zpl_content.replace('{{PCODE}}', m1)
                         
+                        # 🔍 VERIFICATION PASS: Map out the new user form entries explicitly
+                        zpl_content = zpl_content.replace('{{TRAYS}}', str(m2)) # Trays count number string
+                        zpl_content = zpl_content.replace('{{DDATE}}', str(m3)) # Formatted delivery date string
+                        
                         final_zpl_payload = zpl_content
                     else:
-                        final_zpl_payload = f"^XA^FO50,50^A0N,50,50^FDERROR: MISSING TEMPLATE {template_name}^XZ"
+                        final_zpl_payload = f"^XA^FO50,50^A0N,20,20^FDERROR: MISSING TEMPLATE {template_name}^XZ"
 
-            # 📝 INJECTED LOGIC DIVERGENCY FOR PLAIN MODE PRINTING RUNS
+            # 📝 NEW EXPLICIT ROUTINE FOR PLAIN LABELS MODE 
             elif color == 'plain':
                 template_name = 'PlainLabel.zpl'
                 template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
                 
                 if not os.path.exists(template_path):
-                    raise FileNotFoundError(f"Missing Plain Label ZPL template file: {template_name}")
-
-                with open(template_path, 'r') as file:
-                    zpl_content = file.read()
-
-                # Execute standard textual handlebar placeholder modifications
-                zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
-                zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
-
-                # Fire the automated pixel image 1-bit monochrome converter loop
-                image_download_command = convert_image_to_zpl_graphic(m1)
-
-                if image_download_command.strip() != "":
-                    final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
+                    final_zpl_payload = f"^XA^FO50,50^A0N,40,40^FDERROR: MISSING TEMPLATE {template_name}^XZ"
                 else:
-                    final_zpl_payload = zpl_content
+                    with open(template_path, 'r') as file:
+                        zpl_content = file.read()
+
+                    # Execute standard textual handlebar placeholder modifications
+                    zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
+                    zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
+
+                    # Fire the automated pixel image 1-bit monochrome converter loop
+                    image_download_command = convert_image_to_zpl_graphic(m1)
+
+                    if image_download_command.strip() != "":
+                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
+                    else:
+                        final_zpl_payload = zpl_content
             
             # 🗓️ STANDARD FALLBACK ROUTINE FOR BASELINE CALENDAR YEARS STOCKS
             else:

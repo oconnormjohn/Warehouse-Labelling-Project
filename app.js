@@ -885,10 +885,33 @@ function setDispatchCollectionFocus(inputFieldKey) {
 }
 
 /**
- * Temporary placeholder submit function to prevent errors when clicking the print icon
+ * Master Dispatch Spooler: Gathers values from the unified data entry fields,
+ * packages the parameters, and fires the data directly to the printing pipeline.
  */
 function submitDispatchJobPrintSpool() {
-    console.log("🚀 Spooling dispatch print pipeline... (Counter logic and placeholders to follow)");
+    const tVal = document.getElementById('dispatch-input-trolleys').value.trim();
+    const rVal = document.getElementById('dispatch-input-trays').value.trim();
+    const dVal = document.getElementById('dispatch-input-date').value.trim();
+
+    console.log("🚀 Initializing Logistics Spooler: Capturing fields for active print delivery loop.");
+    console.log("📊 Trolleys: [" + tVal + "], Trays: [" + rVal + "], Date: [" + dVal + "]");
+
+    // Build the dynamic parameters array onto the global print payload tracker object
+    lastExecutedPrintPayload = {
+        color: "dispatch",            // Forces routing to the dedicated dispatch printer queue
+        cwrd1: lastExecutedPrintPayload.cwrd1, // Address Line 1
+        cwrd2: lastExecutedPrintPayload.cwrd2, // Address Line 2
+        q: "ACTIVE_DISPATCH",          // Core active queue routing marker flag
+        year: tVal,                    // Pass total trolleys quantity (Y) through the year tracking slot
+        m1: lastExecutedPrintPayload.m1,       // Hidden postcode string stowed securely in memory
+        m2: rVal,                      // Pass total trays count through the m2 tracking slot
+        m3: dVal                       // Pass formatted intended delivery date through the m3 tracking slot
+    };
+
+    // Fire the physical system print engine instantly (Running 1 time since Python will loop inside the box)
+    executePhysicalPrintSpooler(lastExecutedPrintPayload, 1);
+
+    // Close down the overlay and return cleanly to a fresh Screen 5 matrix look
     dismissDispatchCollectionOverlay();
 }
 
@@ -1407,29 +1430,38 @@ function clearQtyPadEntry() {
 function confirmMultiplesQuantityRun() {
     // 🚛 INTERCEPT GATEWAY: Handle data values collection when inside dispatch view
     if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
-        const collectedValue = multiplesCountTarget.toString().trim();
         
-        // Ensure an entry value exists, or default cleanly back to zero
+        // 🚀 NEW FIX: If this is an explicit Blank Label run, fire it straight to the print loop!
+        if (lastExecutedPrintPayload && lastExecutedPrintPayload.q === 'BLANK_DISPATCH') {
+            console.log("🚛 Blank Dispatch Run Confirmed: Spooling batch directly into local queue.");
+            executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
+            
+            // Clean up the modal layout overlays instantly
+            const multiplesModal = document.getElementById('admin-multiples-modal');
+            if (multiplesModal) {
+                multiplesModal.style.setProperty('display', 'none', 'important');
+                multiplesModal.classList.add('modal-hide');
+            }
+            return;
+        }
+
+        // Standard fallback for normal form entry field input blocks (Trolleys/Trays keypad inputs)
+        const collectedValue = multiplesCountTarget.toString().trim();
         const targetValue = (collectedValue === "") ? "0" : collectedValue;
         
         const activeInput = document.getElementById(`dispatch-input-${activeDispatchFocusedInputKey}`);
         if (activeInput) {
             activeInput.value = targetValue;
             console.log(`Value entry committed successfully: Field [dispatch-input-${activeDispatchFocusedInputKey}] -> [${targetValue}]`);
-            
-            // Re-evaluate the grayed-out PRINT action button status instantly
             updateDispatchPrintButtonState();
         }
 
-        // 🧼 INSTANT VISUAL DISMISSAL: Force an ironclad redraw and hide the overlay immediately
         const multiplesModal = document.getElementById('admin-multiples-modal');
         if (multiplesModal) {
-            multiplesModal.style.display = 'none'; // Force immediate visual drop
             multiplesModal.style.setProperty('display', 'none', 'important');
             multiplesModal.classList.add('modal-hide');
         }
         
-        // Clear active focus highlight highlights natively to return to a clean data box state
         clearAllDispatchCollectionFocus();
         return;
     }
@@ -1438,6 +1470,7 @@ function confirmMultiplesQuantityRun() {
     if (lastExecutedPrintPayload) {
         executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
     }
+    // ... rest of the function remains exactly the same ...
 
     const universalOverlay = document.getElementById('kiosk-universal-overlay');
     if (universalOverlay) {
