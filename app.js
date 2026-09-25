@@ -623,11 +623,11 @@ function handleCardClick(year, period, zplMonths) {
 async function executePhysicalPrintSpooler(payload, totalRuns) {
     if (!payload) return;
 
-    // ANIMATION FIX: Explicitly remove animation tracker layout states cleanly
     const mainWrapper = document.getElementById('main-app-wrapper');
     if (mainWrapper) {
         mainWrapper.classList.remove('printing-active-state');
     }
+    
     if (isDemoModeActive) {
         console.log(`✈️ DEMO MODE ACTIVE: Bypassing print daemon for ${totalRuns} labels.`);
         showUserAlert('PRINT_CONFIRM', { 
@@ -639,48 +639,74 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
         return;
     }
 
-    const structuralPostPayload = {
-        color: payload.color,
-        cwrd1: payload.cwrd1,
-        cwrd2: payload.cwrd2,
-        q: payload.q,
-        year: payload.year,
-        m1: payload.m1,
-        m2: payload.m2,
-        m3: payload.m3
-    };
-
     try {
-        // SEQUENTIAL CHAINING: Wait for each network fetch to complete before starting the next
-        for (let run = 0; run < totalRuns; run++) {
-            const response = await fetch('http://localhost:8080', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(structuralPostPayload)
-            });
+        // 🚛 LOGISTICS BATCH GENERATOR GATEWAY
+        if (payload.color === 'dispatch' && payload.q === 'ACTIVE_DISPATCH') {
+            // totalRuns represents the total count typed into the trolleys input box
+            const totalTrolleysCount = parseInt(payload.year) || 1;
+            console.log(`🚀 Loop Generator Engaged: Spooling ${totalTrolleysCount} unique incrementing trolley cards.`);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error status: ${response.status}`);
+            for (let currentNumber = 1; currentNumber <= totalTrolleysCount; currentNumber++) {
+                const structuralPostPayload = {
+                    color: payload.color,
+                    cwrd1: payload.cwrd1,
+                    cwrd2: payload.cwrd2,
+                    q: payload.q,
+                    year: currentNumber.toString(), // 🔢 Dynamic loop variable injected into year -> {{TRLY}}
+                    m1: payload.m1,
+                    m2: payload.m2,
+                    m3: payload.m3,
+                    total_trolleys: totalTrolleysCount.toString() // Passed down cleanly -> {{TRLYS}}
+                };
+
+                const response = await fetch('http://localhost:8080', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(structuralPostPayload)
+                });
+
+                if (!response.ok) throw new Error(`HTTP loop error status: ${response.status}`);
+                const data = await response.json();
+                console.log(`🎉 Dispatched Trolley (${currentNumber}/${totalTrolleysCount}) straight to hardware queue.`);
             }
+        } 
+        // 🟢 STANDARD FALLBACK SYSTEM BATCHES RUN LOGIC (Categories, Plain, Blank Stock)
+        else {
+            const structuralPostPayload = {
+                color: payload.color,
+                cwrd1: payload.cwrd1,
+                cwrd2: payload.cwrd2,
+                q: payload.q,
+                year: payload.year,
+                m1: payload.m1,
+                m2: payload.m2,
+                m3: payload.m3
+            };
 
-            const data = await response.json();
-            console.log(`🎉 Dispatched run (${run + 1}/${totalRuns}) to local CUPS spooler:`, data);
+            for (let run = 0; run < totalRuns; run++) {
+                const response = await fetch('http://localhost:8080', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(structuralPostPayload)
+                });
+
+                if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+                const data = await response.json();
+                console.log(`🎉 Dispatched run (${run + 1}/${totalRuns}) to local CUPS spooler:`, data);
+            }
         }
 
-        // CONFIRMATION GATE: Only show success if all network iterations resolve perfectly
+        // Trigger success alert window natively once entire batch sequence successfully finishes
         showUserAlert('PRINT_CONFIRM', { 
             categoryName: `${payload.cwrd1} ${payload.cwrd2}`.trim(), 
             periodText: payload.finalPeriod, 
-            yearText: payload.year, 
+            yearText: payload.color === 'dispatch' && payload.q === 'ACTIVE_DISPATCH' ? `BATCH RUN OF ${payload.year}` : payload.year, 
             hexColor: payload.finalHex 
         }, 3000);
 
     } catch (error) {
         console.error('❌ Network printing engine link broken during spooling sequence:', error);
-        
-        if (mainWrapper) {
-            mainWrapper.classList.remove('printing-active-state');
-        }
+        if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
         showUserAlert('SYSTEM_ALERT', { message: 'PRINTER ROUTER CONNECTION OFFLINE' }, 5000);
     }
 }

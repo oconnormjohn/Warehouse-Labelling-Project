@@ -263,9 +263,14 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                         zpl_content = zpl_content.replace('{{ADDR2}}', cwrd2)
                         zpl_content = zpl_content.replace('{{PCODE}}', m1)
                         
-                        # 🔍 VERIFICATION PASS: Map out the new user form entries explicitly
+                        # 🔍 VERIFICATION PASS: Map out the user form entries explicitly
                         zpl_content = zpl_content.replace('{{TRAYS}}', str(m2)) # Trays count number string
                         zpl_content = zpl_content.replace('{{DDATE}}', str(m3)) # Formatted delivery date string
+                        
+                        # 🔄 LOOP INJECTION SUBROUTINE: Extract current index counter maps
+                        # payload['year'] holds the current active trolley sequence string passed from app.js
+                        zpl_content = zpl_content.replace('{{TRLY}}', str(year))
+                        zpl_content = zpl_content.replace('{{TRLYS}}', str(payload.get('total_trolleys', '1')))
                         
                         final_zpl_payload = zpl_content
                     else:
