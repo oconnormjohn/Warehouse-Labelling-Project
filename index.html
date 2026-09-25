@@ -698,56 +698,145 @@
     </div>
 </div>
 
-<!-- REFINED MULTIPLES QUANTITY SELECTION Pad MODAL -->
-<div id="admin-multiples-modal" class="modal-overlay modal-hide" style="z-index: 999999999;">
-    <div class="modal-content" style="width: 48vw; max-width: 440px; padding: 3vh 2.5vw; gap: 2vh; display: flex; flex-direction: column;">
+<!-- ==========================================================================
+     SCREEN 5 SUITE: POLISHED UNIFIED DISPATCH DATA COLLECTION OVERLAY
+     ========================================================================== -->
+<div id="dispatch-data-collection-modal" class="modal-overlay modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 99999999; font-family: sans-serif; pointer-events: auto;">
+    
+    <!-- CENTRAL CONTAINER BOX -->
+    <div style="background-color: #FFFFFF; border: 0.4vh solid #000000; border-radius: 16px; width: 55vw; max-height: 90vh; box-shadow: 0px 1vh 3px rgba(0,0,0,0.5); padding: 3vh 2.5vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2.5vh; position: relative;">
         
-        <div id="multiples-modal-title" style="color: #7851A9; font-weight: bold; font-size: 2.8vh; text-transform: uppercase; text-align: center; letter-spacing: 1px;">
-            Set Print Quantity
-        </div>
-        
-        <!-- ZONE A: NUMERICAL KEYPAD ENTRY ZONE -->
-        <div id="multiples-qty-zone" style="width: 100%; display: flex; flex-direction: column; gap: 2vh;">
-            <input type="text" id="admin-qty-display" value="" readonly                  
-            style="width: 100%; padding: 1.5vh 0; font-size: 4vh; font-weight: 900; text-align: center; border: 3px solid #7851A9; border-radius: 10px; background: #fff; color: #000;">
-            
-            <!-- 3x4 Grid Mapping -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1vh; width: 100%;">
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('1')">1</button>
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('2')">2</button>
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('3')">3</button>
-                
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('4')">4</button>
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('5')">5</button>
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('6')">6</button>
-                
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('7')">7</button>
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('8')">8</button>
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('9')">9</button>
-                
-                <button type="button" class="qty-key-btn" onclick="clearQtyPadEntry()" style="background: #ffb74d !important; color: #fff !important;">CLR</button>
-                <button type="button" class="qty-key-btn" onclick="pressQtyPadKey('0')">0</button>
-                <button type="button" class="btn-multiples-confirm" onclick="confirmMultiplesQuantityRun()" style="font-size: 1.8vh;">SEND</button>
-            </div>
+        <!-- HEADER DESTINATION CONFIRMATION LAYER (Unified Font Styles) -->
+        <div style="background-color: #e1f5fe; border: 0.3vh solid #000000; border-radius: 12px; padding: 2vh 1.5vw; text-align: center; box-sizing: border-box; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+            <div id="dispatch-modal-addr1" style="font-size: 2.6vh; font-weight: 900; color: #000000; text-transform: uppercase; line-height: 1.3;">ADDRESS LINE 1</div>
+            <div id="dispatch-modal-addr2" style="font-size: 2.6vh; font-weight: 900; color: #000000; text-transform: uppercase; line-height: 1.3; margin-top: 0.3vh;">ADDRESS LINE 2</div>
         </div>
 
-        <!-- ZONE B: CONTINUITY DECISION FORK BOX -->
-        <div id="multiples-fork-zone" style="width: 100%; display: none; flex-direction: column; align-items: center; gap: 2.5vh;">
-            <div style="font-size: 2.2vh; color: #7851A9; font-weight: 800; text-align: center; text-transform: uppercase;">
-                Are more labels required?
-            </div>
+        <!-- FORM ENTRY MATRIX AREA -->
+        <div style="display: flex; flex-direction: column; gap: 2vh; width: 100%; box-sizing: border-box;">
             
-            <div style="display: flex; flex-direction: column; gap: 1.5vh; width: 100%;">
-                <button onclick="handleContinuityChoice('SAME')" class="btn-multiples-confirm" style="width: 100%; padding: 2vh 0; font-size: 2vh; border: none; cursor: pointer; text-transform: uppercase;">
-                    Print More of Same Label
-                </button>
-                <button onclick="handleContinuityChoice('FRESH_PURPLE')" class="btn-multiples-fresh" style="width: 100%; padding: 2vh 0; font-size: 2vh; border: none; cursor: pointer; text-transform: uppercase;">
-                    Pick Fresh Label
-                </button>
-                <button onclick="handleContinuityChoice('EXIT_GREEN')" class="btn-multiples-exit" style="width: 100%; padding: 2vh 0; font-size: 2vh; border: none; cursor: pointer; text-transform: uppercase;">
-                    No (Return to Normal Green System)
-                </button>
+            <!-- ROW 1: TROLLEY COUNT ENTRY INPUT -->
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span style="font-size: 2.2vh; font-weight: bold; color: #333333; width: 28vw;">How many trolleys in the order?</span>
+                <input type="text" id="dispatch-input-trolleys" readonly onclick="setDispatchCollectionFocus('trolleys')" placeholder="TAP TO ENTER"
+                       style="width: 20vw; height: 5.5vh; background-color: #F4F4F4; border: 0.3vh solid #000000; border-radius: 8px; text-align: center; font-size: 2.4vh; font-weight: 900; color: #000000; outline: none; cursor: pointer;">
             </div>
+
+            <!-- ROW 2: TRAY COUNT ENTRY INPUT -->
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span style="font-size: 2.2vh; font-weight: bold; color: #333333; width: 28vw;">How many trays in the order?</span>
+                <input type="text" id="dispatch-input-trays" readonly onclick="setDispatchCollectionFocus('trays')" placeholder="TAP TO ENTER"
+                       style="width: 20vw; height: 5.5vh; background-color: #F4F4F4; border: 0.3vh solid #000000; border-radius: 8px; text-align: center; font-size: 2.4vh; font-weight: 900; color: #000000; outline: none; cursor: pointer;">
+            </div>
+
+            <!-- ROW 3: DATE ENTRY INPUT -->
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span style="font-size: 2.2vh; font-weight: bold; color: #333333; width: 28vw;">Intended delivery date?</span>
+                <input type="text" id="dispatch-input-date" readonly onclick="setDispatchCollectionFocus('date')" placeholder="TAP TO SELECT"
+                       style="width: 20vw; height: 5.5vh; background-color: #F4F4F4; border: 0.3vh solid #000000; border-radius: 8px; text-align: center; font-size: 2.2vh; font-weight: 900; color: #000000; outline: none; cursor: pointer;">
+            </div>
+
+        </div>
+
+        <!-- LOWER MASTER CONTROL ACTION PANEL BUTTONS -->
+        <div style="display: flex; justify-content: flex-end; gap: 1.5vw; width: 100%; margin-top: 1vh; box-sizing: border-box;">
+            
+            <!-- CANCEL BACK NAVIGATION SQUARE CONTROL -->
+            <button onclick="dismissDispatchCollectionOverlay()" style="width: 8vh; height: 8vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 0; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#C64B4B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="width: 4vh; height: 4vh;">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                <div style="font-size: 1.1vh; font-weight: 900; color: #C64B4B; line-height: 1.0; margin-top: 0.2vh;">CANCEL</div>
+            </button>
+
+            <!-- ACTION PRINT SUBMIT SQUARE CONTROL (Defaults to Grayed-Out via ID Hook) -->
+            <button id="dispatch-modal-print-btn" onclick="submitDispatchJobPrintSpool()" style="width: 8vh; height: 8vh; background-color: #CCCCCC; border: 0.3vh solid #666666; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 0; box-shadow: 0px 0.4vh 0px #666666; outline: none; pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: all 0.2s ease;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#333333" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="width: 4vh; height: 4vh;" id="dispatch-modal-print-svg">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div id="dispatch-modal-print-text" style="font-size: 1.1vh; font-weight: 900; color: #333333; line-height: 1.0; margin-top: 0.2vh;">PRINT</div>
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- ==========================================================================
+     SCREEN 5 SUITE: 2-COLUMN x 7-ROW ROLLING DELIVERY DATE PICKER OVERLAY
+     ========================================================================== -->
+<div id="dispatch-calendar-modal" class="modal-overlay modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.75); justify-content: center; align-items: center; z-index: 9999999999; font-family: sans-serif; pointer-events: auto;">
+    
+    <!-- CENTRAL CALENDAR PANEL CARD -->
+    <div style="background-color: #333333; border: 0.4vh solid #000000; border-radius: 20px; width: 45vw; max-height: 94vh; padding: 2.5vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0px 1.5vh 4px rgba(0,0,0,0.6); align-items: center;">
+        
+        <!-- HEADER HEADER TITLE BARS -->
+        <div style="display: flex; justify-content: space-between; width: 100%; border-bottom: 2px dashed rgba(255,255,255,0.2); padding-bottom: 1vh; box-sizing: border-box;">
+            <div style="color: #FFFFFF; font-size: 2.2vh; font-weight: bold; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">THIS WEEK</div>
+            <div style="color: #FFFFFF; font-size: 2.2vh; font-weight: bold; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">NEXT WEEK</div>
+        </div>
+
+        <!-- 2-COLUMN x 7-ROW INDUSTRIAL DAY MATRIX TRACK CONTAINER -->
+        <div id="calendar-picker-grid-matrix" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(7, 1fr); gap: 1vh 1vw; width: 100%; height: 70vh; box-sizing: border-box;">
+            <!-- Dynamic 14 date selector button pairs populate here via JavaScript loop -->
+        </div>
+
+        <!-- LOWER FINAL ESCAPE ACTION BAR -->
+        <div style="width: 100%; display: flex; justify-content: center; margin-top: 1vh; box-sizing: border-box;">
+            <button type="button" onclick="dismissDispatchCalendarOverlay()" style="width: 40%; height: 6.5vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
+                <span style="font-size: 1.8vh; font-weight: 900; color: #C64B4B; letter-spacing: 0.5px; text-transform: uppercase;">CLOSE CALENDAR</span>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==========================================================================
+     SHARED SUITE: GENERIC HIGH-CONTRAST NUMERICAL KEYPAD OVERLAY
+     ========================================================================== -->
+<div id="admin-multiples-modal" class="modal-overlay modal-hide" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.75); justify-content: center; align-items: center; z-index: 999999999; font-family: sans-serif; pointer-events: auto;">
+    
+    <!-- KEYPAD CENTRAL BODY CARD -->
+    <div style="background-color: #333333; border: 0.4vh solid #000000; border-radius: 20px; width: 34vw; padding: 3vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2.5vh; box-shadow: 0px 1.5vh 4px rgba(0,0,0,0.6); align-items: center;">
+        
+        <!-- HEADER QUANTITY SELECTION DATA ELEMENT DISPLAY TRACK -->
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 2px dashed rgba(255,255,255,0.2); padding-bottom: 1.5vh; box-sizing: border-box;">
+            <span id="multiples-modal-title" style="color: #FFFFFF; font-size: 2.4vh; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">SET PRINT QUANTITY</span>
+            <input type="text" id="admin-multiples-count-badge" value="1" readonly
+                   style="width: 7vw; height: 6vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 8px; text-align: center; font-size: 3vh; font-weight: 900; color: #000000; outline: none;">
+        </div>
+
+        <!-- 3x4 TOUCHPAD BUTTONS MATRIX GRID LOOP -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5vh 1vw; width: 100%; box-sizing: border-box;">
+            <!-- Row 1 -->
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('1')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">1</button>
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('2')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">2</button>
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('3')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">3</button>
+            <!-- Row 2 -->
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('4')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">4</button>
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('5')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">5</button>
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('6')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">6</button>
+            <!-- Row 3 -->
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('7')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">7</button>
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('8')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">8</button>
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('9')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">9</button>
+            <!-- Row 4 -->
+            <button type="button" class="kbd-key" onclick="backspaceMultiplesKey()" style="height: 7.5vh; font-size: 1.8vh; font-weight: 900; background-color: #C64B4B; color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #702828; cursor: pointer; text-transform: uppercase;">BACKSPACE</button>
+            <button type="button" class="kbd-key" onclick="pressMultiplesKey('0')" style="height: 7.5vh; font-size: 3.5vh; font-weight: 900; background-color: #FFFFFF; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #888888; cursor: pointer;">0</button>
+            <button type="button" class="kbd-key" onclick="clearMultiplesKey()" style="height: 7.5vh; font-size: 2.2vh; font-weight: 900; background-color: #FFB300; color: #000000; border: 0.3vh solid #000000; border-radius: 12px; box-shadow: 0px 0.4vh 0px #9e6f00; cursor: pointer; text-transform: uppercase;">CLEAR</button>
+        </div>
+
+        <!-- LOWER FINAL COMMIT ACTION ACTION BAR (Clean side-by-side uniform layout) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vw; width: 100%; margin-top: 1vh; box-sizing: border-box;">
+            <!-- Square Cancel Button -->
+            <button type="button" onclick="dismissMultiplesQuantityOverlay()" style="height: 7.5vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
+                <span style="font-size: 2vh; font-weight: 900; color: #C64B4B; letter-spacing: 0.5px; text-transform: uppercase;">CANCEL</span>
+            </button>
+            <!-- Square Green Submit Button -->
+            <button type="button" onclick="confirmMultiplesQuantityRun()" style="height: 7.5vh; background-color: #4cd964; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
+                <span id="multiples-modal-submit-text" style="font-size: 2vh; font-weight: 900; color: #000000; letter-spacing: 0.5px; text-transform: uppercase;">SEND</span>
+            </button>
         </div>
 
     </div>

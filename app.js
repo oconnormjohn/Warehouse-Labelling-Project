@@ -735,27 +735,148 @@ function loadDispatchLabelsMatrix() {
 function handleDispatchMatrixCellClick(buttonElement) {
     const postcode = buttonElement.getAttribute('data-postcode') || " ";
     const labelLines = buttonElement.querySelector('.btn-text').innerHTML.split('<br>');
-    const addr1 = (labelLines[0] || "").trim().toUpperCase();
-    const addr2 = (labelLines[1] || "").trim().toUpperCase();
     
-    console.log(`🚛 Destination Chosen: [${addr1} ${addr2}], Postcode: [${postcode}]. Launching print loop.`);
+    // Extract the strings from the array positions safely before trimming
+    const addr1 = (labelLines[0] || "").toString().trim().toUpperCase();
+    const addr2 = (labelLines[1] || "").toString().trim().toUpperCase();
     
-    // Package data matching logistics payload schemas exactly
+    console.log(`Grid destination selected: [${addr1} ${addr2}]. Populating overlay metrics data.`);
+    
+    // Save target data structure safely to global print payload parameters
     lastExecutedPrintPayload = {
-        color: "dispatch",    // Routes straight to the dedicated dispatch_labels queue
-        cwrd1: addr1,         // Passed as text1 parameters
-        cwrd2: addr2,         // Passed as text2 parameters
-        q: "ACTIVE_DISPATCH", // Unique signature tracking flag for active destination runs
+        color: "dispatch",
+        cwrd1: addr1,
+        cwrd2: addr2,
+        q: "ACTIVE_DISPATCH",
         year: " ",
-        m1: postcode,         // Send postcode variable through the m1 slot for backend collection
+        m1: postcode, 
         m2: " ",
         m3: " ",
-        finalHex: "#e1f5fe",  // Keeps visual palette alignment consistent
+        finalHex: "#e1f5fe",
         finalPeriod: "DISPATCH RUN"
     };
 
-    // Open the quantitative overlay pad cleanly
-    triggerMultiplesQuantityOverlay();
+    // Launch our unified data collection overlay container loop instantly
+    launchDispatchDataCollectionOverlay(addr1, addr2, postcode);
+}
+
+// Workspace tracker flags for the unified data collection modal overlay box
+let activeDispatchFocusedInputKey = "trolleys"; // Current input track tracker: 'trolleys', 'trays', 'date'
+
+/**
+ * Triggers the unified dispatch overlay box open, populates the header strings,
+ * and clears past input selections cleanly.
+ */
+function launchDispatchDataCollectionOverlay(addr1, addr2, postcode) {
+    // 1. Map text fields straight to confirmation labels
+    const modalAddr1 = document.getElementById('dispatch-modal-addr1');
+    const modalAddr2 = document.getElementById('dispatch-modal-addr2');
+    
+    if (modalAddr1) modalAddr1.textContent = addr1;
+    if (modalAddr2) modalAddr2.textContent = addr2;
+
+    // 2. Clear historical inputs entirely to reset the form field state
+    document.getElementById('dispatch-input-trolleys').value = "";
+    document.getElementById('dispatch-input-trays').value = "";
+    document.getElementById('dispatch-input-date').value = "";
+
+    // 3. Unhide the master structural layout container cleanly
+    const modalFrame = document.getElementById('dispatch-data-collection-modal');
+    if (modalFrame) {
+        modalFrame.classList.remove('modal-hide');
+        modalFrame.style.setProperty('display', 'flex', 'important');
+    }
+
+    // 4. 🧼 STABLE BASELINE: Clear past highlights and wait for the user to touch a row explicitly
+    clearAllDispatchCollectionFocus();
+}
+
+/**
+ * Resets all entry row backgrounds to clean default gray state
+ */
+function clearAllDispatchCollectionFocus() {
+    activeDispatchFocusedInputKey = "";
+    const targetingKeys = ['trolleys', 'trays', 'date'];
+    targetingKeys.forEach(key => {
+        const inputEl = document.getElementById(`dispatch-input-${key}`);
+        if (inputEl) {
+            inputEl.style.backgroundColor = "#F4F4F4";
+        }
+    });
+}
+
+/**
+ * Cleanly dismisses the logistics overlay box overlay framework view
+ */
+function dismissDispatchCollectionOverlay() {
+    const modalFrame = document.getElementById('dispatch-data-collection-modal');
+    if (modalFrame) {
+        modalFrame.style.setProperty('display', 'none', 'important');
+        modalFrame.classList.add('modal-hide');
+    }
+}
+
+/**
+ * Focus Router: High contrast shading lookups for active text input rows.
+ * Intercepts numeric inputs to launch the shared quantity keypad dynamically.
+ */
+function setDispatchCollectionFocus(inputFieldKey) {
+    activeDispatchFocusedInputKey = inputFieldKey;
+
+    const targetingKeys = ['trolleys', 'trays', 'date'];
+    
+    // Reset all target background parameters back to standard gray lookups
+    targetingKeys.forEach(key => {
+        const inputEl = document.getElementById(`dispatch-input-${key}`);
+        if (inputEl) {
+            inputEl.style.backgroundColor = "#F4F4F4";
+        }
+    });
+
+    // Apply prominent soft green active focus highlight shading to the targeted box row element
+    const activeTargetEl = document.getElementById(`dispatch-input-${inputFieldKey}`);
+    if (activeTargetEl) {
+        activeTargetEl.style.backgroundColor = "#a5d6a7";
+    }
+
+    // 🚀 KEYPAD INTERCEPT FOR NUMERIC LOGISTICS ROWS
+    if (inputFieldKey === 'trolleys' || inputFieldKey === 'trays') {
+        console.log(`Logistics row input focused: Initializing shared numeric keypad overlay.`);
+        
+        // Adapt text labels dynamically for custom value entry context
+        const keypadTitle = document.getElementById('multiples-modal-title');
+        const keypadSubmitText = document.getElementById('multiples-modal-submit-text');
+        
+        if (keypadTitle) keypadTitle.textContent = "ENTER A VALUE";
+        if (keypadSubmitText) keypadSubmitText.textContent = "ENTER";
+        
+        // Reset keypad counter memory layout tracker to a blank state for crisp inputs
+        multiplesCountTarget = "";
+        const countBadge = document.getElementById('admin-multiples-count-badge');
+        if (countBadge) countBadge.value = "";
+        
+        // Launch the clean, stripped multiples keypad overlay instantly
+        const multiplesModal = document.getElementById('admin-multiples-modal');
+        if (multiplesModal) {
+            multiplesModal.classList.remove('modal-hide');
+            multiplesModal.style.setProperty('display', 'flex', 'important');
+        }
+    }
+
+    // 🚀 DYNAMIC OVERLAY PICKER GATEWAY FOR DATE FIELD
+    if (inputFieldKey === 'date') {
+        console.log("🗓️ Date row field focused: Initializing 2-week rolling delivery picker canvas.");
+        launchDispatchCalendarOverlay(); // 🗓️ Click Hook Activated! Opens the new 2x7 calendar tray instantly.
+    }
+
+}
+
+/**
+ * Temporary placeholder submit function to prevent errors when clicking the print icon
+ */
+function submitDispatchJobPrintSpool() {
+    console.log("🚀 Spooling dispatch print pipeline... (Counter logic and placeholders to follow)");
+    dismissDispatchCollectionOverlay();
 }
 
 /**
@@ -1211,23 +1332,33 @@ function executeValidatedAdminAction(actionKey) {
     }
 }
 
+/**
+ * Shared Multi-Use Overlay Trigger: Launches the numerical input keypad.
+ * Dynamically enforces standard labels if triggered outside logistics view tracks.
+ */
 function triggerMultiplesQuantityOverlay() {
-    multiplesCountTarget = 0; 
-    const qtyDisplay = document.getElementById('admin-qty-display');
-    if (qtyDisplay) qtyDisplay.value = "";
+    // 🧼 BASELINE RESET: Restore default labels if not in dispatch data collection mode
+    if (currentActiveWorkspaceMode !== "DISPATCH_MODE") {
+        const keypadTitle = document.getElementById('multiples-modal-title');
+        const keypadSubmitText = document.getElementById('multiples-modal-submit-text');
+        
+        if (keypadTitle) keypadTitle.textContent = "SET PRINT QUANTITY";
+        if (keypadSubmitText) keypadSubmitText.textContent = "SEND";
+    }
+
+    // Initialize the shared numerical input variable state back to a baseline string
+    multiplesCountTarget = "1";
     
-    document.getElementById('multiples-modal-title').textContent = "Set Print Quantity";
-    
-    // Explicitly unhide the master modal container along with the numerical input layout
+    const countBadge = document.getElementById('admin-multiples-count-badge');
+    if (countBadge) countBadge.value = "1";
+
     const multiplesModal = document.getElementById('admin-multiples-modal');
     if (multiplesModal) {
         multiplesModal.classList.remove('modal-hide');
         multiplesModal.style.setProperty('display', 'flex', 'important');
     }
-    
-    const qtyZone = document.getElementById('multiples-qty-zone');
-    if (qtyZone) qtyZone.style.setProperty('display', 'flex', 'important');
 }
+
 function pressQtyPadKey(digitString) {
     const qtyDisplay = document.getElementById('admin-qty-display');
     if (!qtyDisplay) return;
@@ -1257,48 +1388,71 @@ function clearQtyPadEntry() {
 }
 
 /**
- * Commits quantity selections and automates workspace routing boundaries
- * UPGRADED: Bypasses continuity prompts and returns directly to the category screen.
+ * Commits numerical entries from the keypad: Spools print jobs for standard categories
+ * or pipes values straight into the active Screen 5 text field input blocks.
  */
 function confirmMultiplesQuantityRun() {
-    // 🚀 EXECUTE PRINT LOOP NOW: Fires the target count collected by the keypad
+    // 🚛 INTERCEPT GATEWAY: Handle data values collection when inside dispatch view
+    if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
+        const collectedValue = multiplesCountTarget.toString().trim();
+        
+        // Ensure an entry value exists, or default cleanly back to zero
+        const targetValue = (collectedValue === "") ? "0" : collectedValue;
+        
+        const activeInput = document.getElementById(`dispatch-input-${activeDispatchFocusedInputKey}`);
+        if (activeInput) {
+            activeInput.value = targetValue;
+            console.log(`Value entry committed successfully: Field [dispatch-input-${activeDispatchFocusedInputKey}] -> [${targetValue}]`);
+            
+            // Re-evaluate the grayed-out PRINT action button status instantly
+            updateDispatchPrintButtonState();
+        }
+
+        // 🧼 INSTANT VISUAL DISMISSAL: Force an ironclad redraw and hide the overlay immediately
+        const multiplesModal = document.getElementById('admin-multiples-modal');
+        if (multiplesModal) {
+            multiplesModal.style.display = 'none'; // Force immediate visual drop
+            multiplesModal.style.setProperty('display', 'none', 'important');
+            multiplesModal.classList.add('modal-hide');
+        }
+        
+        // Clear active focus highlight highlights natively to return to a clean data box state
+        clearAllDispatchCollectionFocus();
+        return;
+    }
+
+    // 🟢 BASELINE MULTI-PRINT SYSTEM RUN LOGIC (Untouched fallback rules for Screen 1A, 4, etc.)
     if (lastExecutedPrintPayload) {
         executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
     }
 
-    // 🧼 CLEAN-UP: Instantly find and remove the standard print confirmation overlay if it popped up
     const universalOverlay = document.getElementById('kiosk-universal-overlay');
     if (universalOverlay) {
         universalOverlay.remove();
     }
 
-    // Strip active background animation queue safely
     const mainWrapper = document.getElementById('main-app-wrapper');
     if (mainWrapper) {
         mainWrapper.classList.remove('printing-active-state');
     }
 
-    console.log("🚀 Multi-Print Spool Committed: Bypassing fork prompts. Closing overlay instantly.");
+    console.log("🚀 Multi-Print Spool Committed: Closing overlay instantly.");
     
-    // Find the quantity modal panel wrapper and dismiss it instantly for ALL modes
     const multiplesModal = document.getElementById('admin-multiples-modal');
     if (multiplesModal) {
         multiplesModal.style.setProperty('display', 'none', 'important');
         multiplesModal.classList.add('modal-hide');
     }
     
-    // 🌟 STRICT PATHWAY INTEGRITY: Re-stabilize state using the explicit State Machine
     if (currentActiveScreen === "4") {
-        loadPlainLabelsMatrix(); // Keep the white text label cards matrix cleanly populated
+        loadPlainLabelsMatrix(); 
         switchKioskScreenLayout("4");
     } else if (currentActiveScreen === "5") {
-        // 🚛 LOGISTICS PERSISTENCE TRIGGER: Keeps the user firmly locked inside the Screen 5 grid
         loadDispatchLabelsMatrix();
         switchKioskScreenLayout("5");
     } else {
         switchKioskScreenLayout("1A");
     }
-
 }
 
 /**
@@ -1617,13 +1771,29 @@ function setEditorFieldFocus(fieldKey) {
  * Character Stream Proxy: Appends touches from the digital keyboard into the active object buffer
  */
 function pressEditorKey(keyChar) {
+    // 🚛 LOGISTICS MODAL INPUT INTERCEPT LAYER
+    if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
+        if (!['0','1','2','3','4','5','6','7','8','9'].includes(keyChar)) return;
+        if (activeDispatchFocusedInputKey === 'date') return;
+
+        const activeInput = document.getElementById(`dispatch-input-${activeDispatchFocusedInputKey}`);
+        if (activeInput) {
+            if (activeInput.value === "TAP TO ENTER") activeInput.value = "";
+            if (activeInput.value.length < 3) {
+                activeInput.value += keyChar;
+                updateDispatchPrintButtonState();
+            }
+        }
+        return;
+    }
+
+    // 🟢 YOUR ORIGINAL UNTOUCHED FUNCTION LOGIC STARTS HERE
     if (activeFocusedInputId === null || !activeFocusedFieldKey) return;
     
     const targetObject = currentListSchemaDataArray[activeFocusedInputId];
     let currentValue = "";
     
     // VARIABLE CHARACTER BOUNDARIES CONFIGURATION
-    // 11 characters max for Category list, 13 characters max for Toiletries, Christmas, Miscellaneous
     let characterLimit = (activeEditorFileKey === 'category') ? 11 : 13;
     
     if (activeFocusedFieldKey === 'line1') {
@@ -1632,32 +1802,42 @@ function pressEditorKey(keyChar) {
         currentValue = targetObject.text2;
     } else if (activeFocusedFieldKey === 'image') {
         currentValue = targetObject.image_file;
-        characterLimit = 40; // Extended path name limit unchanged
+        characterLimit = 40;
     }
     
-    // Force uppercase filtering for text entry slots
     let processedChar = (activeFocusedFieldKey === 'image') ? keyChar : keyChar.toUpperCase();
     
     if (currentValue.length < characterLimit) {
         let updatedValue = currentValue + processedChar;
         
-        // Save state changes directly inside the live memory object matrix array
         if (activeFocusedFieldKey === 'line1') targetObject.text1 = updatedValue;
         else if (activeFocusedFieldKey === 'line2') targetObject.text2 = updatedValue;
         else if (activeFocusedFieldKey === 'image') targetObject.image_file = updatedValue;
         
-        // Push string values visually onto active layout display inputs bars
         document.getElementById(`editor-input-${activeFocusedFieldKey}`).value = updatedValue;
         
-        // Update the scrollable playlist row lookups dynamically
         synchronizePlaylistTextLineLabel(activeFocusedInputId);
         refreshLiveWorkspaceCanvasPreviews();
     }
 }
+
 /**
  * Backspace Processor: Remaps truncation requests down to active data strings
  */
 function backspaceEditorKey() {
+    // 🚛 LOGISTICS MODAL INPUT INTERCEPT LAYER
+    if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
+        if (activeDispatchFocusedInputKey === 'date') return;
+        
+        const activeInput = document.getElementById(`dispatch-input-${activeDispatchFocusedInputKey}`);
+        if (activeInput && activeInput.value.length > 0) {
+            activeInput.value = activeInput.value.slice(0, -1);
+            updateDispatchPrintButtonState();
+        }
+        return;
+    }
+
+    // 🟢 YOUR ORIGINAL UNTOUCHED FUNCTION LOGIC STARTS HERE
     if (activeFocusedInputId === null || !activeFocusedFieldKey) return;
     
     const targetObject = currentListSchemaDataArray[activeFocusedInputId];
@@ -2019,4 +2199,242 @@ function handleBlankDispatchLabelsClick() {
 
     // Fire the existing quantitative keypad layout overlay instantly
     triggerMultiplesQuantityOverlay();
+}
+
+/**
+ * Keypad Entry Handler: Tracks touches from the 3x4 layout matrix grid.
+ */
+function pressMultiplesKey(digitString) {
+    console.log(`Keypad digit touched: [${digitString}]`);
+    
+    // Convert multiples count memory tracker to a clean string space
+    let currentInputString = (multiplesCountTarget || "").toString();
+
+    // Enforce strict limit: Cap numerical string values at 3 digits max
+    if (currentInputString.length < 3) {
+        // Prevent leading zeros if the entry field box is currently empty
+        if (currentInputString === "" && digitString === "0") return;
+        
+        multiplesCountTarget = currentInputString + digitString;
+        
+        // Push the update visually onto the active keypad header value badge display
+        const countBadge = document.getElementById('admin-multiples-count-badge');
+        if (countBadge) countBadge.value = multiplesCountTarget;
+    }
+}
+
+/**
+ * Keypad Backspace: Erases the last character from the active entry string loop.
+ */
+function backspaceMultiplesKey() {
+    let currentInputString = (multiplesCountTarget || "").toString();
+    if (currentInputString.length > 0) {
+        multiplesCountTarget = currentInputString.slice(0, -1);
+        
+        const countBadge = document.getElementById('admin-multiples-count-badge');
+        if (countBadge) countBadge.value = multiplesCountTarget;
+    }
+}
+
+/**
+ * Keypad Clear: Flushes the numeric memory tracker instantly to a blank space.
+ */
+function clearMultiplesKey() {
+    multiplesCountTarget = "";
+    const countBadge = document.getElementById('admin-multiples-count-badge');
+    if (countBadge) countBadge.value = "";
+}
+
+/**
+ * Multiples Overlay Dismissal Helper: Safely closes the keypad block view.
+ */
+function dismissMultiplesQuantityOverlay() {
+    const multiplesModal = document.getElementById('admin-multiples-modal');
+    if (multiplesModal) {
+        multiplesModal.style.setProperty('display', 'none', 'important');
+        multiplesModal.classList.add('modal-hide');
+    }
+    
+    // Clear active focus highlight safely if escaping out from a dispatch row selection loop
+    if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
+        clearAllDispatchCollectionFocus();
+    }
+}
+
+/**
+ * Evaluates the dispatch input statuses and unlocks the PRINT button 
+ * safely with zero string conversion crashes.
+ */
+function updateDispatchPrintButtonState() {
+    const tInput = document.getElementById('dispatch-input-trolleys');
+    const rInput = document.getElementById('dispatch-input-trays');
+    const dInput = document.getElementById('dispatch-input-date');
+    
+    // Fallback safely to empty strings if elements are missing from DOM tracking
+    const tVal = tInput ? tInput.value.toString().trim() : "";
+    const rVal = rInput ? rInput.value.toString().trim() : "";
+    const dVal = dInput ? dInput.value.toString().trim() : "";
+    
+    const printBtn = document.getElementById('dispatch-modal-print-btn');
+    const printSvg = document.getElementById('dispatch-modal-print-svg');
+    const printText = document.getElementById('dispatch-modal-print-text');
+    
+    if (!printBtn) return;
+
+    // Filter out standard baseline placeholder text strings from validation passes
+    const isTrolleysDone = (tVal !== "" && tVal !== "TAP TO ENTER");
+    const isTraysDone = (rVal !== "" && rVal !== "TAP TO ENTER");
+    const isDateDone = (dVal !== "" && dVal !== "TAP TO SELECT");
+
+    if (isTrolleysDone && isTraysDone && isDateDone) {
+        // Unlock button with full operational bright green theme parameters
+        printBtn.style.backgroundColor = "#4cd964";
+        printBtn.style.borderColor = "#000000";
+        printBtn.style.boxShadow = "0px 0.4vh 0px #000000";
+        printBtn.style.pointerEvents = "auto";
+        printBtn.style.opacity = "1";
+        printBtn.style.filter = "none";
+        
+        if (printSvg) printSvg.setAttribute('stroke', '#000000');
+        if (printText) printText.style.color = '#000000';
+    } else {
+        // Strict fallback lock to grayed-out inactive parameters
+        printBtn.style.backgroundColor = "#CCCCCC";
+        printBtn.style.borderColor = "#666666";
+        printBtn.style.boxShadow = "0px 0.4vh 0px #666666";
+        printBtn.style.pointerEvents = "none";
+        printBtn.style.opacity = "0.5";
+        printBtn.style.filter = "grayscale(1)";
+        
+        if (printSvg) printSvg.setAttribute('stroke', '#333333');
+        if (printText) printText.style.color = '#333333';
+    }
+}
+
+/**
+ * Automatically calculates a rolling 14-day window from the current system clock,
+ * formats the days tabs prominently, doubles date typography visibility numbers, unifies backgrounds,
+ * and completely locks out/desaturates Sundays natively.
+ */
+function renderDispatchCalendarGrid() {
+    const gridContainer = document.getElementById('calendar-picker-grid-matrix');
+    if (!gridContainer) return;
+
+    const shortDayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    let gridHTML = "";
+
+    // Strictly pre-calculate all 14 sequential days from today
+    const calculatedDaysArray = [];
+    for (let i = 0; i < 14; i++) {
+        const futureDateObj = new Date();
+        futureDateObj.setDate(futureDateObj.getDate() + i);
+        
+        // Extract layout variables natively
+        const dayIndex = futureDateObj.getDay(); // 0 = Sunday, 6 = Saturday
+        const dayOfWeekStr = shortDayNames[dayIndex];
+        const dayOfMonthNum = String(futureDateObj.getDate()).padStart(2, '0');
+        const monthNum = String(futureDateObj.getMonth() + 1).padStart(2, '0');
+        
+        // ZPL Target Output Format: DDD dd/mm (e.g. FRI 25/09)
+        const targetPrintString = dayOfWeekStr + " " + dayOfMonthNum + "/" + monthNum;
+        // Screen Label Format: Short day number (e.g. 25/09)
+        const displayDateString = dayOfMonthNum + "/" + monthNum;
+
+        calculatedDaysArray.push({
+            dayLabel: dayOfWeekStr,
+            dateLabel: displayDateString,
+            payloadValue: targetPrintString,
+            isSunday: (dayIndex === 0)
+        });
+    }
+
+    // Map out the unified 2-column x 7-row layout sequence (Left col: This Week, Right col: Next Week)
+    for (let rowIndex = 0; rowIndex < 7; rowIndex++) {
+        const thisWeekDay = calculatedDaysArray[rowIndex];       
+        const nextWeekDay = calculatedDaysArray[rowIndex + 7];   
+
+        // 1. PROCESS LEFT COLUMN CELL (THIS WEEK)
+        let leftBtnStyle = "height: 100%; width: 100%; background-color: #e1f5fe; border: 0.3vh solid #000000; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0px 0.3vh 0px #000000; padding: 0.3vh 0; outline: none; pointer-events: auto;";
+        let leftDayStyle = "font-size: 2.8vh; font-weight: 900; color: #000000; line-height: 1.1;";
+        let leftDateStyle = "font-size: 3.0vh; font-weight: 900; color: #333333; line-height: 1.0; margin-top: 0.4vh;"; 
+        let leftOnClick = "onclick=\"handleCalendarDaySelection('" + thisWeekDay.payloadValue + "')\"";
+
+        if (thisWeekDay.isSunday) {
+            leftBtnStyle = "height: 100%; width: 100%; background-color: #ECEFF1; border: 0.3vh solid #7A869A; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.3vh 0; outline: none; pointer-events: none; opacity: 0.5; filter: grayscale(1);";
+            leftDayStyle = "font-size: 2.8vh; font-weight: 900; color: #7A869A; line-height: 1.1;";
+            leftDateStyle = "font-size: 3.0vh; font-weight: 900; color: #7A869A; line-height: 1.0; margin-top: 0.4vh;";
+            leftOnClick = "";
+        }
+
+        // 2. PROCESS RIGHT COLUMN CELL (NEXT WEEK)
+        let rightBtnStyle = "height: 100%; width: 100%; background-color: #e1f5fe; border: 0.3vh solid #000000; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0px 0.3vh 0px #000000; padding: 0.3vh 0; outline: none; pointer-events: auto;";
+        let rightDayStyle = "font-size: 2.8vh; font-weight: 900; color: #000000; line-height: 1.1;";
+        let rightDateStyle = "font-size: 3.0vh; font-weight: 900; color: #333333; line-height: 1.0; margin-top: 0.4vh;"; 
+        let rightOnClick = "onclick=\"handleCalendarDaySelection('" + nextWeekDay.payloadValue + "')\"";
+
+        if (nextWeekDay.isSunday) {
+            rightBtnStyle = "height: 100%; width: 100%; background-color: #ECEFF1; border: 0.3vh solid #7A869A; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.3vh 0; outline: none; pointer-events: none; opacity: 0.5; filter: grayscale(1);";
+            rightDayStyle = "font-size: 2.8vh; font-weight: 900; color: #7A869A; line-height: 1.1;";
+            rightDateStyle = "font-size: 3.0vh; font-weight: 900; color: #7A869A; line-height: 1.0; margin-top: 0.4vh;";
+            rightOnClick = "";
+        }
+
+        // Construct vertical columns side-by-side using secure string additions
+        gridHTML += "<button type=\"button\" " + leftOnClick + " style=\"" + leftBtnStyle + "\">" +
+                        "<span style=\"" + leftDayStyle + "\">" + thisWeekDay.dayLabel + "</span>" +
+                        "<span style=\"" + leftDateStyle + "\">" + thisWeekDay.dateLabel + "</span>" +
+                    "</button>";
+
+        gridHTML += "<button type=\"button\" " + rightOnClick + " style=\"" + rightBtnStyle + "\">" +
+                    "<span style=\"" + rightDayStyle + "\">" + nextWeekDay.dayLabel + "</span>" +
+                    "<span style=\"" + rightDateStyle + "\">" + nextWeekDay.dateLabel + "</span>" +
+                    "</button>";
+    }
+
+    gridContainer.innerHTML = gridHTML;
+}
+
+/**
+ * Capture click event from calendar days, map the value onto the form, 
+ * and evaluate print availability state rules immediately.
+ */
+function handleCalendarDaySelection(datePayloadString) {
+    console.log("🗓️ Calendar Day Selection Committed: [" + datePayloadString + "]");
+    
+    const dateInput = document.getElementById('dispatch-input-date');
+    if (dateInput) {
+        dateInput.value = datePayloadString;
+        
+        // Trigger verification engine checks to instantly evaluate if PRINT can unlock
+        updateDispatchPrintButtonState();
+    }
+    
+    dismissDispatchCalendarOverlay();
+}
+
+/**
+ * Unhides the central calendar grid structural viewport container
+ */
+function launchDispatchCalendarOverlay() {
+    renderDispatchCalendarGrid(); // Refresh rolling date tracks dynamically from device clock
+    
+    const calendarModal = document.getElementById('dispatch-calendar-modal');
+    if (calendarModal) {
+        calendarModal.classList.remove('modal-hide');
+        calendarModal.style.setProperty('display', 'flex', 'important');
+    }
+}
+
+/**
+ * Hides the calendar grid structural container panel completely
+ */
+function dismissDispatchCalendarOverlay() {
+    const calendarModal = document.getElementById('dispatch-calendar-modal');
+    if (calendarModal) {
+        calendarModal.style.setProperty('display', 'none', 'important');
+        calendarModal.classList.add('modal-hide');
+    }
+    
+    // Smoothly clear focus background parameters back to neutral gray state
+    clearAllDispatchCollectionFocus();
 }
