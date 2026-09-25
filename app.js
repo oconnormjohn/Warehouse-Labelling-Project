@@ -30,6 +30,41 @@ let kioskConfig = {
     isDemoModeActive: false // 🌟 NEW PARAMETER BOUND TO THE SERVER CORE CONFIG DATA OBJECT
 };
 
+// Poll the live printer hardware array every 5 seconds
+function pollPrinterHardwareStatus() {
+    fetch('http://localhost:8080/api/printers/status')
+        .then(res => res.json())
+        .then(statusMap => {
+            const colorMapping = ['pink', 'green', 'yellow', 'blue', 'plain', 'dispatch'];
+            
+            colorMapping.forEach((color, index) => {
+                const statusRows = document.querySelectorAll('.status-row');
+                if (statusRows[index]) {
+                    const ledDot = statusRows[index].querySelector('.led-dot');
+                    if (ledDot) {
+                        if (statusMap[color]) {
+                            // 🟢 Queue Operational: Apply green class cleanly
+                            ledDot.classList.remove('led-offline');
+                            ledDot.classList.add('led-online');
+                        } else {
+                            // 🔴 Queue Paused/USB Drop: Force red class natively
+                            ledDot.classList.remove('led-online');
+                            ledDot.classList.add('led-offline');
+                        }
+                    }
+                }
+            });
+        })
+        .catch(() => console.log("⚠️ Printer status check skipped: server offline."));
+}
+
+// Fire check immediately and track repeatedly
+setInterval(pollPrinterHardwareStatus, 5000);
+
+// Fire check immediately and track repeatedly
+setInterval(pollPrinterHardwareStatus, 5000);
+
+
 // ==========================================================================
 // WORKSPACE MODES & PROCESSING TRACKERS
 // ==========================================================================

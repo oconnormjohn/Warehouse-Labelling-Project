@@ -128,6 +128,33 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(data_payload).encode('utf-8'))
             return
 
+        # 📊 NEW LIVE STATUS INTERCEPT: Read real-time states of physical queues
+        if self.path == '/api/printers/status':
+            try:
+                # Run standard Linux status query natively
+                result = subprocess.run(['lpstat', '-p'], capture_output=True, text=True, check=True)
+                output = result.stdout.lower()
+                
+                # Check for the word "disabled" or "paused" inside each queue segment string cleanly
+                status_report = {
+                    "pink": "disabled" not in output.split("pink_labels")[1].split("📄")[0].split("\n")[0] if "pink_labels" in output else False,
+                    "green": "disabled" not in output.split("green_labels")[1].split("📄")[0].split("\n")[0] if "green_labels" in output else False,
+                    "yellow": "disabled" not in output.split("yellow_labels")[1].split("📄")[0].split("\n")[0] if "yellow_labels" in output else False,
+                    "blue": "disabled" not in output.split("blue_labels")[1].split("📄")[0].split("\n")[0] if "blue_labels" in output else False,
+                    "plain": "disabled" not in output.split("plain_labels")[1].split("📄")[0].split("\n")[0] if "plain_labels" in output else False,
+                    "dispatch": "disabled" not in output.split("dispatch_labels")[1].split("📄")[0].split("\n")[0] if "dispatch_labels" in output else False
+                }
+            except Exception:
+                # Fallback strictly to offline safe state if subsystem queries fail
+                status_report = {"pink": False, "green": False, "yellow": False, "blue": False, "plain": False, "dispatch": False}
+
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps(status_report).encode('utf-8'))
+            return
+
         clean_path = self.path.split('?')[0]
       
         # Default empty root path requests straight to your index file
@@ -339,7 +366,22 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
 
             # Fire terminal command directly into the Linux CUPS system layer
             print_command = ['lp', '-d', target_cups_printer, temp_print_file]
-            subprocess.run(print_command, capture_output=True, text=True, check=True)
+            
+            try:
+                # Execute standard print call
+                subprocess.run(print_command, capture_output=True, text=True, check=True)
+                print(f"🎉 Job cleanly handed off to {target_cups_printer} queue.")
+            except subprocess.CalledProcessError as lp_ex:
+                # 🛠️ PRINTER BLIP DETECTED: USB bus blipped the pool or the queue went into PAUSE mode
+                print(f"⚠️ [PRINTER BLIP DETECTED] Error routing to {target_cups_printer}. Activating auto-recovery...")
+                
+                # Instantly execute the standard unpause string that targets all 6 queues
+                recovery_command = 'sudo cupsenable blue_labels dispatch_labels green_labels pink_labels plain_labels yellow_labels'
+                subprocess.run(recovery_command, shell=True, capture_output=True, text=True)
+                print("🏁 [RECOVERY] All printer queues forced back online smoothly. Resubmitting job...")
+                
+                # Retry printing the label immediately now that the system has unpaused the queues
+                subprocess.run(print_command, capture_output=True, text=True, check=True)
 
             if os.path.exists(temp_print_file):
                 os.remove(temp_print_file)
@@ -354,7 +396,6 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.send_response(500)
             error_response = {"status": "error", "message": str(e)}
             self.wfile.write(json.dumps(error_response).encode('utf-8'))
-
 
 def run_server(port=8080):
     if not os.path.exists(CONFIG_FILE_PATH):
