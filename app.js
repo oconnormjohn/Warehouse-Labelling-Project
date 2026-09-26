@@ -2545,3 +2545,58 @@ function dismissDispatchCalendarOverlay() {
     // Smoothly clear focus background parameters back to neutral gray state
     clearAllDispatchCollectionFocus();
 }
+
+// Hidden State Matrix Counters for the Admin Hidden Sequence
+let secretPinkSquareTapCount = 0;
+let secretPinkSquareTimeoutId = null;
+
+function handleSecretPinkSquareTap() {
+    console.log("🎯 Pink status square container touched.");
+
+    // 1. Reset the 5-second window countdown if tapped consecutively
+    if (secretPinkSquareTimeoutId) {
+        clearTimeout(secretPinkSquareTimeoutId);
+    }
+    
+    secretPinkSquareTimeoutId = setTimeout(() => {
+        secretPinkSquareTapCount = 0;
+        secretPinkSquareTimeoutId = null;
+        console.log("🧼 Hidden sequence window expired. Clearing counter matrix.");
+    }, 5000);
+
+    // 2. Increment the direct tap log
+    secretPinkSquareTapCount++;
+
+    // 3. Trigger manual recovery the absolute millisecond hit 3 resolves
+    if (secretPinkSquareTapCount === 3) {
+        console.log("🧙‍♂️ Magic Sequence Validated: Firing truthful printer recovery sweep...");
+        
+        // Reset tracking memory states instantly
+        secretPinkSquareTapCount = 0;
+        clearTimeout(secretPinkSquareTimeoutId);
+        secretPinkSquareTimeoutId = null;
+
+        // Fire the backend reset endpoint loop
+        triggerAdminPrinterResetAction();
+    }
+}
+
+// Fires a network request to execute a truthful hardware reset sweep
+function triggerAdminPrinterResetAction() {
+    console.log("🛠️ Admin Override Triggered: Dispatching hardware verification sweep to server.");
+    
+    fetch('http://localhost:8080/api/printers/reset')
+        .then(res => {
+            if (!res.ok) throw new Error("Server rejected manual verification sweep.");
+            return res.json();
+        })
+        .then(data => {
+            console.log("🎉 Truthful printer recovery sweep executed successfully:", data);
+            // Refresh the screen LEDs immediately to reveal the new truth
+            pollPrinterHardwareStatus();
+        })
+        .catch(err => {
+            console.error("❌ Admin printer reset block failed:", err);
+            showUserAlert('SYSTEM_ALERT', { message: 'HARDWARE VERIFICATION SWEEP FAILED' }, 4000);
+        });
+}

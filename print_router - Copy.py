@@ -128,16 +128,23 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(data_payload).encode('utf-8'))
             return
 
-        # 📊 LIVE STATUS INTERCEPT: Read exact software queue states natively
+        # 📊 NEW LIVE STATUS INTERCEPT: Read true physical USB node states
         if self.path == '/api/printers/status':
+            # Default everything to False (Offline/Off) right at the start of the check
             status_report = {"pink": False, "green": False, "yellow": False, "blue": False, "plain": False, "dispatch": False}
 
             try:
-                # Query the exact standard status matrix (Instantaneous response)
+                # 🔍 1. Query the true underlying system mapping paths
+                # This lists the active physical connection uris for every queue
+                result = subprocess.run(['lpstat', '-v'], capture_output=True, text=True, check=True)
+                output = result.stdout.lower()
+
+                # Cross-reference the live queue states natively
                 queue_result = subprocess.run(['lpstat', '-p'], capture_output=True, text=True, check=True)
                 queue_output = queue_result.stdout.lower()
-                
-                # Check individual line states. If a printer fails or is off, it remains disabled/paused
+
+                # A printer is ONLY green if its software queue is active AND it hasn't been paused by a hardware blip
+                # If a printer is switched off, CUPS leaves its configuration but marks its status line as 'disabled'
                 for line in queue_output.split('\n'):
                     if "pink_labels" in line and "disabled" not in line and "paused" not in line:
                         status_report["pink"] = True
@@ -162,45 +169,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(status_report).encode('utf-8'))
             return
 
-        # 🛠️ TRUTHFUL ADMIN OVERRIDE: Manually resets queues based on strict hardware presence
-        if self.path == '/api/printers/reset':
-            try:
-                # Query standard CUPS configuration settings to extract what is registered
-                lpstat_v_result = subprocess.run(['lpstat', '-v'], capture_output=True, text=True, check=True)
-                v_output = lpstat_v_result.stdout.lower()
-
-                queues_to_enable = []
-                queues_to_disable = []
-
-                # Sift through the queues line-for-line to see which paths are broken or unplugged
-                for color, queue_name in PRINTER_POOL.items():
-                    # If a printer is switched off or disconnected, CUPS flags its string line with standard errors
-                    # Cross-reference if it is safely mapped to a valid live hardware port path entry string
-                    if queue_name in v_output and "usb" in [line for line in v_output.split('\n') if queue_name in line]:
-                        queues_to_enable.append(queue_name)
-                    else:
-                        queues_to_disable.append(queue_name)
-
-                # 🚀 EXECUTE BALANCED TRUTH SWEEP: Wakes the live, explicitly shuts down the dead
-                if queues_to_enable:
-                    subprocess.run(f"sudo /usr/sbin/cupsenable {' '.join(queues_to_enable)}", shell=True, capture_output=True)
-                if queues_to_disable:
-                    # Explicitly push broken hardware lines down into error states to reflect accurately on screen
-                    subprocess.run(f"sudo /usr/sbin/cupsdisable {' '.join(queues_to_disable)}", shell=True, capture_output=True)
-
-                response_payload = {"status": "success", "message": "Truthful state synchronization complete"}
-                self.send_response(200)
-            except Exception as ex:
-                response_payload = {"status": "error", "message": str(ex)}
-                self.send_response(500)
-
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps(response_payload).encode('utf-8'))
-            return
-
-        # 📂 STATIC FILE ROUTER: Streams UI files and graphics to Firefox
+        # 📂 RESTORED STATIC FILE ROUTER: Streams UI files and graphics to Firefox
         try:
             # Drop any query string parameters (like ?v=4) cleanly to find the pure file path string
             raw_path_string = str(self.path).split('?')[0]

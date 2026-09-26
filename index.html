@@ -270,15 +270,21 @@
                 </div>
 
                 <!-- Printer Status Module -->
+                <!-- Update only the Pink square status block to listen for touch taps -->
                 <div class="status-container">
                     <div class="status-title">PRINTER<br>STATUS</div>
-                    <div class="status-row"><div class="color-box pink"></div><div class="led-dot"></div></div>
+                    <!-- The outer card block remains identical to the others visually, but acts as a wide touch zone -->
+                    <div class="status-row" onclick="handleSecretPinkSquareTap()" style="cursor: pointer; user-select: none;">
+                        <div class="color-box pink"></div>
+                        <div class="led-dot"></div>
+                    </div>
                     <div class="status-row"><div class="color-box green"></div><div class="led-dot"></div></div>
                     <div class="status-row"><div class="color-box yellow"></div><div class="led-dot"></div></div>
                     <div class="status-row"><div class="color-box blue"></div><div class="led-dot"></div></div>
                     <div class="status-row"><div class="color-box text-box">PLAIN</div><div class="led-dot"></div></div>
                     <div class="status-row"><div class="color-box text-box">DISP.</div><div class="led-dot"></div></div>
                 </div>
+
             </div> <!-- Closes .sidebar -->
         </div> <!-- Closes .sidebar-container -->
     </div> <!-- Closes .dashboard-wrapper (Main Home Screen Layout Layer) -->
