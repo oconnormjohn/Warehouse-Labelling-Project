@@ -130,23 +130,41 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
 
         # 📊 NEW LIVE STATUS INTERCEPT: Read real-time states of physical queues
         if self.path == '/api/printers/status':
+            # 🛠️ PASSIVE BACKGROUND SELF-HEALING: Proactively prod all 6 software queues
             try:
-                # Run standard Linux status query natively
+                recovery_command = 'sudo /usr/sbin/cupsenable blue_labels dispatch_labels green_labels pink_labels plain_labels yellow_labels'
+                subprocess.run(recovery_command, shell=True, capture_output=True, text=True)
+            except Exception as e:
+                print(f"⚠️ Passive recovery warning: {e}")
+
+            # Safe default dictionary layout configuration
+            status_report = {"pink": False, "green": False, "yellow": False, "blue": False, "plain": False, "dispatch": False}
+
+            try:
+                # Run standard Linux status query natively now that the lines are prodded
                 result = subprocess.run(['lpstat', '-p'], capture_output=True, text=True, check=True)
                 output = result.stdout.lower()
                 
-                # Check for the word "disabled" or "paused" inside each queue segment string cleanly
-                status_report = {
-                    "pink": "disabled" not in output.split("pink_labels")[1].split("📄")[0].split("\n")[0] if "pink_labels" in output else False,
-                    "green": "disabled" not in output.split("green_labels")[1].split("📄")[0].split("\n")[0] if "green_labels" in output else False,
-                    "yellow": "disabled" not in output.split("yellow_labels")[1].split("📄")[0].split("\n")[0] if "yellow_labels" in output else False,
-                    "blue": "disabled" not in output.split("blue_labels")[1].split("📄")[0].split("\n")[0] if "blue_labels" in output else False,
-                    "plain": "disabled" not in output.split("plain_labels")[1].split("📄")[0].split("\n")[0] if "plain_labels" in output else False,
-                    "dispatch": "disabled" not in output.split("dispatch_labels")[1].split("📄")[0].split("\n")[0] if "dispatch_labels" in output else False
-                }
-            except Exception:
-                # Fallback strictly to offline safe state if subsystem queries fail
-                status_report = {"pink": False, "green": False, "yellow": False, "blue": False, "plain": False, "dispatch": False}
+                # Split the raw output into a clean list of lines
+                status_lines = output.split('\n')
+
+                # Check each individual line for the printer name and its state
+                for line in status_lines:
+                    if "pink_labels" in line and "disabled" not in line:
+                        status_report["pink"] = True
+                    if "green_labels" in line and "disabled" not in line:
+                        status_report["green"] = True
+                    if "yellow_labels" in line and "disabled" not in line:
+                        status_report["yellow"] = True
+                    if "blue_labels" in line and "disabled" not in line:
+                        status_report["blue"] = True
+                    if "plain_labels" in line and "disabled" not in line:
+                        status_report["plain"] = True
+                    if "dispatch_labels" in line and "disabled" not in line:
+                        status_report["dispatch"] = True
+                    
+            except Exception as parse_ex:
+                print(f"⚠️ Status check parse failed: {parse_ex}")
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -155,41 +173,45 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(status_report).encode('utf-8'))
             return
 
-        clean_path = self.path.split('?')[0]
-      
-        # Default empty root path requests straight to your index file
-        if clean_path == '/' or clean_path == '':
-            clean_path = '/index.html'
-        
-        file_path = os.path.join(os.path.dirname(__file__), clean_path.lstrip('/'))
-        
-        if not os.path.exists(file_path) or os.path.isdir(file_path):
-            self.send_response(404)
-            self.end_headers()
-            self.wfile.write(b"Asset not found inside project workspace.")
-            return
-
-        mimetype = 'application/octet-stream'
-        lower_path = file_path.lower()
-        
-        if lower_path.endswith(".html"): mimetype = 'text/html'
-        elif lower_path.endswith(".css"): mimetype = 'text/css'
-        elif lower_path.endswith(".js"):  mimetype = 'application/javascript'
-        elif lower_path.endswith(".jpg") or lower_path.endswith(".jpeg"): mimetype = 'image/jpeg'
-        elif lower_path.endswith(".png"): mimetype = 'image/png'
-        elif lower_path.endswith(".svg"): mimetype = 'image/svg+xml'
-
+        # 📂 RESTORED STATIC FILE ROUTER: Streams UI files and graphics to Firefox
         try:
-            with open(file_path, 'rb') as file:
+            # Drop any query string parameters (like ?v=4) cleanly to find the pure file path string
+            raw_path_string = str(self.path).split('?')[0]
+            if raw_path_string == '/':
+                raw_path_string = '/index.html'
+
+            # Build absolute local path targeting the shared directory structures cleanly
+            local_file_path = os.path.join(os.path.dirname(__file__), raw_path_string.lstrip('/'))
+
+            if os.path.exists(local_file_path) and os.path.isfile(local_file_path):
+                # Map standard file extensions natively to correct MIME headers
+                content_type = "text/plain"
+                if local_file_path.endswith('.html'): content_type = "text/html"
+                elif local_file_path.endswith('.css'): content_type = "text/css"
+                elif local_file_path.endswith('.js'): content_type = "application/javascript"
+                elif local_file_path.endswith('.png'): content_type = "image/png"
+                elif local_file_path.endswith('.jpg') or local_file_path.endswith('.jpeg'): content_type = "image/jpeg"
+
                 self.send_response(200)
-                self.send_header('Content-type', mimetype)
-                self.send_header('Content-Length', str(os.path.getsize(file_path)))
+                self.send_header('Content-type', content_type)
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
-                self.wfile.write(file.read())
-        except Exception as e:
+
+                # Stream the binary contents straight down the network socket pipeline
+                with open(local_file_path, 'rb') as asset_file:
+                    self.wfile.write(asset_file.read())
+                return
+            else:
+                # Return standard clean 404 block if files are missing from the folder
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b"Resource file not found on disk storage.")
+                return
+        except Exception as serve_ex:
+            print(f"❌ Static server error: {serve_ex}")
             self.send_response(500)
             self.end_headers()
-            self.wfile.write(f"Internal server file error: {str(e)}".encode('utf-8'))
+            return
 
     # Configure CORS Safety Headers explicitly so Firefox doesn't block requests
     def _set_headers(self):
@@ -367,21 +389,22 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             # Fire terminal command directly into the Linux CUPS system layer
             print_command = ['lp', '-d', target_cups_printer, temp_print_file]
             
+            # 🛠️ PROACTIVE AUTO-RECOVERY: Always unpause the target queue before sending the job
+            # This handles the silent CUPS pause blocks without waiting for an error code
             try:
-                # Execute standard print call
+                recovery_command = f'sudo /usr/sbin/cupsenable {target_cups_printer}'
+                subprocess.run(recovery_command, shell=True, capture_output=True, text=True)
+                print(f"🛠️ Proactively unpaused {target_cups_printer} queue.")
+            except Exception as e:
+                print(f"⚠️ Recovery warning: Could not verify queue state: {e}")
+
+            try:
+                # Execute standard print call now that the path is cleared
                 subprocess.run(print_command, capture_output=True, text=True, check=True)
                 print(f"🎉 Job cleanly handed off to {target_cups_printer} queue.")
             except subprocess.CalledProcessError as lp_ex:
-                # 🛠️ PRINTER BLIP DETECTED: USB bus blipped the pool or the queue went into PAUSE mode
-                print(f"⚠️ [PRINTER BLIP DETECTED] Error routing to {target_cups_printer}. Activating auto-recovery...")
-                
-                # Instantly execute the standard unpause string that targets all 6 queues
-                recovery_command = 'sudo cupsenable blue_labels dispatch_labels green_labels pink_labels plain_labels yellow_labels'
-                subprocess.run(recovery_command, shell=True, capture_output=True, text=True)
-                print("🏁 [RECOVERY] All printer queues forced back online smoothly. Resubmitting job...")
-                
-                # Retry printing the label immediately now that the system has unpaused the queues
-                subprocess.run(print_command, capture_output=True, text=True, check=True)
+                print(f"❌ Critical failure routing to {target_cups_printer}: {lp_ex.stderr}")
+                raise lp_ex
 
             if os.path.exists(temp_print_file):
                 os.remove(temp_print_file)
