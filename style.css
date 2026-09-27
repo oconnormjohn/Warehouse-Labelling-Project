@@ -1066,3 +1066,130 @@ input:checked + .admin-slider:before {
     background-color: #ECEFF1 !important; /* Muted grey-blue tint to eliminate the stark white flash */
     box-shadow: 0px 0.4vh 0px rgba(0,0,0,0.25) !important;
 }
+
+/* ==========================================================================
+   UNIVERSAL HIGH-SPEED NUMERIC KEYPAD COMPONENT METRICS
+   ========================================================================== */
+.universal-keypad-box {
+    background-color: #EAEAEA; /* 🎨 Deeper industrial tone - perfectly steps between white and sidebar gray */
+    border: 0.35vh solid #000000;
+    border-radius: 16px;
+    padding: 3vh 1.8vw;
+    width: 25vw; /* Tightened footprint for smooth side-by-side Screen 5 layout */
+    box-shadow: 0px 1vh 3vh rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.keypad-header-title {
+    font-family: Arial, sans-serif;
+    font-size: 2.5vh;
+    font-weight: 900;
+    color: #000000;
+    text-transform: uppercase;
+    margin-bottom: 1.5vh;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.keypad-value-display {
+    width: 100%;
+    height: 6vh;
+    background-color: #FFFFFF;
+    border: 0.3vh solid #000000;
+    border-radius: 8px;
+    font-size: 3.5vh;
+    font-weight: 900;
+    text-align: center;
+    color: #000000;
+    margin-bottom: 2vh;
+    box-sizing: border-box;
+    outline: none;
+}
+
+/* 3-Column Symmetrical Button Grid Configuration */
+.keypad-buttons-matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2vh 0.8vw;
+    width: 100%;
+    margin-bottom: 2.5vh;
+    box-sizing: border-box;
+}
+
+/* Symmetrical Industrial Square Layout Settings */
+.kp-btn {
+    height: 7.5vh;
+    border: 0.3vh solid #000000;
+    border-radius: 10px;
+    font-size: 3.2vh;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    box-shadow: 0px 0.4vh 0px #000000;
+    transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.kp-btn:active {
+    transform: translateY(0.4vh);
+    box-shadow: 0px 0px 0px #000000;
+}
+
+/* Base Style Discipline: Standard entries AND backspace match clean white background */
+.num-key, .clr-key, .backspace-arrow-key {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+/* Isolated layout override to step down the dominant scale of the CLR font */
+.clr-key {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-size: 2.2vh !important; /* Step down typography scale cleanly from 3.2vh */
+}
+
+/* Bottom Actions Control Row Blueprint */
+.keypad-actions-container-row {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr; /* Gives the master print action button slightly more prominence */
+    gap: 0 1vw;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.action-btn {
+    height: 7.5vh;
+    border: 0.3vh solid #000000;
+    border-radius: 10px;
+    font-size: 2.4vh;
+    font-weight: 900;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0px 0.4vh 0px #000000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:active {
+    transform: translateY(0.4vh);
+    box-shadow: 0px 0px 0px #000000;
+}
+
+/* Strict Color Assignment: Toned down to align with Universal Sidebar tones */
+.cancel-action {
+    background-color: #C64B4B; /* Toned-down Red match */
+    color: #FFFFFF;
+}
+
+.print-action {
+    background-color: #4A8B5B; /* Toned-down Green match */
+    color: #FFFFFF; /* Flipped to white text for solid readability over darker green tone */
+}

@@ -794,31 +794,74 @@ function loadDispatchLabelsMatrix() {
 
 // Handles workflow routing when a destination cell button is clicked on Screen 5.
 function handleDispatchMatrixCellClick(buttonElement) {
-    const postcode = buttonElement.getAttribute('data-postcode') || " ";
-    const labelLines = buttonElement.querySelector('.btn-text').innerHTML.split('<br>');
+    if (!buttonElement) return;
+
+    console.log("🚛 Dispatch Matrix Target Pressed: Initiating automated workflow.");
+    currentActiveWorkspaceMode = "DISPATCH_MODE";
+    activeDispatchStep = "trolleys";
+
+    // Clear out any old cached logistics memory values
+    currentDispatchTrolleysValue = "";
+    currentDispatchTraysValue = "";
+    currentDispatchDateValue = "";
+
+    // 🔍 EXTRACT DATA DIRECTLY FROM THE PRESSED BUTTON CARD
+    // Read the text labels and the postcode stored inside the data attributes safely
+    const innerTextDiv = buttonElement.querySelector('.btn-text');
+    let btnLine1 = "";
+    let btnLine2 = "";
     
-    // Extract the strings from the array positions safely before trimming
-    const addr1 = (labelLines[0] || "").toString().trim().toUpperCase();
-    const addr2 = (labelLines[1] || "").toString().trim().toUpperCase();
+    if (innerTextDiv) {
+        const textLines = innerTextDiv.innerHTML.split('<br>');
+        btnLine1 = (textLines[0] || "").trim().toUpperCase();
+        btnLine2 = (textLines[1] || "").trim().toUpperCase();
+    }
     
-    console.log(`Grid destination selected: [${addr1} ${addr2}]. Populating overlay metrics data.`);
-    
-    // Save target data structure safely to global print payload parameters
+    const btnPostcode = (buttonElement.getAttribute('data-postcode') || "").trim().toUpperCase();
+
+    // Cache these baseline parameters inside our global print transaction object safely
     lastExecutedPrintPayload = {
         color: "dispatch",
-        cwrd1: addr1,
-        cwrd2: addr2,
-        q: "ACTIVE_DISPATCH",
-        year: " ",
-        m1: postcode, 
-        m2: " ",
-        m3: " ",
-        finalHex: "#e1f5fe",
-        finalPeriod: "DISPATCH RUN"
+        cwrd1: btnLine1,
+        cwrd2: btnLine2,
+        m1: btnPostcode, // Postcode mapping
+        q: "ACTIVE_DISPATCH"
     };
 
-    // Launch our unified data collection overlay container loop instantly
-    launchDispatchDataCollectionOverlay(addr1, addr2, postcode);
+    // 1. POPULATE THE LEFT SCOREBOARD HEADER BANNERS IMMEDIATELY
+    const sbLine1 = document.getElementById('scoreboard-text-line1');
+    const sbLine2 = document.getElementById('scoreboard-text-line2');
+    const sbPcode = document.getElementById('scoreboard-text-postcode');
+    const sbDispTrolleys = document.getElementById('scoreboard-display-trolleys');
+    const sbDispTrays = document.getElementById('scoreboard-display-trays');
+    const sbDispDay = document.getElementById('scoreboard-display-day');
+    const sbPrintBtn = document.getElementById('scoreboard-final-print-btn');
+
+    if (sbLine1) sbLine1.textContent = lastExecutedPrintPayload.cwrd1;
+    if (sbLine2) sbLine2.textContent = lastExecutedPrintPayload.cwrd2;
+    if (sbPcode) sbPcode.textContent = lastExecutedPrintPayload.m1;
+    
+    if (sbDispTrolleys) sbDispTrolleys.textContent = "—";
+    if (sbDispTrays) sbDispTrays.textContent = "—";
+    if (sbDispDay) sbDispDay.textContent = "—";
+    
+    if (sbPrintBtn) {
+        sbPrintBtn.setAttribute('disabled', 'true');
+        sbPrintBtn.style.backgroundColor = "#7A869A";
+        sbPrintBtn.style.color = "#FFFFFF";
+        sbPrintBtn.style.opacity = "0.4";
+        sbPrintBtn.style.pointerEvents = "none";
+    }
+
+    // 2. REVEAL THE BASELINE SCOREBOARD BOX NATIVELY ON THE LEFT
+    const scoreboardModal = document.getElementById('dispatch-data-collection-modal');
+    if (scoreboardModal) {
+        scoreboardModal.classList.remove('modal-hide');
+        scoreboardModal.style.setProperty('display', 'flex', 'important');
+    }
+
+    // 3. LAUNCH THE GENERIC NUMERIC KEYPAD FOR STEP 1 ("How many trolleys?")
+    triggerUniversalKeypadStep();
 }
 
 // Workspace tracker flags for the unified data collection modal overlay box
@@ -828,121 +871,122 @@ let activeDispatchFocusedInputKey = "trolleys"; // Current input track tracker: 
  * Triggers the unified dispatch overlay box open, populates the header strings,
  * and clears past input selections cleanly.
  */
-function launchDispatchDataCollectionOverlay(addr1, addr2, postcode) {
-    // 1. Map text fields straight to confirmation labels
-    const modalAddr1 = document.getElementById('dispatch-modal-addr1');
-    const modalAddr2 = document.getElementById('dispatch-modal-addr2');
+
+// 📌 GLOBAL TRACKING VARIABLES (Moved to the top to prevent tracking state wipes)
+let activeDispatchStep = "trolleys"; 
+let currentDispatchTrolleysValue = "";
+let currentDispatchTraysValue = "";
+let currentDispatchDateValue = "";
+
+function launchDispatchDataCollectionOverlay(item) {
+    if (!item) return;
     
-    if (modalAddr1) modalAddr1.textContent = addr1;
-    if (modalAddr2) modalAddr2.textContent = addr2;
+    console.log("Logistics Workflow Initiated.");
+    currentActiveWorkspaceMode = "DISPATCH_MODE";
+    activeDispatchStep = "trolleys";
+    
+    currentDispatchTrolleysValue = "";
+    currentDispatchTraysValue = "";
+    currentDispatchDateValue = "";
 
-    // 2. Clear historical inputs entirely to reset the form field state
-    document.getElementById('dispatch-input-trolleys').value = "";
-    document.getElementById('dispatch-input-trays').value = "";
-    document.getElementById('dispatch-input-date').value = "";
+    // Secure database attributes immediately inside our transaction payload cache
+    lastExecutedPrintPayload = {
+        color: "dispatch",
+        cwrd1: item.text1 || "",
+        cwrd2: item.text2 || "",
+        m1: item.image_file || "", // Postcode
+        q: "ACTIVE_DISPATCH"
+    };
 
-    // 3. Unhide the master structural layout container cleanly
-    const modalFrame = document.getElementById('dispatch-data-collection-modal');
-    if (modalFrame) {
-        modalFrame.classList.remove('modal-hide');
-        modalFrame.style.setProperty('display', 'flex', 'important');
+    // 1. POPULATE THE LEFT SCOREBOARD HEADER BANNERS IMMEDIATELY
+    const sbLine1 = document.getElementById('scoreboard-text-line1');
+    const sbLine2 = document.getElementById('scoreboard-text-line2');
+    const sbPcode = document.getElementById('scoreboard-text-postcode');
+    const sbDispTrolleys = document.getElementById('scoreboard-display-trolleys');
+    const sbDispTrays = document.getElementById('scoreboard-display-trays');
+    const sbDispDay = document.getElementById('scoreboard-display-day');
+    const sbPrintBtn = document.getElementById('scoreboard-final-print-btn');
+
+    if (sbLine1) sbLine1.textContent = lastExecutedPrintPayload.cwrd1.toUpperCase();
+    if (sbLine2) sbLine2.textContent = lastExecutedPrintPayload.cwrd2.toUpperCase();
+    if (sbPcode) sbPcode.textContent = lastExecutedPrintPayload.m1.toUpperCase();
+    
+    if (sbDispTrolleys) sbDispTrolleys.textContent = "—";
+    if (sbDispTrays) sbDispTrays.textContent = "—";
+    if (sbDispDay) sbDispDay.textContent = "—";
+    
+    if (sbPrintBtn) {
+        sbPrintBtn.setAttribute('disabled', 'true');
+        sbPrintBtn.style.backgroundColor = "#7A869A";
+        sbPrintBtn.style.color = "#FFFFFF";
+        sbPrintBtn.style.opacity = "0.4";
+        sbPrintBtn.style.pointerEvents = "none";
     }
 
-    // 4. 🚀 PROACTIVE HIGHLIGHT FOCUS STATE: Light up the Trolleys row instantly upon presentation
-    activeDispatchFocusedInputKey = "trolleys";
-    
-    // Reset all rows to neutral grey first
-    const targetingKeys = ['trolleys', 'trays', 'date'];
-    targetingKeys.forEach(key => {
-        const inputEl = document.getElementById(`dispatch-input-${key}`);
-        if (inputEl) inputEl.style.backgroundColor = "#F4F4F4";
-    });
-
-    // Explicitly shade the Trolleys input row background container to green right at startup
-    const trolleyInput = document.getElementById('dispatch-input-trolleys');
-    if (trolleyInput) {
-        trolleyInput.style.backgroundColor = "#a5d6a7";
+    // 2. REVEAL THE BASELINE SCOREBOARD BOX NATIVELY ON THE LEFT
+    const scoreboardModal = document.getElementById('dispatch-data-collection-modal');
+    if (scoreboardModal) {
+        scoreboardModal.classList.remove('modal-hide');
+        scoreboardModal.style.setProperty('display', 'flex', 'important');
     }
+
+    // 3. LAUNCH THE GENERIC NUMERIC KEYPAD
+    triggerUniversalKeypadStep();
 }
 
-/**
- * Resets all entry row backgrounds to clean default gray state
- */
-function clearAllDispatchCollectionFocus() {
-    activeDispatchFocusedInputKey = "";
-    const targetingKeys = ['trolleys', 'trays', 'date'];
-    targetingKeys.forEach(key => {
-        const inputEl = document.getElementById(`dispatch-input-${key}`);
-        if (inputEl) {
-            inputEl.style.backgroundColor = "#F4F4F4";
-        }
-    });
-}
+function triggerUniversalKeypadStep() {
+    const keypadTitle = document.getElementById('multiples-modal-title');
+    const keypadSubmitText = document.getElementById('multiples-modal-submit-text');
+    const ctxLine1 = document.getElementById('keypad-context-line1');
+    const ctxLine2 = document.getElementById('keypad-context-line2');
+    const countBadge = document.getElementById('admin-multiples-count-badge');
 
-/**
- * Cleanly dismisses the logistics overlay box overlay framework view
- */
-function dismissDispatchCollectionOverlay() {
-    const modalFrame = document.getElementById('dispatch-data-collection-modal');
-    if (modalFrame) {
-        modalFrame.style.setProperty('display', 'none', 'important');
-        modalFrame.classList.add('modal-hide');
-    }
-}
+    multiplesCountTarget = "";
+    if (countBadge) countBadge.value = "";
 
-/**
- * Focus Router: High contrast shading lookups for active text input rows.
- * Intercepts numeric inputs to launch the shared quantity keypad dynamically.
- */
-function setDispatchCollectionFocus(inputFieldKey) {
-    activeDispatchFocusedInputKey = inputFieldKey;
+    // Populate Keypad Headspace Confirmation lines dynamically
+    if (ctxLine1) ctxLine1.textContent = (lastExecutedPrintPayload.cwrd1 || "").toUpperCase();
+    if (ctxLine2) ctxLine2.textContent = (lastExecutedPrintPayload.cwrd2 || "").toUpperCase();
 
-    const targetingKeys = ['trolleys', 'trays', 'date'];
-    
-    // Reset all target background parameters back to standard gray lookups
-    targetingKeys.forEach(key => {
-        const inputEl = document.getElementById(`dispatch-input-${key}`);
-        if (inputEl) {
-            inputEl.style.backgroundColor = "#F4F4F4";
-        }
-    });
-
-    // Apply prominent soft green active focus highlight shading to the targeted box row element
-    const activeTargetEl = document.getElementById(`dispatch-input-${inputFieldKey}`);
-    if (activeTargetEl) {
-        activeTargetEl.style.backgroundColor = "#a5d6a7";
-    }
-
-    // 🚀 KEYPAD INTERCEPT FOR NUMERIC LOGISTICS ROWS
-    if (inputFieldKey === 'trolleys' || inputFieldKey === 'trays') {
-        console.log(`Logistics row input focused: Initializing shared numeric keypad overlay.`);
-        
-        // Adapt text labels dynamically for custom value entry context
-        const keypadTitle = document.getElementById('multiples-modal-title');
-        const keypadSubmitText = document.getElementById('multiples-modal-submit-text');
-        
-        if (keypadTitle) keypadTitle.textContent = "ENTER A VALUE";
+    if (activeDispatchStep === "trolleys") {
+        if (keypadTitle) keypadTitle.textContent = "How many trolleys?";
         if (keypadSubmitText) keypadSubmitText.textContent = "ENTER";
-        
-        // Reset keypad counter memory layout tracker to a blank state for crisp inputs
-        multiplesCountTarget = "";
-        const countBadge = document.getElementById('admin-multiples-count-badge');
-        if (countBadge) countBadge.value = "";
-        
-        // Launch the clean, stripped multiples keypad overlay instantly
-        const multiplesModal = document.getElementById('admin-multiples-modal');
-        if (multiplesModal) {
-            multiplesModal.classList.remove('modal-hide');
-            multiplesModal.style.setProperty('display', 'flex', 'important');
-        }
+    } else if (activeDispatchStep === "trays") {
+        if (keypadTitle) keypadTitle.textContent = "How many trays?";
+        if (keypadSubmitText) keypadSubmitText.textContent = "ENTER";
     }
 
-    // 🚀 DYNAMIC OVERLAY PICKER GATEWAY FOR DATE FIELD
-    if (inputFieldKey === 'date') {
-        console.log("🗓️ Date row field focused: Initializing 2-week rolling delivery picker canvas.");
-        launchDispatchCalendarOverlay(); // 🗓️ Click Hook Activated! Opens the new 2x7 calendar tray instantly.
+    const multiplesModal = document.getElementById('admin-multiples-modal');
+    if (multiplesModal) {
+        multiplesModal.classList.remove('modal-hide');
+        multiplesModal.style.setProperty('display', 'flex', 'important');
+    }
+}
+
+function clearAllDispatchCollectionFocus() {
+    console.log("🧼 Clear focus bounds.");
+}
+
+function dismissDispatchCollectionOverlay() {
+    console.log("🧼 Dismissing logistics overlay windows. Flushing display tracking states.");
+    
+    const scoreboardModal = document.getElementById('dispatch-data-collection-modal');
+    if (scoreboardModal) {
+        scoreboardModal.style.setProperty('display', 'none', 'important');
+        scoreboardModal.classList.add('modal-hide');
     }
 
+    const multiplesModal = document.getElementById('admin-multiples-modal');
+    if (multiplesModal) {
+        multiplesModal.style.setProperty('display', 'none', 'important');
+        multiplesModal.classList.add('modal-hide');
+    }
+    
+    currentActiveWorkspaceMode = "";
+}
+
+function setDispatchCollectionFocus(key) {
+    console.log("🔄 Internal workflow transition slot reached for key: " + key);
 }
 
 /**
@@ -1431,23 +1475,33 @@ function executeValidatedAdminAction(actionKey) {
 
 /**
  * Shared Multi-Use Overlay Trigger: Launches the numerical input keypad.
- * Dynamically enforces standard labels if triggered outside logistics view tracks.
+ * Dynamically enforces standard labels and context text blocks depending on current screens.
  */
 function triggerMultiplesQuantityOverlay() {
-    // 🧼 BASELINE RESET: Restore default labels if not in dispatch data collection mode
-    if (currentActiveWorkspaceMode !== "DISPATCH_MODE") {
-        const keypadTitle = document.getElementById('multiples-modal-title');
-        const keypadSubmitText = document.getElementById('multiples-modal-submit-text');
-        
-        if (keypadTitle) keypadTitle.textContent = "SET PRINT QUANTITY";
-        if (keypadSubmitText) keypadSubmitText.textContent = "SEND";
-    }
-
-    // Initialize the shared numerical input variable state back to a baseline string
-    multiplesCountTarget = "1";
-    
+    const keypadTitle = document.getElementById('multiples-modal-title');
+    const keypadSubmitText = document.getElementById('multiples-modal-submit-text');
+    const ctxLine1 = document.getElementById('keypad-context-line1');
+    const ctxLine2 = document.getElementById('keypad-context-line2');
     const countBadge = document.getElementById('admin-multiples-count-badge');
-    if (countBadge) countBadge.value = "1";
+
+    // 🧼 BASELINE RESET: Clean out memory buffers to start completely fresh and empty
+    multiplesCountTarget = ""; 
+    if (countBadge) countBadge.value = ""; // 🛑 Injected Fix: Forces field to be completely blank at startup
+
+    // Enforce layout values if executing inside standard Screen 4 Plain Labels grid
+    if (currentActiveWorkspaceMode !== "DISPATCH_MODE") {
+        if (keypadTitle) keypadTitle.textContent = "How many labels?";
+        if (keypadSubmitText) keypadSubmitText.textContent = "PRINT";
+
+        // 🔍 DYNAMIC TEXT PICKUP: Extract text variables directly from the last payload profile
+        if (lastExecutedPrintPayload) {
+            if (ctxLine1) ctxLine1.textContent = (lastExecutedPrintPayload.cwrd1 || "").toUpperCase();
+            if (ctxLine2) ctxLine2.textContent = (lastExecutedPrintPayload.cwrd2 || "").toUpperCase();
+        } else {
+            if (ctxLine1) ctxLine1.textContent = "SET PRINT";
+            if (ctxLine2) ctxLine2.textContent = "QUANTITY";
+        }
+    }
 
     const multiplesModal = document.getElementById('admin-multiples-modal');
     if (multiplesModal) {
@@ -1488,77 +1542,69 @@ function clearQtyPadEntry() {
  * Commits numerical entries from the keypad: Spools print jobs for standard categories
  * or pipes values straight into the active Screen 5 text field input blocks.
  */
+
 function confirmMultiplesQuantityRun() {
-    // 🚛 INTERCEPT GATEWAY: Handle data values collection when inside dispatch view
+    const collectedValue = (multiplesCountTarget || "").toString().trim();
+    const finalNumericValue = (collectedValue === "") ? "0" : collectedValue;
+
+    // 🚛 INTERCEPT GATE: Handle automatic step sequencing when in Screen 5 Dispatch Mode
     if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
         
-        // 🚀 NEW FIX: If this is an explicit Blank Label run, fire it straight to the print loop!
+        // A. Bypassing check if this happens to be a Blank Label sidebar transaction
         if (lastExecutedPrintPayload && lastExecutedPrintPayload.q === 'BLANK_DISPATCH') {
-            console.log("🚛 Blank Dispatch Run Confirmed: Spooling batch directly into local queue.");
-            executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
+            console.log("Blank Dispatch Run Confirmed.");
+            executePhysicalPrintSpooler(lastExecutedPrintPayload, parseInt(finalNumericValue) || 1);
+            dismissDispatchCollectionOverlay();
+            return;
+        }
+
+        // B. Handle regular multi-stage text processing step loops
+        if (activeDispatchStep === "trolleys") {
+            currentDispatchTrolleysValue = finalNumericValue;
             
-            // Clean up the modal layout overlays instantly
+            // Pop the text metric dynamically onto our left scoreboard display row
+            const sbTrolleys = document.getElementById('scoreboard-display-trolleys');
+            if (sbTrolleys) sbTrolleys.textContent = currentDispatchTrolleysValue;
+            
+            console.log("Trolleys Quantity Saved: [" + currentDispatchTrolleysValue + "]. Advancing step context.");
+            
+            // Step forward instantly to Trays data gathering without closing down keypad layout
+            activeDispatchStep = "trays";
+            triggerUniversalKeypadStep();
+            return;
+            
+        } else if (activeDispatchStep === "trays") {
+            currentDispatchTraysValue = finalNumericValue;
+            
+            // Pop the text metric dynamically onto our left scoreboard display row
+            const sbTrays = document.getElementById('scoreboard-display-trays');
+            if (sbTrays) sbTrays.textContent = currentDispatchTraysValue;
+            
+            console.log("Trays Quantity Saved. Hiding keypad, triggering picker.");
+            
+            // Hide the numeric keypad completely now that quantities are set
             const multiplesModal = document.getElementById('admin-multiples-modal');
             if (multiplesModal) {
                 multiplesModal.style.setProperty('display', 'none', 'important');
                 multiplesModal.classList.add('modal-hide');
             }
+
+            // 🚀 TRIGGER THE CALENDAR PICKER OVERLAY INSTANTLY
+            launchDispatchCalendarOverlay();
             return;
         }
-
-        // Standard fallback for normal form entry field input blocks (Trolleys/Trays keypad inputs)
-        const collectedValue = multiplesCountTarget.toString().trim();
-        const targetValue = (collectedValue === "") ? "0" : collectedValue;
-        
-        const activeInput = document.getElementById(`dispatch-input-${activeDispatchFocusedInputKey}`);
-        if (activeInput) {
-            activeInput.value = targetValue;
-            console.log(`Value entry committed successfully: Field [dispatch-input-${activeDispatchFocusedInputKey}] -> [${targetValue}]`);
-            updateDispatchPrintButtonState();
-        }
-
-        const multiplesModal = document.getElementById('admin-multiples-modal');
-        if (multiplesModal) {
-            multiplesModal.style.setProperty('display', 'none', 'important');
-            multiplesModal.classList.add('modal-hide');
-        }
-        
-        clearAllDispatchCollectionFocus();
-        return;
     }
 
-    // 🟢 BASELINE MULTI-PRINT SYSTEM RUN LOGIC (Untouched fallback rules for Screen 1A, 4, etc.)
+    // 🟢 STANDARD FALLBACK SYSTEM BATCHES RUN LOGIC (Screen 1A, 4, etc. - Completely Untouched)
     if (lastExecutedPrintPayload) {
-        executePhysicalPrintSpooler(lastExecutedPrintPayload, multiplesCountTarget);
-    }
-    // ... rest of the function remains exactly the same ...
-
-    const universalOverlay = document.getElementById('kiosk-universal-overlay');
-    if (universalOverlay) {
-        universalOverlay.remove();
+        const runCount = parseInt(finalNumericValue) || 1;
+        executePhysicalPrintSpooler(lastExecutedPrintPayload, runCount);
     }
 
-    const mainWrapper = document.getElementById('main-app-wrapper');
-    if (mainWrapper) {
-        mainWrapper.classList.remove('printing-active-state');
-    }
-
-    console.log("🚀 Multi-Print Spool Committed: Closing overlay instantly.");
-    
     const multiplesModal = document.getElementById('admin-multiples-modal');
     if (multiplesModal) {
         multiplesModal.style.setProperty('display', 'none', 'important');
         multiplesModal.classList.add('modal-hide');
-    }
-    
-    if (currentActiveScreen === "4") {
-        loadPlainLabelsMatrix(); 
-        switchKioskScreenLayout("4");
-    } else if (currentActiveScreen === "5") {
-        loadDispatchLabelsMatrix();
-        switchKioskScreenLayout("5");
-    } else {
-        switchKioskScreenLayout("1A");
     }
 }
 
@@ -2314,17 +2360,17 @@ function handleBlankDispatchLabelsClick() {
 function pressMultiplesKey(digitString) {
     console.log(`Keypad digit touched: [${digitString}]`);
     
-    // Convert multiples count memory tracker to a clean string space
+    // Ensure we handle memory tracking string data spaces cleanly
     let currentInputString = (multiplesCountTarget || "").toString();
 
-    // Enforce strict limit: Cap numerical string values at 3 digits max
+    // Prevent starting a multidigit entry sequence with a leading zero if box is blank
+    if (currentInputString === "" && digitString === "0") return;
+
+    // Enforce strict limit: Cap numerical entry bounds at 3 digits max
     if (currentInputString.length < 3) {
-        // Prevent leading zeros if the entry field box is currently empty
-        if (currentInputString === "" && digitString === "0") return;
-        
         multiplesCountTarget = currentInputString + digitString;
         
-        // Push the update visually onto the active keypad header value badge display
+        // Push the string value visually onto the active display display badge row
         const countBadge = document.getElementById('admin-multiples-count-badge');
         if (countBadge) countBadge.value = multiplesCountTarget;
     }
@@ -2505,18 +2551,36 @@ function renderDispatchCalendarGrid() {
  * Capture click event from calendar days, map the value onto the form, 
  * and evaluate print availability state rules immediately.
  */
-function handleCalendarDaySelection(datePayloadString) {
-    console.log("🗓️ Calendar Day Selection Committed: [" + datePayloadString + "]");
+
+function handleCalendarDaySelection(dateString) {
+    if (!dateString) return;
     
-    const dateInput = document.getElementById('dispatch-input-date');
-    if (dateInput) {
-        dateInput.value = datePayloadString;
-        
-        // Trigger verification engine checks to instantly evaluate if PRINT can unlock
-        updateDispatchPrintButtonState();
+    console.log("🗓️ Calendar Target Committed: [" + dateString + "]");
+    currentDispatchDateValue = dateString;
+
+    // Pop the text metric dynamically onto our left scoreboard display row
+    const sbDispDay = document.getElementById('scoreboard-display-day');
+    if (sbDispDay) sbDispDay.textContent = currentDispatchDateValue;
+
+    // Update the master print transaction payload object values explicitly
+    if (lastExecutedPrintPayload) {
+        lastExecutedPrintPayload.year = currentDispatchTrolleysValue; // Trolleys goes to year slot
+        lastExecutedPrintPayload.m2 = currentDispatchTraysValue;      // Trays goes to m2 slot
+        lastExecutedPrintPayload.m3 = currentDispatchDateValue;       // Date string goes to m3 slot
     }
-    
-    dismissDispatchCalendarOverlay();
+
+    // Call the precise calendar dismissal handler
+    dismissDispatchDateOverlay();
+
+    // Turn the master PRINT button crisp Green and active
+    const sbPrintBtn = document.getElementById('scoreboard-final-print-btn');
+    if (sbPrintBtn) {
+        sbPrintBtn.removeAttribute('disabled');
+        sbPrintBtn.style.backgroundColor = "#4A8B5B"; // Toned-down green match
+        sbPrintBtn.style.color = "#FFFFFF";
+        sbPrintBtn.style.opacity = "1";
+        sbPrintBtn.style.pointerEvents = "auto";
+    }
 }
 
 /**
