@@ -1252,10 +1252,24 @@ function clearPinPadEntry() {
 }
 
 function dismissPinPadSecurity() {
-    const pinModal = document.getElementById('gatekeeper-pin-modal');
-    if (pinModal) {
-        pinModal.style.setProperty('display', 'none', 'important');
-        pinModal.classList.add('modal-hide');
+    console.log("🧼 Security entry overlay dismissed manually. Flushing secure characters.");
+    
+    // Clear the visual entry display securely
+    const pinBadge = document.getElementById('admin-pin-display-badge');
+    if (pinBadge) pinBadge.value = "";
+    
+    // Clear your internal tracking pin string variable if it exists in your script
+    if (typeof pinInputBuffer !== 'undefined') {
+        pinInputBuffer = "";
+    } else if (typeof currentAccumulatedPinString !== 'undefined') {
+        currentAccumulatedPinString = "";
+    }
+
+    // Force the correct gatekeeper container to hide instantly
+    const securityModal = document.getElementById('gatekeeper-pin-modal');
+    if (securityModal) {
+        securityModal.style.setProperty('display', 'none', 'important');
+        securityModal.classList.add('modal-hide');
     }
 }
 
@@ -2402,15 +2416,20 @@ function clearMultiplesKey() {
  * Multiples Overlay Dismissal Helper: Safely closes the keypad block view.
  */
 function dismissMultiplesQuantityOverlay() {
+    console.log("🧼 Keypad Cancel button pressed. Assessing active workspace mode.");
+
+    // 🚛 IF SCREEN 5 IS ACTIVE: Intercept and route directly to your master cleanup function
+    if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
+        dismissDispatchCollectionOverlay();
+        return;
+    }
+
+    // 🟢 STANDARD FALLBACK: Clear out standard Screen 4 and Admin loops safely
+    console.log("🧼 Clearing standard universal quantity modal layers.");
     const multiplesModal = document.getElementById('admin-multiples-modal');
     if (multiplesModal) {
         multiplesModal.style.setProperty('display', 'none', 'important');
         multiplesModal.classList.add('modal-hide');
-    }
-    
-    // Clear active focus highlight safely if escaping out from a dispatch row selection loop
-    if (currentActiveWorkspaceMode === "DISPATCH_MODE") {
-        clearAllDispatchCollectionFocus();
     }
 }
 
@@ -2467,84 +2486,93 @@ function updateDispatchPrintButtonState() {
 /**
  * Automatically calculates a rolling 14-day window from the current system clock,
  * formats the days tabs prominently, doubles date typography visibility numbers, unifies backgrounds,
- * and completely locks out/desaturates Sundays natively.
+ * and completely locks out/desaturates Saturdays and Sundays natively.
  */
+
 function renderDispatchCalendarGrid() {
-    const gridContainer = document.getElementById('calendar-picker-grid-matrix');
-    if (!gridContainer) return;
+    const calendarGrid = document.getElementById('dispatch-calendar-days-grid');
+    if (!calendarGrid) return;
 
-    const shortDayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    let gridHTML = "";
+    console.log("🗓️ Building rolling 14-day calendar grid with weekend lockouts and dd/mm date format.");
+    let gridHTML = '';
+    let calculatedDaysArray = [];
 
-    // Strictly pre-calculate all 14 sequential days from today
-    const calculatedDaysArray = [];
+    const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+    // Generate 14 rolling calendar days starting exactly from Today
     for (let i = 0; i < 14; i++) {
-        const futureDateObj = new Date();
-        futureDateObj.setDate(futureDateObj.getDate() + i);
+        let d = new Date();
+        d.setDate(d.getDate() + i);
+
+        let dayOfWeekNum = d.getDay(); // 0 = Sunday, 6 = Saturday
+        let dayOfWeekStr = dayNames[dayOfWeekNum];
         
-        // Extract layout variables natively
-        const dayIndex = futureDateObj.getDay(); // 0 = Sunday, 6 = Saturday
-        const dayOfWeekStr = shortDayNames[dayIndex];
-        const dayOfMonthNum = String(futureDateObj.getDate()).padStart(2, '0');
-        const monthNum = String(futureDateObj.getMonth() + 1).padStart(2, '0');
+        let dateNum = d.getDate();
+        let monthNum = d.getMonth() + 1; // JavaScript months are 0-11, add 1 for actual month number
         
-        // ZPL Target Output Format: DDD dd/mm (e.g. FRI 25/09)
-        const targetPrintString = dayOfWeekStr + " " + dayOfMonthNum + "/" + monthNum;
-        // Screen Label Format: Short day number (e.g. 25/09)
-        const displayDateString = dayOfMonthNum + "/" + monthNum;
+        // Ensure proper industrial padding format (e.g. "05" instead of "5")
+        let paddedDate = dateNum < 10 ? "0" + dateNum : dateNum;
+        let paddedMonth = monthNum < 10 ? "0" + monthNum : monthNum;
+
+        // 🎯 RESTORED EXACT FORMAT SPECIFICATION: DDD dd/mm (e.g. MON 28/09)
+        let displayDateString = paddedDate + "/" + paddedMonth;
+        let targetPrintString = dayOfWeekStr + " " + displayDateString;
+
+        // Flag BOTH Saturdays and Sundays as weekend lockout slots
+        let isWeekendSlot = (dayOfWeekNum === 0 || dayOfWeekNum === 6);
 
         calculatedDaysArray.push({
             dayLabel: dayOfWeekStr,
             dateLabel: displayDateString,
             payloadValue: targetPrintString,
-            isSunday: (dayIndex === 0)
+            isSunday: isWeekendSlot // Reuses internal grid hook to mark weekend blocks inactive
         });
     }
 
-    // Map out the unified 2-column x 7-row layout sequence (Left col: This Week, Right col: Next Week)
+    // Map out the unified 2-column layout (Left col: This Week, Right col: Next Week)
     for (let rowIndex = 0; rowIndex < 7; rowIndex++) {
         const thisWeekDay = calculatedDaysArray[rowIndex];       
         const nextWeekDay = calculatedDaysArray[rowIndex + 7];   
 
         // 1. PROCESS LEFT COLUMN CELL (THIS WEEK)
-        let leftBtnStyle = "height: 100%; width: 100%; background-color: #e1f5fe; border: 0.3vh solid #000000; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0px 0.3vh 0px #000000; padding: 0.3vh 0; outline: none; pointer-events: auto;";
-        let leftDayStyle = "font-size: 2.8vh; font-weight: 900; color: #000000; line-height: 1.1;";
-        let leftDateStyle = "font-size: 3.0vh; font-weight: 900; color: #333333; line-height: 1.0; margin-top: 0.4vh;"; 
+        let leftBtnStyle = "height: 7.5vh; width: 100%; background-color: #e1f5fe; border: 0.3vh solid #000000; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0px 0.3vh 0px #000000; outline: none; pointer-events: auto;";
+        let leftDayStyle = "font-size: 2.4vh; font-weight: 900; color: #000000; line-height: 1.1; letter-spacing: 0.5px;"; // Boosted prominence for drivers
+        let leftDateStyle = "font-size: 1.8vh; font-weight: 700; color: #333333; line-height: 1.0; margin-top: 0.3vh;"; 
         let leftOnClick = "onclick=\"handleCalendarDaySelection('" + thisWeekDay.payloadValue + "')\"";
 
         if (thisWeekDay.isSunday) {
-            leftBtnStyle = "height: 100%; width: 100%; background-color: #ECEFF1; border: 0.3vh solid #7A869A; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.3vh 0; outline: none; pointer-events: none; opacity: 0.5; filter: grayscale(1);";
-            leftDayStyle = "font-size: 2.8vh; font-weight: 900; color: #7A869A; line-height: 1.1;";
-            leftDateStyle = "font-size: 3.0vh; font-weight: 900; color: #7A869A; line-height: 1.0; margin-top: 0.4vh;";
+            leftBtnStyle = "height: 7.5vh; width: 100%; background-color: #ECEFF1; border: 0.3vh solid #7A869A; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; outline: none; pointer-events: none; opacity: 0.4; filter: grayscale(1);";
+            leftDayStyle = "font-size: 2.4vh; font-weight: 900; color: #7A869A; line-height: 1.1;";
+            leftDateStyle = "font-size: 1.8vh; font-weight: 700; color: #7A869A; line-height: 1.0; margin-top: 0.3vh;";
             leftOnClick = "";
         }
 
         // 2. PROCESS RIGHT COLUMN CELL (NEXT WEEK)
-        let rightBtnStyle = "height: 100%; width: 100%; background-color: #e1f5fe; border: 0.3vh solid #000000; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0px 0.3vh 0px #000000; padding: 0.3vh 0; outline: none; pointer-events: auto;";
-        let rightDayStyle = "font-size: 2.8vh; font-weight: 900; color: #000000; line-height: 1.1;";
-        let rightDateStyle = "font-size: 3.0vh; font-weight: 900; color: #333333; line-height: 1.0; margin-top: 0.4vh;"; 
+        let rightBtnStyle = "height: 7.5vh; width: 100%; background-color: #e1f5fe; border: 0.3vh solid #000000; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0px 0.3vh 0px #000000; outline: none; pointer-events: auto;";
+        let rightDayStyle = "font-size: 2.4vh; font-weight: 900; color: #000000; line-height: 1.1; letter-spacing: 0.5px;"; // Boosted prominence for drivers
+        let rightDateStyle = "font-size: 1.8vh; font-weight: 700; color: #333333; line-height: 1.0; margin-top: 0.3vh;"; 
         let rightOnClick = "onclick=\"handleCalendarDaySelection('" + nextWeekDay.payloadValue + "')\"";
 
         if (nextWeekDay.isSunday) {
-            rightBtnStyle = "height: 100%; width: 100%; background-color: #ECEFF1; border: 0.3vh solid #7A869A; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.3vh 0; outline: none; pointer-events: none; opacity: 0.5; filter: grayscale(1);";
-            rightDayStyle = "font-size: 2.8vh; font-weight: 900; color: #7A869A; line-height: 1.1;";
-            rightDateStyle = "font-size: 3.0vh; font-weight: 900; color: #7A869A; line-height: 1.0; margin-top: 0.4vh;";
+            rightBtnStyle = "height: 7.5vh; width: 100%; background-color: #ECEFF1; border: 0.3vh solid #7A869A; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; outline: none; pointer-events: none; opacity: 0.4; filter: grayscale(1);";
+            rightDayStyle = "font-size: 2.4vh; font-weight: 900; color: #7A869A; line-height: 1.1;";
+            rightDateStyle = "font-size: 1.8vh; font-weight: 700; color: #7A869A; line-height: 1.0; margin-top: 0.3vh;";
             rightOnClick = "";
         }
 
-        // Construct vertical columns side-by-side using secure string additions
         gridHTML += "<button type=\"button\" " + leftOnClick + " style=\"" + leftBtnStyle + "\">" +
                         "<span style=\"" + leftDayStyle + "\">" + thisWeekDay.dayLabel + "</span>" +
                         "<span style=\"" + leftDateStyle + "\">" + thisWeekDay.dateLabel + "</span>" +
                     "</button>";
 
         gridHTML += "<button type=\"button\" " + rightOnClick + " style=\"" + rightBtnStyle + "\">" +
-                    "<span style=\"" + rightDayStyle + "\">" + nextWeekDay.dayLabel + "</span>" +
-                    "<span style=\"" + rightDateStyle + "\">" + nextWeekDay.dateLabel + "</span>" +
+                        "<span style=\"" + rightDayStyle + "\">" + nextWeekDay.dayLabel + "</span>" +
+                        "<span style=\"" + rightDateStyle + "\">" + nextWeekDay.dateLabel + "</span>" +
                     "</button>";
     }
 
-    gridContainer.innerHTML = gridHTML;
+    calendarGrid.innerHTML = gridHTML;
+    console.log("🎉 Rolling calendar populated with active weekend lockouts and strict dd/mm formats.");
 }
 
 /**
@@ -2555,32 +2583,74 @@ function renderDispatchCalendarGrid() {
 function handleCalendarDaySelection(dateString) {
     if (!dateString) return;
     
-    console.log("🗓️ Calendar Target Committed: [" + dateString + "]");
+    console.log("🗓️ Date Selected: [" + dateString + "]. Initiating automatic printing execution workflow.");
     currentDispatchDateValue = dateString;
 
-    // Pop the text metric dynamically onto our left scoreboard display row
+    // 1. Pop the selection metric onto our scoreboard readout row instantly
     const sbDispDay = document.getElementById('scoreboard-display-day');
     if (sbDispDay) sbDispDay.textContent = currentDispatchDateValue;
 
-    // Update the master print transaction payload object values explicitly
+    // 2. Hide the calendar overlay box immediately to focus on print feedback
+    const dateModal = document.getElementById('dispatch-calendar-modal');
+    if (dateModal) {
+        dateModal.style.setProperty('display', 'none', 'important');
+        dateModal.classList.add('modal-hide');
+    }
+
+    // 3. Inject the data metrics cleanly into our active print payload transaction object
     if (lastExecutedPrintPayload) {
-        lastExecutedPrintPayload.year = currentDispatchTrolleysValue; // Trolleys goes to year slot
-        lastExecutedPrintPayload.m2 = currentDispatchTraysValue;      // Trays goes to m2 slot
-        lastExecutedPrintPayload.m3 = currentDispatchDateValue;       // Date string goes to m3 slot
+        lastExecutedPrintPayload.year = currentDispatchTrolleysValue; // Trolleys value maps to trolley count
+        lastExecutedPrintPayload.total_trolleys = currentDispatchTrolleysValue;
+        lastExecutedPrintPayload.m2 = currentDispatchTraysValue;      // Trays value maps to trays count
+        lastExecutedPrintPayload.m3 = currentDispatchDateValue;       // Date text string maps to delivery date
     }
 
-    // Call the precise calendar dismissal handler
-    dismissDispatchDateOverlay();
-
-    // Turn the master PRINT button crisp Green and active
-    const sbPrintBtn = document.getElementById('scoreboard-final-print-btn');
-    if (sbPrintBtn) {
-        sbPrintBtn.removeAttribute('disabled');
-        sbPrintBtn.style.backgroundColor = "#4A8B5B"; // Toned-down green match
-        sbPrintBtn.style.color = "#FFFFFF";
-        sbPrintBtn.style.opacity = "1";
-        sbPrintBtn.style.pointerEvents = "auto";
+    // 4. AUTOMATIC PRINT INITIATION: Fire print job instantly based on the Trolleys volume count
+    const totalLabelsToPrint = parseInt(currentDispatchTrolleysValue) || 1;
+    console.log("🚀 Spooling " + totalLabelsToPrint + " dispatch labels straight into CUPS pipeline.");
+    
+    // Fire your existing core terminal printing function
+    if (typeof executePhysicalPrintSpooler === 'function') {
+        executePhysicalPrintSpooler(lastExecutedPrintPayload, totalLabelsToPrint);
+    } else if (typeof submitDispatchJobPrintSpool === 'function') {
+        submitDispatchJobPrintSpool();
     }
+
+    // 5. PRINT CONFIRMATION MESSAGE: Illuminate "PRINTING" text inside scoreboard space
+    const sbStatusText = document.getElementById('scoreboard-status-confirmation-row');
+    if (sbStatusText) {
+        sbStatusText.textContent = "PRINTING";
+        sbStatusText.style.color = "#4A8B5B"; // Crisp green confirmation tone
+    }
+
+    // 6. DELAYED AUTO-ROUTING HOME PANEL RESET: Hold feedback for 3 seconds then clear
+    setTimeout(() => {
+        console.log("🧼 3-Second feedback period complete. Auto-routing back to home panel workspace.");
+        
+        // Hide the left scoreboard overlay completely
+        const scoreboardModal = document.getElementById('dispatch-data-collection-modal');
+        if (scoreboardModal) {
+            scoreboardModal.style.setProperty('display', 'none', 'important');
+            scoreboardModal.classList.add('modal-hide');
+        }
+
+        // Reset system flags back to baseline empty workspace settings
+        currentActiveWorkspaceMode = "";
+        
+        // 🏠 FORCE SCREEN SWITCH BACK TO HOME SCREEN NATIVELY
+        // Invokes your core screen workspace router function (e.g. switchScreen(1))
+        if (typeof switchScreen === 'function') {
+            switchScreen(1); // Return directly to Home Screen 1
+        } else if (typeof showScreen === 'function') {
+            showScreen('screen1');
+        } else {
+            // Fallback: programmatic DOM manipulation if standard router names differ
+            const screen5View = document.getElementById('screen5');
+            const screen1View = document.getElementById('screen1');
+            if (screen5View) screen5View.style.display = 'none';
+            if (screen1View) screen1View.style.display = 'block';
+        }
+    }, 3000);
 }
 
 /**
@@ -2663,4 +2733,34 @@ function triggerAdminPrinterResetAction() {
             console.error("❌ Admin printer reset block failed:", err);
             showUserAlert('SYSTEM_ALERT', { message: 'HARDWARE VERIFICATION SWEEP FAILED' }, 4000);
         });
+}
+
+function handleCalendarManualCancelAction() {
+    console.log("🧼 Calendar manual cancel invoked. Flushing scoreboard values and releasing screen lock.");
+    
+    // 1. Clear out data displays visually down to placeholders
+    const sbDispTrolleys = document.getElementById('scoreboard-display-trolleys');
+    const sbDispTrays = document.getElementById('scoreboard-display-trays');
+    const sbDispDay = document.getElementById('scoreboard-display-day');
+    const sbStatusText = document.getElementById('scoreboard-status-confirmation-row');
+
+    if (sbDispTrolleys) sbDispTrolleys.textContent = "—";
+    if (sbDispTrays) sbDispTrays.textContent = "—";
+    if (sbDispDay) sbDispDay.textContent = "—";
+    if (sbStatusText) sbStatusText.textContent = "";
+
+    // 2. Clear local tracking memory variables completely
+    currentDispatchTrolleysValue = "";
+    currentDispatchTraysValue = "";
+    currentDispatchDateValue = "";
+
+    // 3. HARD CLOSURE: Force the calendar overlay container to hide immediately
+    const dateModal = document.getElementById('dispatch-calendar-modal');
+    if (dateModal) {
+        dateModal.style.setProperty('display', 'none', 'important');
+        dateModal.classList.add('modal-hide');
+    }
+
+    // 4. Hide the left scoreboard overlay cleanly
+    dismissDispatchCollectionOverlay();
 }

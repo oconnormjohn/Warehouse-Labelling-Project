@@ -594,38 +594,52 @@
 </div> <!-- Closes id="admin-list-editor-workspace" -->
 
 <!-- FRONT GATE NUMERICAL PIN PAD SECURITY OVERLAY -->
-<div id="gatekeeper-pin-modal" class="modal-overlay modal-hide" style="z-index: 999999999;">
-    <div class="modal-content" style="width: 45vw; max-width: 420px; padding: 3vh 2vw; border: 4px solid #7851A9; gap: 2vh;">
+<div id="gatekeeper-pin-modal" class="modal-overlay modal-hide" style="display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background-color: transparent !important; justify-content: center !important; align-items: flex-start !important; padding-top: 12vh !important; z-index: 999999999 !important; pointer-events: auto !important;">
+    
+    <!-- Width narrowed down to 25vw to perfectly mirror the universal numeric keypad -->
+    <div class="security-pinpad-body-box" style="background-color: #EAEAEA; border: 0.35vh solid #000000; border-radius: 16px; padding: 3vh 1.8vw; width: 25vw; box-shadow: 0px 1vh 3vh rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; box-sizing: border-box;">
         
-        <div style="color: #7851A9; font-weight: bold; font-size: 2.8vh; text-transform: uppercase; text-align: center; letter-spacing: 1px;">
-            Security Check
+        <!-- Standard Authority Access Prompt Header Title -->
+        <div style="font-family: Arial, sans-serif; font-size: 2.5vh; font-weight: 900; color: #000000; text-transform: uppercase; margin-bottom: 2vh; text-align: center; letter-spacing: 0.5px;">Security Check</div>
+        
+        <!-- Star-Masked Secret Character Entry Display Bar (Restored as a clean form input element) -->
+        <input type="password" id="gatekeeper-pin-input" class="keypad-value-display" readonly value="" style="width: 100%; height: 6vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 8px; font-size: 3.5vh; font-weight: 900; text-align: center; color: #000000; margin-bottom: 1.5vh; box-sizing: border-box; outline: none; letter-spacing: 1vh;">
+        
+        <!-- Hidden Error Warning Line Slot -->
+        <div id="gatekeeper-pin-error" style="display: none; color: #C64B4B; font-size: 1.8vh; font-weight: 900; text-align: center; margin-bottom: 1.5vh; text-transform: uppercase; letter-spacing: 0.5px;"></div>
+        
+        <!-- Symmetrical 3x4 Touch Button Matrix Grid -->
+        <div class="keypad-buttons-matrix-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2vh 0.8vw; width: 100%; margin-bottom: 2.5vh; box-sizing: border-box;">
+            <!-- 🚀 FIXED: All handlers point to your exact function name "pressPinPadKey" -->
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('1')">1</button>
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('2')">2</button>
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('3')">3</button>
+            
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('4')">4</button>
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('5')">5</button>
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('6')">6</button>
+            
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('7')">7</button>
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('8')">8</button>
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('9')">9</button>
+            
+            <!-- Bottom Matrix Utility Controls -->
+            <button type="button" class="kp-btn control-key clr-key" onclick="clearPinDisplay()" style="font-size: 2.2vh !important;">CLR</button>
+            <button type="button" class="kp-btn num-key" onclick="pressPinPadKey('0')">0</button>
+            <button type="button" class="kp-btn control-key backspace-arrow-key" onclick="backspacePinDigit()">
+                <svg viewBox="0 0 24 24" width="3.5vh" height="3.5vh" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto;">
+                    <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                    <line x1="18" y1="9" x2="12" y2="15"></line>
+                    <line x1="12" y1="9" x2="18" y2="15"></line>
+                </svg>
+            </button>
         </div>
         
-        <!-- Masked Entry Field -->
-        <input type="password" id="gatekeeper-pin-input" placeholder="••••" readonly 
-               style="width: 100%; padding: 1.8vh 1vw; font-size: 4vh; font-weight: bold; text-align: center; border: 2px solid #333; border-radius: 8px; box-sizing: border-box; background: #fff; letter-spacing: 2vw;">
-
-        <!-- Dynamic PIN Error Message Slot -->
-        <div id="gatekeeper-pin-error" style="color: #ff3b30; font-weight: bold; font-size: 1.8vh; text-align: center; min-height: 2.2vh; display: none; text-transform: uppercase;"></div>
-
-        <!-- 3x4 Touch Grid Layout Component -->
-        <div class="pin-grid-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2vh; width: 100%; box-sizing: border-box;">
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('1')">1</button>
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('2')">2</button>
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('3')">3</button>
-            
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('4')">4</button>
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('5')">5</button>
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('6')">6</button>
-            
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('7')">7</button>
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('8')">8</button>
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('9')">9</button>
-            
-            <button type="button" class="pin-key-btn clear-key" onclick="clearPinPadEntry()" style="background: #ffb74d; color: #fff;">CLR</button>
-            <button type="button" class="pin-key-btn" onclick="pressPinPadKey('0')">0</button>
-            <button type="button" class="pin-key-btn cancel-key" onclick="dismissPinPadSecurity()" style="background: #ff3b30; color: #fff;">X</button>
+        <!-- Master Operations Exit Row -->
+        <div style="width: 100%; box-sizing: border-box;">
+            <button type="button" class="action-btn cancel-action" onclick="dismissPinPadSecurity()" style="width: 100%; background-color: #C64B4B; color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 10px; font-size: 2.4vh; font-weight: 900; box-shadow: 0px 0.4vh 0px #000000; cursor: pointer; text-transform: uppercase; outline: none; height: 7.5vh;">Cancel</button>
         </div>
+
     </div>
 </div>
 
@@ -711,29 +725,25 @@
     
     <div class="dispatch-scoreboard-box" style="background-color: #EAEAEA; border: 0.35vh solid #000000; border-radius: 16px; padding: 3vh 1.8vw; width: 25vw; box-shadow: 0px 1vh 3vh rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; box-sizing: border-box;">
         
-        <!-- Target Delivery Address Header Block -->
-        <div class="scoreboard-address-header" style="text-align: center; width: 100%; border-bottom: 2px dashed rgba(0,0,0,0.2); padding-bottom: 1.5vh; margin-bottom: 2vh;">
+        <!-- Target Delivery Address Header Block (Postcode and dotted line permanently removed) -->
+        <div class="scoreboard-address-header" style="text-align: center; width: 100%; padding-bottom: 0.5vh; margin-bottom: 2vh;">
             <div id="scoreboard-text-line1" style="font-size: 2.6vh; font-weight: 900; color: #000000; text-transform: uppercase; line-height: 1.1;">—</div>
             <div id="scoreboard-text-line2" style="font-size: 2.6vh; font-weight: 900; color: #000000; text-transform: uppercase; line-height: 1.1; margin-top: 0.4vh;">—</div>
-            <div id="scoreboard-text-postcode" style="font-size: 2.2vh; font-weight: 700; color: #555555; margin-top: 0.5vh;">—</div>
         </div>
 
-        <!-- Telemetry Metrics Display Grid Rows (Completely flat text readouts) -->
-        <div class="scoreboard-metrics-rows-stack" style="width: 100%; display: flex; flex-direction: column; gap: 1.5vh; margin-bottom: 3vh; box-sizing: border-box;">
+        <!-- Telemetry Metrics Display Grid Rows -->
+        <div class="scoreboard-metrics-rows-stack" style="width: 100%; display: flex; flex-direction: column; gap: 1.5vh; box-sizing: border-box;">
             
-            <!-- Trolleys Metric Row -->
             <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; height: 5.5vh; background-color: #FFFFFF; border: 0.25vh solid #000000; border-radius: 8px; padding: 0 1vw; box-sizing: border-box;">
                 <span style="font-size: 2.0vh; font-weight: 700; color: #333333;">No. of Trolleys:</span>
                 <span id="scoreboard-display-trolleys" style="font-size: 2.6vh; font-weight: 900; color: #000000;">—</span>
             </div>
 
-            <!-- Trays Metric Row -->
             <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; height: 5.5vh; background-color: #FFFFFF; border: 0.25vh solid #000000; border-radius: 8px; padding: 0 1vw; box-sizing: border-box;">
                 <span style="font-size: 2.0vh; font-weight: 700; color: #333333;">No. of Trays:</span>
                 <span id="scoreboard-display-trays" style="font-size: 2.6vh; font-weight: 900; color: #000000;">—</span>
             </div>
 
-            <!-- Delivery Day Metric Row -->
             <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; height: 5.5vh; background-color: #FFFFFF; border: 0.25vh solid #000000; border-radius: 8px; padding: 0 1vw; box-sizing: border-box;">
                 <span style="font-size: 2.0vh; font-weight: 700; color: #333333;">Delivery Day:</span>
                 <span id="scoreboard-display-day" style="font-size: 2.4vh; font-weight: 900; color: #000000; text-transform: uppercase;">—</span>
@@ -741,10 +751,9 @@
 
         </div>
 
-        <!-- Master Operations Action Footer Bar -->
-        <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 0 1vw; width: 100%; box-sizing: border-box;">
-            <button type="button" class="action-btn cancel-action" onclick="dismissDispatchCollectionOverlay()" style="height: 7.5vh; border: 0.3vh solid #000000; border-radius: 10px; font-size: 2.4vh; font-weight: 900; box-shadow: 0px 0.4vh 0px #000000; background-color: #C64B4B; color: #FFFFFF; cursor: pointer; text-transform: uppercase; outline: none;">CANCEL</button>
-            <button type="button" id="scoreboard-final-print-btn" class="action-btn print-action" onclick="submitDispatchJobPrintSpool()" style="height: 7.5vh; border: 0.3vh solid #000000; border-radius: 10px; font-size: 2.4vh; font-weight: 900; box-shadow: 0px 0.4vh 0px #000000; background-color: #7A869A; color: #FFFFFF; cursor: pointer; text-transform: uppercase; opacity: 0.4; pointer-events: none; outline: none;">PRINT</button>
+        <!-- Hidden Operations Status Row Space (Populated on automated printing execution) -->
+        <div id="scoreboard-status-confirmation-row" style="width: 100%; margin-top: 3.5vh; height: 5vh; display: flex; align-items: center; justify-content: center; font-size: 3.2vh; font-weight: 900; color: #4A8B5B; letter-spacing: 2px; text-transform: uppercase; box-sizing: border-box;">
+            <!-- Dynamic Confirmation text injects here -->
         </div>
 
     </div>
@@ -799,30 +808,24 @@
 </div>
 
 <!-- ==========================================================================
-     SCREEN 5 SUITE: POSITIONED LEFT LIGHT-GREY CALENDAR PICKER OVERLAY
+     SCREEN 5: ROLLING CALENDAR DATA PICKER LAYOUT COMPONENT
      ========================================================================== -->
-<div id="dispatch-calendar-modal" class="modal-overlay modal-hide" style="display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background-color: transparent !important; justify-content: center !important; align-items: flex-start !important; padding-top: 12vh !important; z-index: 999999999 !important; pointer-events: auto !important;">
+<div id="dispatch-calendar-modal" class="modal-overlay modal-hide" style="display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background-color: transparent !important; justify-content: center !important; align-items: flex-start !important; padding-top: 10vh !important; z-index: 999999999 !important; pointer-events: auto !important;">
     
-    <!-- CENTRAL CALENDAR PANEL CARD -->
-    <div style="background-color: #F5F5F5; border: 0.4vh solid #000000; border-radius: 20px; width: 45vw; max-height: 94vh; padding: 2.5vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; gap: 2vh; box-shadow: 0px 1.5vh 4px rgba(0,0,0,0.4); align-items: center;">
+    <!-- Width narrowed down to 25vw to perfectly mirror the universal numeric keypad -->
+    <div class="calendar-picker-body-box" style="background-color: #EAEAEA; border: 0.35vh solid #000000; border-radius: 16px; padding: 2.5vh 1.8vw; width: 25vw; box-shadow: 0px 1vh 3vh rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; box-sizing: border-box;">
         
-        <!-- HEADER HEADER TITLE BARS (No dashed line, black text) -->
-        <div style="display: flex; justify-content: space-between; width: 100%; padding-bottom: 0.5vh; box-sizing: border-box;">
-            <div style="color: #000000; font-size: 2.2vh; font-weight: 900; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">THIS WEEK</div>
-            <div style="color: #000000; font-size: 2.2vh; font-weight: 900; width: 50%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">NEXT WEEK</div>
+        <div style="font-family: Arial, sans-serif; font-size: 2.4vh; font-weight: 900; color: #000000; text-transform: uppercase; margin-bottom: 1.5vh; text-align: center; letter-spacing: 0.5px;">Select Delivery Day</div>
+        
+        <!-- Live Calendar Scrolling Grid Frame Wrapper (Saturates columns dynamically via app.js) -->
+        <div id="dispatch-calendar-days-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1vh 0.8vw; width: 100%; box-sizing: border-box; margin-bottom: 2.5vh;">
+            <!-- Dynamically populated rows pass here -->
         </div>
-
-        <!-- 2-COLUMN x 7-ROW INDUSTRIAL DAY MATRIX TRACK CONTAINER -->
-        <div id="calendar-picker-grid-matrix" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(7, 1fr); gap: 1vh 1vw; width: 100%; height: 70vh; box-sizing: border-box;">
-            <!-- Dynamic 14 date selector selector button pairs populate here via JavaScript loop -->
-        </div>
-
-        <!-- LOWER FINAL ESCAPE ACTION BAR -->
-        <div style="width: 100%; display: flex; justify-content: center; margin-top: 1vh; box-sizing: border-box;">
-            <button type="button" onclick="dismissDispatchCalendarOverlay()" style="width: 50%; height: 6.5vh; background-color: #FFFFFF; border: 0.3vh solid #000000; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0px 0.4vh 0px #000000; outline: none;">
-                <span style="font-size: 1.8vh; font-weight: 900; color: #C64B4B; letter-spacing: 0.5px; text-transform: uppercase;">CLOSE CALENDAR</span>
-            </button>
-        </div>
+        
+        <!-- Standard White Text on Industrial Red Cancel Button -->
+        <button type="button" class="action-btn cancel-action" onclick="handleCalendarManualCancelAction()" style="width: 100%; height: 7vh; border: 0.3vh solid #000000; border-radius: 10px; font-size: 2.4vh; font-weight: 900; background-color: #C64B4B; color: #FFFFFF; box-shadow: 0px 0.4vh 0px #000000; cursor: pointer; text-transform: uppercase; outline: none;">
+            Cancel
+        </button>
     </div>
 </div>
 
