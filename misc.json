@@ -2,7 +2,7 @@
   {
     "text1": "BABY ITEMS",
     "text2": "",
-    "image_file": "bABY-ITEMS.PNG"
+    "image_file": "BABY-ITEMS.PNG"
   },
   {
     "text1": "HOUSEHOLD",
@@ -30,8 +30,8 @@
     "image_file": "SHORT-DATE.PNG"
   },
   {
-    "text1": "OUT OF",
-    "text2": "DATE",
-    "image_file": "OUT-OF-DATE.JPG"
+    "text1": "OUT",
+    "text2": "OF DATE",
+    "image_file": "OUT-OF-DATE.PNG"
   }
 ]

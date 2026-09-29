@@ -2,22 +2,27 @@
   {
     "text1": "BUBBLE",
     "text2": "BATH",
-    "image_file": "TOILETRIES.JPG"
+    "image_file": "BUBBLE-BATH.PNG"
   },
   {
     "text1": "CONDITIONER",
     "text2": "",
-    "image_file": "TOILETRIES.JPG"
+    "image_file": "CONDITIONER.PNG"
+  },
+  {
+    "text1": "DEODORANT",
+    "text2": "",
+    "image_file": "DEODORANT.PNG"
   },
   {
     "text1": "SHAMPOO",
     "text2": "",
-    "image_file": "TOILETRIES.JPG"
+    "image_file": "SHAMPOO.PNG"
   },
   {
     "text1": "SHOWER GEL",
     "text2": "",
-    "image_file": "TOILETRIES.JPG"
+    "image_file": "SHOWER-GEL.PNG"
   },
   {
     "text1": "SOAP",
@@ -37,11 +42,6 @@
   {
     "text1": "TOILETRIES",
     "text2": "MISCEL.",
-    "image_file": "TOILETRIES.JPG"
-  },
-  {
-    "text1": "OIL OF OLAY",
-    "text2": "",
     "image_file": "TOILETRIES.JPG"
   },
   {
