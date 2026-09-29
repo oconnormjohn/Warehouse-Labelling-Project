@@ -1,5 +1,5 @@
 ^XA
-^FX ==== Blank Dispatch Label - Landscape ====
+^FX ==== Dispatch Label - Landscape ====
 ^LL1218
 
 ^FX ==== Graphic Box ====
@@ -45,9 +45,13 @@
 
 ^FX ==== Bottom Line: Delivery Date ====
 ^FO40,40
-^A0R,80,80^FDDelivery:^FS
+^A0R,80,80^FDDelivery day:^FS
 
-^FO40,350
+^FO40,550
 ^A0R,80,80^FD{{DDATE}}^FS
+
+^FX ==== DISPATCH VAN WITH LOGO GRAPHIC ====
+^FX === Calculate a reasonable Field Origin ~ 150,650 ====
+^FO150,650^ILE:IMGTEMP.GRF,1,1^FS
 
 ^XZ

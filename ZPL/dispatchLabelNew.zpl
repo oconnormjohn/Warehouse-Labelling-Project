@@ -3,7 +3,7 @@
 ^LL1218
 
 ^FX ==== Graphic Box ====
-^FO430,100^GB320,1100,3^FS
+^FO450,50^GB325,1150,3^FS
 
 ^FX ==== Text fields rotated using 'Caret'A0R  ====
 ^FX ==== 'Caret'A0R = (Font 0, Rotated 90 deg) ====
@@ -11,21 +11,17 @@
 
 ^FX ==== 1st line of Address ====
 ^FO650,40
-^FB1200,1,0,C,0
-^A0R,80,80^FD{{ADDR1}}^FS
+^FB1218,1,0,C,0
+^A0R,100,100^FD{{ADDR1}}^FS
 
 ^FX ==== 2nd line of Address ====
 ^FO550,40
 ^FB1200,1,0,C,0
-^A0R,80,80^FD{{ADDR2}}^FS
+^A0R,100,100^FD{{ADDR2}}^FS
 
 ^FX ==== Postcode ====
-^FO450,750
-^A0R,80,80^FD{{PCODE}}^FS
-
-^FX ==== Top Line: Deliver to REMOVED FROM LABEL====
-^FX^FO530,40
-^F^A0R,80,80^FDDeliver to:^FS
+^FO450,850
+^A0R,90,90^FD{{PCODE}}^FS
 
 ^FX ==== Second Line: Trolleys ====
 ^FO300,40
@@ -53,5 +49,11 @@
 
 ^FO40,350
 ^A0R,80,80^FD{{DDATE}}^FS
+
+^FX ==== DISPATCH VAN WITH LOGO GRAPHIC ====
+^FO170,425
+^FX === Centring instruction doesn't work ^FB812,1,0,C,0 ====
+^FX === Calculated a reasonable Field Origin of 170,425 ===
+^XGE:IMGTEMP.GRF,1,1^FS
 
 ^XZ

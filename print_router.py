@@ -25,7 +25,6 @@ LIST_FILES_POOL = {
     'misc': os.path.join(os.path.dirname(__file__), 'misc.json')
 }
 
-
 # ==========================================================================
 # INDUSTRIAL MONOCHROME 1-BIT ZEBRA HEX ENCODER SUBROUTINE
 # ==========================================================================
@@ -55,12 +54,14 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
             else:
                 img = img.convert('RGB')
 
-            # 2. 🚀 ERGONOMIC SCALE TRACK: Automatically resize small web icons up to crisp label dimensions
-            # Target width of 220px preserves layout clarity beautifully on 812-dot stock
-            target_width = 400
-            w_percent = (target_width / float(img.size[0]))
-            target_height = int((float(img.size[1]) * float(w_percent)))
-            img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+            # 2. 🚀 ERGONOMIC SCALE TRACK: Resize icons but preserve raw layout size for dispatch van
+            if image_filename.lower() != 'dispatch-van-90.png':
+                target_width = 400
+                w_percent = (target_width / float(img.size[0]))
+                target_height = int((float(img.size[1]) * float(w_percent)))
+                img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+            else:
+                print("🚚 Dispatch Van graphic recognized: Preserving native structural pixel boundaries.")
 
             # 3. Force high-contrast monochrome conversion layer
             monochrome_img = img.convert("1")
@@ -316,15 +317,24 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             if not target_cups_printer:
                 raise ValueError(f"Unknown printer color requested: {color}")
 
-            # 🚛 NEW ROUTINE FOR DISPATCH MODE LOGISTICS RUNS
+            # 🚛 EXPLICIT ROUTINE FOR DISPATCH MODE LOGISTICS RUNS
             if color == 'dispatch':
+                # Fire the automated pixel image loop for the pre-rotated dispatch van graphic
+                image_download_command = convert_image_to_zpl_graphic('dispatch-van-90.png')
+
                 # Check if this is a blank warehouse stock run bypassing context arrays
                 if payload.get('q') == 'BLANK_DISPATCH':
                     template_name = 'blankDispatchLabel.zpl'
                     template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
                     if os.path.exists(template_path):
                         with open(template_path, 'r') as file:
-                            final_zpl_payload = file.read()
+                            zpl_content = file.read()
+                        
+                        # Prepend the image download command to stash it in memory
+                        if image_download_command.strip() != "":
+                            final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
+                        else:
+                            final_zpl_payload = zpl_content
                     else:
                         final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
                 else:
@@ -342,19 +352,22 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                         zpl_content = zpl_content.replace('{{PCODE}}', m1)
                         
                         # 🔍 VERIFICATION PASS: Map out the user form entries explicitly
-                        zpl_content = zpl_content.replace('{{TRAYS}}', str(m2)) # Trays count number string
-                        zpl_content = zpl_content.replace('{{DDATE}}', str(m3)) # Formatted delivery date string
+                        zpl_content = zpl_content.replace('{{TRAYS}}', str(m2))
+                        zpl_content = zpl_content.replace('{{DDATE}}', str(m3))
                         
                         # 🔄 LOOP INJECTION SUBROUTINE: Extract current index counter maps
-                        # payload['year'] holds the current active trolley sequence string passed from app.js
                         zpl_content = zpl_content.replace('{{TRLY}}', str(year))
                         zpl_content = zpl_content.replace('{{TRLYS}}', str(payload.get('total_trolleys', '1')))
                         
-                        final_zpl_payload = zpl_content
+                        # Prepend the image download command to stash it in memory
+                        if image_download_command.strip() != "":
+                            final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
+                        else:
+                            final_zpl_payload = zpl_content
                     else:
                         final_zpl_payload = f"^XA^FO50,50^A0N,20,20^FDERROR: MISSING TEMPLATE {template_name}^XZ"
 
-            # 📝 NEW EXPLICIT ROUTINE FOR PLAIN LABELS MODE 
+            # 📝 EXPLICIT ROUTINE FOR PLAIN LABELS MODE 
             elif color == 'plain':
                 template_name = 'PlainLabel.zpl'
                 template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)

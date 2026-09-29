@@ -2583,12 +2583,30 @@ function renderDispatchCalendarGrid() {
 function handleCalendarDaySelection(dateString) {
     if (!dateString) return;
     
-    console.log("🗓️ Date Selected: [" + dateString + "]. Initiating automatic printing execution workflow.");
-    currentDispatchDateValue = dateString;
+    console.log("🗓️ Date tapped on screen: [" + dateString + "]");
 
-    // 1. Pop the selection metric onto our scoreboard readout row instantly
+    // Extract the components from the tapped string (e.g., "MON" and "28/09")
+    const parts = dateString.split(" ");
+    const shortDay = parts[0] ? parts[0].toUpperCase() : "";
+    const dateAndMonth = parts[1] || "";
+
+    // Map the short onscreen day names to the full day text for the printed label
+    let fullDayName = shortDay;
+    if (shortDay === "MON") fullDayName = "MONDAY";
+    else if (shortDay === "TUE") fullDayName = "TUESDAY";
+    else if (shortDay === "WED") fullDayName = "WEDNESDAY";
+    else if (shortDay === "THU") fullDayName = "THURSDAY";
+    else if (shortDay === "FRI") fullDayName = "FRIDAY";
+    else if (shortDay === "SAT") fullDayName = "SATURDAY";
+    else if (shortDay === "SUN") fullDayName = "SUNDAY";
+
+    // 🎯 RECONSTRUCT EXACT PAYLOAD SPECIFICATION: FULLDAYNAME dd/mm (e.g. MONDAY 28/09)
+    currentDispatchDateValue = fullDayName + " " + dateAndMonth;
+    console.log("🚀 Expanded text payload for driver label: [" + currentDispatchDateValue + "]");
+
+    // 1. Pop the short date string onto our scoreboard layout text row instantly
     const sbDispDay = document.getElementById('scoreboard-display-day');
-    if (sbDispDay) sbDispDay.textContent = currentDispatchDateValue;
+    if (sbDispDay) sbDispDay.textContent = dateString;
 
     // 2. Hide the calendar overlay box immediately to focus on print feedback
     const dateModal = document.getElementById('dispatch-calendar-modal');
@@ -2602,7 +2620,7 @@ function handleCalendarDaySelection(dateString) {
         lastExecutedPrintPayload.year = currentDispatchTrolleysValue; // Trolleys value maps to trolley count
         lastExecutedPrintPayload.total_trolleys = currentDispatchTrolleysValue;
         lastExecutedPrintPayload.m2 = currentDispatchTraysValue;      // Trays value maps to trays count
-        lastExecutedPrintPayload.m3 = currentDispatchDateValue;       // Date text string maps to delivery date
+        lastExecutedPrintPayload.m3 = currentDispatchDateValue;       // Full text day string maps to delivery date
     }
 
     // 4. AUTOMATIC PRINT INITIATION: Fire print job instantly based on the Trolleys volume count
@@ -2638,13 +2656,11 @@ function handleCalendarDaySelection(dateString) {
         currentActiveWorkspaceMode = "";
         
         // 🏠 FORCE SCREEN SWITCH BACK TO HOME SCREEN NATIVELY
-        // Invokes your core screen workspace router function (e.g. switchScreen(1))
         if (typeof switchScreen === 'function') {
             switchScreen(1); // Return directly to Home Screen 1
         } else if (typeof showScreen === 'function') {
             showScreen('screen1');
         } else {
-            // Fallback: programmatic DOM manipulation if standard router names differ
             const screen5View = document.getElementById('screen5');
             const screen1View = document.getElementById('screen1');
             if (screen5View) screen5View.style.display = 'none';
