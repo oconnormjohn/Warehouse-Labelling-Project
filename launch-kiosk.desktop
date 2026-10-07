@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=Relaunch Kiosk
+Comment=Launches the Production Kiosk System
+Exec=/home/dcp-admin/Desktop/kiosk-system/launch-kiosk.sh
+Icon=chromium
+Categories=Utility;

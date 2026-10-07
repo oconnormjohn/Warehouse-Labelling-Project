@@ -1,0 +1,7 @@
+^XA
+
+^FO10,10
+^A0,20,20
+^FDHELLO ZEBRA^FS
+
+^XZ

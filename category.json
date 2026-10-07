@@ -45,11 +45,6 @@
     "image_file": "FRUIT.PNG"
   },
   {
-    "text1": "FRUIT",
-    "text2": "JUICE",
-    "image_file": "FRUIT-JUICE.PNG"
-  },
-  {
     "text1": "INSTANT",
     "text2": "MEALS",
     "image_file": "INSTANT-MEALS.PNG"
@@ -86,7 +81,7 @@
   },
   {
     "text1": "POP-SQUASH",
-    "text2": "",
+    "text2": "JUICE",
     "image_file": "POP-SQUASH.PNG"
   },
   {
@@ -173,5 +168,10 @@
     "text1": "",
     "text2": "",
     "image_file": "blank.PNG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "blank.jpg"
   }
 ]

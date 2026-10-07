@@ -13,9 +13,9 @@
 ^FO700,60
 ^A0R,60,60^FDDeliver to:^FS
 
-^FX ==== Second Line: Trolleys ====
+^FX ==== Second Line: Dollies ====
 ^FO300,40
-^A0R,80,80^FDTrolley^FS
+^A0R,80,80^FDDolly^FS
 
 ^FO300,290
 ^A0R,80,80^FD____^FS
@@ -47,3 +47,4 @@
 
 
 ^XZ
+

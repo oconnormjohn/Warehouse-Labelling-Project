@@ -1,45 +1,72 @@
+"""
+Production Label Dashboard - CUPS Print Router & Local Web Server
+Designed for Raspberry Pi Linux environments with physical Zebra label printers.
+"""
+
 import http.server
 import json
 import os
 import subprocess
-from PIL import Image  # 🚀 Injected hardware dependency: Image pixel conversion engine
 
-# Map the color tracking string straight to your local CUPS queues
+try:
+    from PIL import Image
+    HAS_PIL = True
+except ImportError:
+    HAS_PIL = False
+
+# Mapping of label colors and job types to local CUPS printer queues
 PRINTER_POOL = {
     'pink': 'pink_labels',
     'green': 'green_labels',
     'yellow': 'yellow_labels',
     'blue': 'blue_labels',
     'plain': 'plain_labels',
-    'dispatch': 'dispatch_labels'  # 🚛 Added dedicated dispatch hardware queue mapping
+    'dispatch': 'dispatch_labels'
 }
 
-# Direct target pathway on the Pi for persistent state synchronization layout
-CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
-# Registered data matrix pathways for dynamic configuration lists
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE_PATH = os.path.join(BASE_DIR, 'config.json')
+
+# Persistent list data stores
 LIST_FILES_POOL = {
-    'category': os.path.join(os.path.dirname(__file__), 'category.json'),
-    'toiletries': os.path.join(os.path.dirname(__file__), 'toiletries.json'),
-    'christmas': os.path.join(os.path.dirname(__file__), 'christmas.json'),
-    'dispatch': os.path.join(os.path.dirname(__file__), 'dispatch.json'),
-    'misc': os.path.join(os.path.dirname(__file__), 'misc.json')
+    'category': os.path.join(BASE_DIR, 'category.json'),
+    'toiletries': os.path.join(BASE_DIR, 'toiletries.json'),
+    'christmas': os.path.join(BASE_DIR, 'christmas.json'),
+    'dispatch': os.path.join(BASE_DIR, 'dispatch.json'),
+    'misc': os.path.join(BASE_DIR, 'misc.json')
 }
 
-# ==========================================================================
-# INDUSTRIAL MONOCHROME 1-BIT ZEBRA HEX ENCODER SUBROUTINE
-# ==========================================================================
+# Standard capacity caps per list type
+LIST_CAPACITY_LIMITS = {
+    'category': 35,
+    'toiletries': 14,
+    'christmas': 14,
+    'misc': 7,
+    'dispatch': 48
+}
+
+
 def convert_image_to_zpl_graphic(image_filename, base_dir=None):
     """
-    Opens a PNG or JPG file, flattens transparency layouts, automatically rescales 
-    web assets up to standard label dimensions, handles photometric inversion,
-    and returns a standard Zebra ~DG code download block.
+    Opens an image file (PNG/JPG), flattens transparency, rescales to standard label
+    dimensions, applies photometric inversion, and returns a Zebra ~DG graphic command.
     """
+    if not HAS_PIL:
+        return ""
+
     if base_dir is None:
-        base_dir = os.path.dirname(__file__)
+        base_dir = BASE_DIR
         
-    file_path = os.path.join(base_dir, 'label-graphics', image_filename.lower())
-    
-    # Fallback to standard blank file if image is missing
+    file_path = os.path.join(base_dir, 'label-graphics', image_filename)
+    if not os.path.exists(file_path):
+        file_path = os.path.join(base_dir, 'label-graphics', image_filename.lower())
+    if not os.path.exists(file_path):
+        graphics_dir = os.path.join(base_dir, 'label-graphics')
+        if os.path.exists(graphics_dir):
+            for fname in os.listdir(graphics_dir):
+                if fname.lower() == image_filename.lower():
+                    file_path = os.path.join(graphics_dir, fname)
+                    break
     if not os.path.exists(file_path):
         file_path = os.path.join(base_dir, 'label-graphics', 'blank.png')
         if not os.path.exists(file_path):
@@ -47,23 +74,21 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
 
     try:
         with Image.open(file_path) as img:
-            # 1. Flatten transparency chains inside web PNG files elegantly
+            # Flatten transparency for web PNG assets
             if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
                 background = Image.new("RGBA", img.size, (255, 255, 255, 255))
                 img = Image.alpha_composite(background, img.convert('RGBA')).convert('RGB')
             else:
                 img = img.convert('RGB')
 
-            # 2. 🚀 ERGONOMIC SCALE TRACK: Resize icons but preserve raw layout size for dispatch van
-            if image_filename.lower() != 'dispatch-van-90.png':
+            # Scale icons to 400px width while preserving native dimensions for dispatch graphics
+            if image_filename.lower() not in ('dispatch-van-90.png', 'durham and sunderland foodbank logo.png'):
                 target_width = 400
-                w_percent = (target_width / float(img.size[0]))
-                target_height = int((float(img.size[1]) * float(w_percent)))
+                w_percent = target_width / float(img.size[0])
+                target_height = int(float(img.size[1]) * float(w_percent))
                 img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
-            else:
-                print("🚚 Dispatch Van graphic recognized: Preserving native structural pixel boundaries.")
 
-            # 3. Force high-contrast monochrome conversion layer
+            # High-contrast 1-bit monochrome conversion
             monochrome_img = img.convert("1")
             width_px, height_px = monochrome_img.size
             
@@ -73,7 +98,7 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
             hex_data = []
             pixel_bytes = monochrome_img.tobytes()
             
-            # 4. 🚀 PHOTOMETRIC BIT INVERSION: Flip every byte (0xFF - byte) to fix Black-is-White inversion
+            # Photometric bit inversion (0xFF - byte) for Zebra printhead polarity
             for i in range(0, len(pixel_bytes), bytes_per_row):
                 row_slice = pixel_bytes[i:i + bytes_per_row]
                 inverted_row = bytes([255 - b for b in row_slice])
@@ -81,38 +106,53 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
 
             return f"~DGE:IMGTEMP.GRF,{total_bytes},{bytes_per_row},{''.join(hex_data)}"
     except Exception as ex:
-        print(f"❌ Python pixel graphic processing loop crashed: {ex}")
+        print(f"Image to ZPL conversion error: {ex}")
         return ""
 
+
 class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
-    
-    # Unified Web Asset Router (HTML, CSS, JS, and graphics folders)
+    """HTTP request handler for label printing, system configuration, and status monitoring."""
+
+    def _set_cors_headers(self, status=200, content_type='application/json'):
+        self.send_response(status)
+        self.send_header('Content-type', content_type)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS, GET')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+
+    def do_OPTIONS(self):
+        self._set_cors_headers()
+
+    def send_json(self, data, status=200):
+        self._set_cors_headers(status=status, content_type='application/json')
+        self.wfile.write(json.dumps(data).encode('utf-8'))
+
+    # =========================================================================
+    # GET ENDPOINTS & STATIC ASSET ROUTING
+    # =========================================================================
     def do_GET(self):
-        # API Intercept Layer: Check if frontend is reading a multi-field list file
+        # API: Fetch list database contents
         if self.path.startswith('/api/list?name='):
-            # 🔧 RESTORED SAFE INDEX STRING SPLITTING
-            list_key = self.path.split('name=')[1].split('&')[0].lower()
+            raw_query = self.path.split('name=')[1]
+            list_key = raw_query.split('&')[0].lower() if '&' in raw_query else raw_query.lower()
             target_path = LIST_FILES_POOL.get(list_key)
             
             if not target_path:
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(b"Invalid list file resource requested.")
+                self.send_json({"error": "Invalid list resource requested"}, status=400)
                 return
-                
-            # Define structural schema capacities matching list length specifications
-            max_boundary_caps = { 'category': 35, 'toiletries': 14, 'christmas': 14, 'misc': 7, 'dispatch': 48 }
-            current_target_cap = max_boundary_caps.get(list_key, 35)
-            
+
+            current_target_cap = LIST_CAPACITY_LIMITS.get(list_key, 35)
             data_payload = []
+
             if os.path.exists(target_path):
                 try:
-                    with open(target_path, 'r') as f:
+                    with open(target_path, 'r', encoding='utf-8') as f:
                         data_payload = json.load(f)
                 except Exception:
                     data_payload = []
             
-            # If the file on disk is completely fresh or raw text format, pad it out seamlessly with multi-field fallback objects
+            # Ensure output is a padded array matching the capacity cap
             if not isinstance(data_payload, list) or len(data_payload) == 0:
                 data_payload = []
                 for _ in range(current_target_cap):
@@ -122,275 +162,201 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                         "image_file": "" if list_key == 'dispatch' else "blank.jpg"
                     })
                     
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps(data_payload).encode('utf-8'))
+            self.send_json(data_payload)
             return
 
-        # 📊 LIVE STATUS INTERCEPT: Read exact software queue states natively
+        # API: Query live CUPS printer queues
         if self.path == '/api/printers/status':
-            status_report = {"pink": False, "green": False, "yellow": False, "blue": False, "plain": False, "dispatch": False}
+            status_report = {
+                "pink": False, "green": False, "yellow": False,
+                "blue": False, "plain": False, "dispatch": False
+            }
 
             try:
-                # Query the exact standard status matrix (Instantaneous response)
                 queue_result = subprocess.run(['lpstat', '-p'], capture_output=True, text=True, check=True)
                 queue_output = queue_result.stdout.lower()
                 
-                # Check individual line states. If a printer fails or is off, it remains disabled/paused
-                for line in queue_output.split('\n'):
-                    if "pink_labels" in line and "disabled" not in line and "paused" not in line:
-                        status_report["pink"] = True
-                    if "green_labels" in line and "disabled" not in line and "paused" not in line:
-                        status_report["green"] = True
-                    if "yellow_labels" in line and "disabled" not in line and "paused" not in line:
-                        status_report["yellow"] = True
-                    if "blue_labels" in line and "disabled" not in line and "paused" not in line:
-                        status_report["blue"] = True
-                    if "plain_labels" in line and "disabled" not in line and "paused" not in line:
-                        status_report["plain"] = True
-                    if "dispatch_labels" in line and "disabled" not in line and "paused" not in line:
-                        status_report["dispatch"] = True
-
+                for color, queue_name in PRINTER_POOL.items():
+                    # Queue is considered online if present and not disabled or paused
+                    if queue_name in queue_output:
+                        for line in queue_output.split('\n'):
+                            if queue_name in line and "disabled" not in line and "paused" not in line:
+                                status_report[color] = True
             except Exception as parse_ex:
-                print(f"⚠️ Status check parse failed: {parse_ex}")
+                print(f"Printer status query failed (CUPS offline): {parse_ex}")
 
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps(status_report).encode('utf-8'))
+            self.send_json(status_report)
             return
 
-        # 🛠️ TRUTHFUL ADMIN OVERRIDE: Manually resets queues based on strict hardware presence
+        # API: Verify and recover hardware printer queues
         if self.path == '/api/printers/reset':
             try:
-                # Query standard CUPS configuration settings to extract what is registered
                 lpstat_v_result = subprocess.run(['lpstat', '-v'], capture_output=True, text=True, check=True)
                 v_output = lpstat_v_result.stdout.lower()
 
                 queues_to_enable = []
                 queues_to_disable = []
 
-                # Sift through the queues line-for-line to see which paths are broken or unplugged
                 for color, queue_name in PRINTER_POOL.items():
-                    # If a printer is switched off or disconnected, CUPS flags its string line with standard errors
-                    # Cross-reference if it is safely mapped to a valid live hardware port path entry string
                     if queue_name in v_output and "usb" in [line for line in v_output.split('\n') if queue_name in line]:
                         queues_to_enable.append(queue_name)
                     else:
                         queues_to_disable.append(queue_name)
 
-                # 🚀 EXECUTE BALANCED TRUTH SWEEP: Wakes the live, explicitly shuts down the dead
                 if queues_to_enable:
                     subprocess.run(f"sudo /usr/sbin/cupsenable {' '.join(queues_to_enable)}", shell=True, capture_output=True)
                 if queues_to_disable:
-                    # Explicitly push broken hardware lines down into error states to reflect accurately on screen
                     subprocess.run(f"sudo /usr/sbin/cupsdisable {' '.join(queues_to_disable)}", shell=True, capture_output=True)
 
-                response_payload = {"status": "success", "message": "Truthful state synchronization complete"}
-                self.send_response(200)
+                self.send_json({"status": "success", "message": "Printer status synchronization complete"})
             except Exception as ex:
-                response_payload = {"status": "error", "message": str(ex)}
-                self.send_response(500)
-
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps(response_payload).encode('utf-8'))
+                self.send_json({"status": "error", "message": str(ex)}, status=500)
             return
 
-        # 📂 STATIC FILE ROUTER: Streams UI files and graphics to Firefox
+        # Static file routing for web interface and graphics
         try:
-            # Drop any query string parameters (like ?v=4) cleanly to find the pure file path string
-            raw_path_string = str(self.path).split('?')[0]
-            if raw_path_string == '/':
-                raw_path_string = '/index.html'
+            raw_path = str(self.path).split('?')[0]
+            if raw_path == '/':
+                raw_path = '/index.html'
 
-            # Build absolute local path targeting the shared directory structures cleanly
-            local_file_path = os.path.join(os.path.dirname(__file__), raw_path_string.lstrip('/'))
+            local_file_path = os.path.join(BASE_DIR, raw_path.lstrip('/'))
 
             if os.path.exists(local_file_path) and os.path.isfile(local_file_path):
-                # Map standard file extensions natively to correct MIME headers
                 content_type = "text/plain"
                 if local_file_path.endswith('.html'): content_type = "text/html"
                 elif local_file_path.endswith('.css'): content_type = "text/css"
                 elif local_file_path.endswith('.js'): content_type = "application/javascript"
+                elif local_file_path.endswith('.json'): content_type = "application/json"
                 elif local_file_path.endswith('.png'): content_type = "image/png"
                 elif local_file_path.endswith('.jpg') or local_file_path.endswith('.jpeg'): content_type = "image/jpeg"
 
-                self.send_response(200)
-                self.send_header('Content-type', content_type)
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-
-                # Stream the binary contents straight down the network socket pipeline
+                self._set_cors_headers(status=200, content_type=content_type)
                 with open(local_file_path, 'rb') as asset_file:
                     self.wfile.write(asset_file.read())
                 return
             else:
-                # Return standard clean 404 block if files are missing from the folder
                 self.send_response(404)
                 self.end_headers()
-                self.wfile.write(b"Resource file not found on disk storage.")
+                self.wfile.write(b"Resource file not found on disk.")
                 return
         except Exception as serve_ex:
-            print(f"❌ Static server error: {serve_ex}")
+            print(f"Static file server error: {serve_ex}")
             self.send_response(500)
             self.end_headers()
-            return
 
-    # Configure CORS Safety Headers explicitly so Firefox doesn't block requests
-    def _set_headers(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS, GET')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
-
-    def do_OPTIONS(self):
-        self._set_headers()
-
-    # Process the incoming print job data payload or configuration syncing tasks
+    # =========================================================================
+    # POST ENDPOINTS & PRINT ROUTING
+    # =========================================================================
     def do_POST(self):
         try:
-            content_length = int(self.headers['Content-Length'])
+            content_length = int(self.headers.get('Content-Length', 0))
             post_data = self.rfile.read(content_length)
             payload = json.loads(post_data.decode('utf-8'))
 
-            # CHECK ROUTING POINT: Handle configuration tasks safely with flexible path boundary matching
+            # Configuration save
             if self.path.rstrip('/') == '/api/config':
-                with open(CONFIG_FILE_PATH, 'w') as config_file:
+                with open(CONFIG_FILE_PATH, 'w', encoding='utf-8') as config_file:
                     json.dump(payload, config_file, indent=2)
-                self._set_headers()
-                self.wfile.write(json.dumps({"status": "success", "message": "Config saved successfully"}).encode('utf-8'))
+                self.send_json({"status": "success", "message": "Config saved successfully"})
                 return
             
-            # API Intercept Layer: Handle saving modified arrays back to disk
+            # List data save
             if self.path.startswith('/api/list/save?name='):
-                # 🛠️ CRASH PROOF LIST KEY PARSER
-                # Safely split at 'name=' and extract the string regardless of trailing parameters
-                raw_query_string = self.path.split('name=')[1]
-                list_key = raw_query_string.split('&')[0].lower() if '&' in raw_query_string else raw_query_string.lower()
+                raw_query = self.path.split('name=')[1]
+                list_key = raw_query.split('&')[0].lower() if '&' in raw_query else raw_query.lower()
                 target_path = LIST_FILES_POOL.get(list_key)
                 
                 if not target_path:
-                    self.send_response(400)
-                    self._set_headers()
-                    self.wfile.write(json.dumps({"status": "error", "message": "Invalid list destination"}).encode('utf-8'))
+                    self.send_json({"status": "error", "message": "Invalid list destination"}, status=400)
                     return
                     
-                with open(target_path, 'w') as config_file:
+                with open(target_path, 'w', encoding='utf-8') as config_file:
                     json.dump(payload, config_file, indent=2)
                     
-                self._set_headers()
-                self.wfile.write(json.dumps({"status": "success", "message": f"{list_key} list updated on disk"}).encode('utf-8'))
+                self.send_json({"status": "success", "message": f"{list_key} list updated on disk"})
                 return
 
-            # STANDARD PRINT ROUTINE (Cleaned with list structural array checking)
+            # Print job processing
             color = payload.get('color', '').lower().strip() 
             cwrd1 = payload.get('cwrd1', '').strip()        
             cwrd2 = payload.get('cwrd2', '').strip()        
             q_num = str(payload.get('q', '')).strip()
             year  = str(payload.get('year', '')).strip()
 
-            # 🛠️ INTELLIGENT ROUTING CHECK: Parse month lists if they are arrays, otherwise pass as raw strings
             raw_m1 = payload.get('m1', ' ')
             raw_m2 = payload.get('m2', ' ')
             raw_m3 = payload.get('m3', ' ')
 
             if isinstance(raw_m1, list):
-                # Category multi-print month check loop array assignment pass
                 m1 = raw_m1[0] if len(raw_m1) > 0 else ' '
                 m2 = raw_m1[1] if len(raw_m1) > 1 else ' '
                 m3 = raw_m1[2] if len(raw_m1) > 2 else ' '
             else:
-                # Standard explicit plain string assignment pass for Dispatch and Plain modes
                 m1 = str(raw_m1).strip()
                 m2 = str(raw_m2).strip()
                 m3 = str(raw_m3).strip()
 
             target_cups_printer = PRINTER_POOL.get(color)
-
             if not target_cups_printer:
-                raise ValueError(f"Unknown printer color requested: {color}")
+                raise ValueError(f"Unknown printer color queue: {color}")
 
-            # 🚛 EXPLICIT ROUTINE FOR DISPATCH MODE LOGISTICS RUNS
+            # 1. Dispatch Labels Mode
             if color == 'dispatch':
-                # Fire the automated pixel image loop for the pre-rotated dispatch van graphic
-                image_download_command = convert_image_to_zpl_graphic('dispatch-van-90.png')
-
-                # Check if this is a blank warehouse stock run bypassing context arrays
-                if payload.get('q') == 'BLANK_DISPATCH':
-                    template_name = 'blankDispatchLabel.zpl'
-                    template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
+                if payload.get('q') == 'EFB_LABEL':
+                    image_download_command = convert_image_to_zpl_graphic('Durham and Sunderland Foodbank logo.png')
+                    template_filename = payload.get('m1', 'efb-box-A-label.zpl')
+                    template_path = os.path.join(BASE_DIR, 'ZPL', template_filename)
                     if os.path.exists(template_path):
-                        with open(template_path, 'r') as file:
-                            zpl_content = file.read()
-                        
-                        # Prepend the image download command to stash it in memory
-                        if image_download_command.strip() != "":
-                            final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
-                        else:
-                            final_zpl_payload = zpl_content
+                        with open(template_path, 'r', encoding='utf-8') as f:
+                            zpl_content = f.read()
+                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
+                    else:
+                        final_zpl_payload = f"^XA^FO50,50^A0N,20,20^FDERROR: MISSING EFB TEMPLATE {template_filename}^XZ"
+
+                elif payload.get('q') == 'BLANK_DISPATCH':
+                    image_download_command = convert_image_to_zpl_graphic('dispatch-van-90.png')
+                    template_path = os.path.join(BASE_DIR, 'ZPL', 'blankDispatchLabel.zpl')
+                    if os.path.exists(template_path):
+                        with open(template_path, 'r', encoding='utf-8') as f:
+                            zpl_content = f.read()
+                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
                     else:
                         final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING BLANK DISPATCH TEMPLATE^XZ"
                 else:
-                    # 🚚 ACTIVE DESTINATION RUN: Load your prepared dispatch template file
-                    template_name = 'dispatchLabel.zpl'
-                    template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
-                    
+                    image_download_command = convert_image_to_zpl_graphic('dispatch-van-90.png')
+                    template_path = os.path.join(BASE_DIR, 'ZPL', 'dispatchLabel.zpl')
                     if os.path.exists(template_path):
-                        with open(template_path, 'r') as file:
-                            zpl_content = file.read()
+                        with open(template_path, 'r', encoding='utf-8') as f:
+                            zpl_content = f.read()
                         
-                        # Execute baseline address and postcode substitutions
                         zpl_content = zpl_content.replace('{{ADDR1}}', cwrd1)
                         zpl_content = zpl_content.replace('{{ADDR2}}', cwrd2)
                         zpl_content = zpl_content.replace('{{PCODE}}', m1)
-                        
-                        # 🔍 VERIFICATION PASS: Map out the user form entries explicitly
                         zpl_content = zpl_content.replace('{{TRAYS}}', str(m2))
                         zpl_content = zpl_content.replace('{{DDATE}}', str(m3))
-                        
-                        # 🔄 LOOP INJECTION SUBROUTINE: Extract current index counter maps
                         zpl_content = zpl_content.replace('{{TRLY}}', str(year))
                         zpl_content = zpl_content.replace('{{TRLYS}}', str(payload.get('total_trolleys', '1')))
                         
-                        # Prepend the image download command to stash it in memory
-                        if image_download_command.strip() != "":
-                            final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
-                        else:
-                            final_zpl_payload = zpl_content
+                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
                     else:
-                        final_zpl_payload = f"^XA^FO50,50^A0N,20,20^FDERROR: MISSING TEMPLATE {template_name}^XZ"
+                        final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING DISPATCH TEMPLATE^XZ"
 
-            # 📝 EXPLICIT ROUTINE FOR PLAIN LABELS MODE 
+            # 2. Plain Labels Mode
             elif color == 'plain':
-                template_name = 'PlainLabel.zpl'
-                template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
-                
+                template_path = os.path.join(BASE_DIR, 'ZPL', 'PlainLabel.zpl')
                 if not os.path.exists(template_path):
-                    final_zpl_payload = f"^XA^FO50,50^A0N,40,40^FDERROR: MISSING TEMPLATE {template_name}^XZ"
+                    final_zpl_payload = "^XA^FO50,50^A0N,40,40^FDERROR: MISSING PLAIN TEMPLATE^XZ"
                 else:
-                    with open(template_path, 'r') as file:
-                        zpl_content = file.read()
+                    with open(template_path, 'r', encoding='utf-8') as f:
+                        zpl_content = f.read()
 
-                    # Execute standard textual handlebar placeholder modifications
                     zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
                     zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
 
-                    # Fire the automated pixel image 1-bit monochrome converter loop
                     image_download_command = convert_image_to_zpl_graphic(m1)
-
-                    if image_download_command.strip() != "":
-                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}"
-                    else:
-                        final_zpl_payload = zpl_content
+                    final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
             
-            # 🗓️ STANDARD FALLBACK ROUTINE FOR BASELINE CALENDAR YEARS STOCKS
+            # 3. Standard Rolling Calendar / Months Labels Mode
             else:
                 is_month_mode = (str(q_num).upper() == 'MM')
                 is_full_year  = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
@@ -403,87 +369,79 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                 else:
                     template_name = 'twoWordCategoryLabel.zpl' if is_two_word else 'oneWordCategoryLabel.zpl'
 
-                template_path = os.path.join(os.path.dirname(__file__), 'ZPL', template_name)
+                template_path = os.path.join(BASE_DIR, 'ZPL', template_name)
                 
                 if not os.path.exists(template_path):
-                    raise FileNotFoundError(f"Missing master ZPL template file: {template_name}")
+                    final_zpl_payload = f"^XA^FO50,50^A0N,30,30^FDERROR: MISSING TEMPLATE {template_name}^XZ"
+                else:
+                    with open(template_path, 'r', encoding='utf-8') as f:
+                        zpl_content = f.read()
 
-                with open(template_path, 'r') as file:
-                    zpl_content = file.read()
+                    zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
+                    zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
+                    zpl_content = zpl_content.replace('{{Q}}', str(q_num))
+                    zpl_content = zpl_content.replace('{{YR}}', str(year))
+                    zpl_content = zpl_content.replace('{{M1}}', m1 if m1 != 'x' else ' ')
+                    zpl_content = zpl_content.replace('{{M2}}', m2 if m2 != 'x' else ' ')
+                    zpl_content = zpl_content.replace('{{M3}}', m3 if m3 != 'x' else ' ')
+                    zpl_content = zpl_content.replace('{{MONTH}}', m1)
 
-                # Execute string placeholder token substitutions
-                zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
-                zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
-                zpl_content = zpl_content.replace('{{Q}}', str(q_num))
-                zpl_content = zpl_content.replace('{{YR}}', str(year))
-                zpl_content = zpl_content.replace('{{M1}}', m1 if m1 != 'x' else ' ')
-                zpl_content = zpl_content.replace('{{M2}}', m2 if m2 != 'x' else ' ')
-                zpl_content = zpl_content.replace('{{M3}}', m3 if m3 != 'x' else ' ')
-                zpl_content = zpl_content.replace('{{MONTH}}', m1)
+                    final_zpl_payload = zpl_content
 
-                final_zpl_payload = zpl_content
+            # Write temporary spool file and send to CUPS
+            temp_print_file = os.path.join(BASE_DIR, 'temp_print_job.zpl')
+            with open(temp_print_file, 'w', encoding='utf-8') as f:
+                f.write(final_zpl_payload)
 
-            # Write out a temporary file to deliver to the physical queue execution pipeline
-            temp_print_file = os.path.join(os.path.dirname(__file__), 'temp_print_job.zpl')
-            with open(temp_print_file, 'w') as file:
-                file.write(final_zpl_payload)
-
-            # Fire terminal command directly into the Linux CUPS system layer
-            print_command = ['lp', '-d', target_cups_printer, temp_print_file]
-            
-            # 🛠️ PROACTIVE AUTO-RECOVERY: Always unpause the target queue before sending the job
-            # This handles the silent CUPS pause blocks without waiting for an error code
+            # Proactively unpause queue before printing
             try:
-                recovery_command = f'sudo /usr/sbin/cupsenable {target_cups_printer}'
-                subprocess.run(recovery_command, shell=True, capture_output=True, text=True)
-                print(f"🛠️ Proactively unpaused {target_cups_printer} queue.")
+                recovery_cmd = f'sudo /usr/sbin/cupsenable {target_cups_printer}'
+                subprocess.run(recovery_cmd, shell=True, capture_output=True, text=True)
             except Exception as e:
-                print(f"⚠️ Recovery warning: Could not verify queue state: {e}")
+                print(f"Warning: could not verify queue state: {e}")
 
+            # Hand off to lp command
+            print_command = ['lp', '-d', target_cups_printer, temp_print_file]
             try:
-                # Execute standard print call now that the path is cleared
                 subprocess.run(print_command, capture_output=True, text=True, check=True)
-                print(f"🎉 Job cleanly handed off to {target_cups_printer} queue.")
             except subprocess.CalledProcessError as lp_ex:
-                print(f"❌ Critical failure routing to {target_cups_printer}: {lp_ex.stderr}")
+                print(f"Critical failure routing to {target_cups_printer}: {lp_ex.stderr}")
                 raise lp_ex
+            finally:
+                if os.path.exists(temp_print_file):
+                    os.remove(temp_print_file)
 
-            if os.path.exists(temp_print_file):
-                os.remove(temp_print_file)
-
-            # Return success confirmation payload back to Firefox interface
-            self._set_headers()
-            response = {"status": "success", "message": f"Job routed to {target_cups_printer}"}
-            self.wfile.write(json.dumps(response).encode('utf-8'))
+            self.send_json({"status": "success", "message": f"Job routed to {target_cups_printer}"})
 
         except Exception as e:
-            self._set_headers()
-            self.send_response(500)
-            error_response = {"status": "error", "message": str(e)}
-            self.wfile.write(json.dumps(error_response).encode('utf-8'))
+            self.send_json({"status": "error", "message": str(e)}, status=500)
+
 
 def run_server(port=8080):
+    """Initializes default configuration file if absent and starts HTTP daemon."""
     if not os.path.exists(CONFIG_FILE_PATH):
         default_config = {
             "version": "1.1.0",
             "isFourthYearReleased": False,
             "showPrintConfirmation": True,
-            "securityPin": "1234"
+            "securityPin": "1234",
+            "shortDatePeriod": 1,
+            "isDemoModeActive": False
         }
         try:
-            with open(CONFIG_FILE_PATH, 'w') as f:
+            with open(CONFIG_FILE_PATH, 'w', encoding='utf-8') as f:
                 json.dump(default_config, f, indent=2)
-            print(f"📁 Created default persistent state configuration layer file: config.json")
+            print("Initialized default configuration file: config.json")
         except Exception as e:
-            print(f"⚠️ Warning: Could not write default layout configurations file: {e}")
+            print(f"Warning: Could not create default config.json: {e}")
 
     server_address = ('', port)
     httpd = http.server.HTTPServer(server_address, PrintRouterHandler)
-    print(f"🚀 Print Router Server active on Pi port {port}...")
+    print(f"Print Router Daemon listening on port {port}...")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print("\n🛑 Shutting down print service daemon gracefully.")
+        print("\nShutting down Print Router Daemon.")
         httpd.server_close()
 
 

@@ -23,9 +23,9 @@
 ^FO450,850
 ^A0R,90,90^FD{{PCODE}}^FS
 
-^FX ==== Second Line: Trolleys ====
+^FX ==== Second Line: Dolliess ====
 ^FO300,40
-^A0R,80,80^FDTrolley^FS
+^A0R,80,80^FDDolly^FS
 
 ^FO300,300
 ^A0R,100,100^FD{{TRLY}}^FS
