@@ -82,7 +82,7 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
                 img = img.convert('RGB')
 
             # Scale icons to 400px width while preserving native dimensions for dispatch graphics
-            if image_filename.lower() not in ('dispatch-van-90.png', 'durham and sunderland foodbank logo.png'):
+            if image_filename.lower() not in ('dispatch-van-90.png', 'durham and sunderland foodbank logo.png', 'fb-logo90.png'):
                 target_width = 400
                 w_percent = target_width / float(img.size[0])
                 target_height = int(float(img.size[1]) * float(w_percent))
@@ -300,20 +300,23 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
             if not target_cups_printer:
                 raise ValueError(f"Unknown printer color queue: {color}")
 
-            # 1. Dispatch Labels Mode
-            if color == 'dispatch':
-                if payload.get('q') == 'EFB_LABEL':
-                    image_download_command = convert_image_to_zpl_graphic('Durham and Sunderland Foodbank logo.png')
-                    template_filename = payload.get('m1', 'efb-box-A-label.zpl')
-                    template_path = os.path.join(BASE_DIR, 'ZPL', template_filename)
-                    if os.path.exists(template_path):
-                        with open(template_path, 'r', encoding='utf-8') as f:
-                            zpl_content = f.read()
-                        final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
-                    else:
-                        final_zpl_payload = f"^XA^FO50,50^A0N,20,20^FDERROR: MISSING EFB TEMPLATE {template_filename}^XZ"
+            # 1. EFB Labels Mode (Single label routed to plain_labels printer)
+            if payload.get('q') == 'EFB_LABEL':
+                target_cups_printer = PRINTER_POOL.get('plain')
+                logo_filename = payload.get('m2') or 'fb-logo90.png'
+                image_download_command = convert_image_to_zpl_graphic(logo_filename)
+                template_filename = payload.get('m1') or 'efb-label.zpl'
+                template_path = os.path.join(BASE_DIR, 'ZPL', template_filename)
+                if os.path.exists(template_path):
+                    with open(template_path, 'r', encoding='utf-8') as f:
+                        zpl_content = f.read()
+                    final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
+                else:
+                    final_zpl_payload = f"^XA^FO50,50^A0N,20,20^FDERROR: MISSING EFB TEMPLATE {template_filename}^XZ"
 
-                elif payload.get('q') == 'BLANK_DISPATCH':
+            # 2. Dispatch Labels Mode
+            elif color == 'dispatch':
+                if payload.get('q') == 'BLANK_DISPATCH':
                     image_download_command = convert_image_to_zpl_graphic('dispatch-van-90.png')
                     template_path = os.path.join(BASE_DIR, 'ZPL', 'blankDispatchLabel.zpl')
                     if os.path.exists(template_path):
@@ -341,7 +344,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     else:
                         final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING DISPATCH TEMPLATE^XZ"
 
-            # 2. Plain Labels Mode
+            # 3. Plain Labels Mode
             elif color == 'plain':
                 template_path = os.path.join(BASE_DIR, 'ZPL', 'PlainLabel.zpl')
                 if not os.path.exists(template_path):
@@ -356,7 +359,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     image_download_command = convert_image_to_zpl_graphic(m1)
                     final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
             
-            # 3. Standard Rolling Calendar / Months Labels Mode
+            # 4. Standard Rolling Calendar / Months Labels Mode
             else:
                 is_month_mode = (str(q_num).upper() == 'MM')
                 is_full_year  = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])

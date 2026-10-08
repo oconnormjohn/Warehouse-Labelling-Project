@@ -1,10 +1,5 @@
 [
   {
-    "text1": "BABY ITEMS",
-    "text2": "",
-    "image_file": "BABY-ITEMS.PNG"
-  },
-  {
     "text1": "BUBBLE",
     "text2": "BATH",
     "image_file": "BUBBLE-BATH.PNG"
@@ -18,11 +13,6 @@
     "text1": "DEODORANT",
     "text2": "",
     "image_file": "DEODORANT.PNG"
-  },
-  {
-    "text1": "HOUSEHOLD",
-    "text2": "ITEMS",
-    "image_file": "HOUSEHOLD.PNG"
   },
   {
     "text1": "SHAMPOO",
@@ -55,6 +45,16 @@
     "image_file": "TOILETRIES.JPG"
   },
   {
+    "text1": "OIL OF OLAY",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
+    "text1": "",
+    "text2": "",
+    "image_file": "TOILETRIES.JPG"
+  },
+  {
     "text1": "",
     "text2": "",
     "image_file": "TOILETRIES.JPG"
@@ -67,6 +67,6 @@
   {
     "text1": "",
     "text2": "",
-    "image_file": "blank.jpg"
+    "image_file": "TOILETRIES.JPG"
   }
 ]

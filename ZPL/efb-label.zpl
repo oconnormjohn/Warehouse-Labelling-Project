@@ -1,25 +1,20 @@
 ^XA
 
 ^FX ==== FOODBANK LOGO ====
-^FX === Calculate a reasonable Field Origin ~ 15,200 ====
-^FO150,680^ILE:IMGTEMP.GRF,1,1^FS
+^FO550,35^ILE:IMGTEMP.GRF,1,1^FS
 
-^FX ==== Top Line: EFB  ====
-^FO500,40
-^A0R,40,55^FDEMERGENCY FOOD BOX^FS
 
-^FX ==== Middle Line: Weight  ====
-^FO400,20
-^A0R,40,40^FDWeight (Kg):^FS
+^FO450,30
+^A0R,75,75^FDWEIGHT^FS
 
-^FO300,20
-^A0R,80,80^FD______________^FS
+^FO300,30
+^A0R,80,80^FD___________ Kg^FS
 
-^FX ==== Bottom Line: Expiry Date ====
-^FO200,20
-^A0R,40,40^FDUse by date:^FS
 
-^FO50,20
+^FO200,30
+^A0R,60,60^FDUse by date^FS
+
+^FO40,30
 ^A0R,80,80^FD______________^FS
 
 ^XZ

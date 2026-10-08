@@ -5,7 +5,7 @@ killall chromium
 killall firefox
 
 # 2. Start the Python print server daemon silently in the background
-python3 ~/shared/warehouse-label-kiosk/print_router.py &
+python3 ~/shared/test-warehouse-label-kiosk/print_router.py &
 
 # 3. Give the background server 2 seconds to warm up
 sleep 2
