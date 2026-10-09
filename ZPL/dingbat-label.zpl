@@ -1,0 +1,7 @@
+^XA
+
+
+^FO5,30^XGE:IMGTEMP.GRF,1,1^FS
+
+
+^XZ

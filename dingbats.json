@@ -1,0 +1,2564 @@
+[
+  {
+    "day": 1,
+    "puzzle_text": "STAND / I",
+    "answer_text": "I UNDERSTAND",
+    "puzzle_image": "dingbat_001_puzzle.png",
+    "answer_image": "dingbat_001_answer.png"
+  },
+  {
+    "day": 2,
+    "puzzle_text": "M_CE M_CE M_CE",
+    "answer_text": "THREE BLIND MICE",
+    "puzzle_image": "dingbat_002_puzzle.png",
+    "answer_image": "dingbat_002_answer.png"
+  },
+  {
+    "day": 3,
+    "puzzle_text": "[ SAND ]",
+    "answer_text": "SANDBOX",
+    "puzzle_image": "dingbat_003_puzzle.png",
+    "answer_image": "dingbat_003_answer.png"
+  },
+  {
+    "day": 4,
+    "puzzle_text": "R | E | A | D | I | N | G",
+    "answer_text": "READING BETWEEN THE LINES",
+    "puzzle_image": "dingbat_004_puzzle.png",
+    "answer_image": "dingbat_004_answer.png"
+  },
+  {
+    "day": 5,
+    "puzzle_text": "HISTORY HISTORY HISTORY",
+    "answer_text": "HISTORY REPEATS ITSELF",
+    "puzzle_image": "dingbat_005_puzzle.png",
+    "answer_image": "dingbat_005_answer.png"
+  },
+  {
+    "day": 6,
+    "puzzle_text": "MIND / MATTER",
+    "answer_text": "MIND OVER MATTER",
+    "puzzle_image": "dingbat_006_puzzle.png",
+    "answer_image": "dingbat_006_answer.png"
+  },
+  {
+    "day": 7,
+    "puzzle_text": "HEAD / HEELS",
+    "answer_text": "HEAD OVER HEELS",
+    "puzzle_image": "dingbat_007_puzzle.png",
+    "answer_image": "dingbat_007_answer.png"
+  },
+  {
+    "day": 8,
+    "puzzle_text": "TIMING  TIM ING",
+    "answer_text": "SPLIT SECOND TIMING",
+    "puzzle_image": "dingbat_008_puzzle.png",
+    "answer_image": "dingbat_008_answer.png"
+  },
+  {
+    "day": 9,
+    "puzzle_text": "CYCLE CYCLE CYCLE",
+    "answer_text": "TRICYCLE",
+    "puzzle_image": "dingbat_009_puzzle.png",
+    "answer_image": "dingbat_009_answer.png"
+  },
+  {
+    "day": 10,
+    "puzzle_text": "NO T_RN",
+    "answer_text": "NO U-TURN",
+    "puzzle_image": "dingbat_010_puzzle.png",
+    "answer_image": "dingbat_010_answer.png"
+  },
+  {
+    "day": 11,
+    "puzzle_text": "KNEE / LIGHTS",
+    "answer_text": "NEON LIGHTS",
+    "puzzle_image": "dingbat_011_puzzle.png",
+    "answer_image": "dingbat_011_answer.png"
+  },
+  {
+    "day": 12,
+    "puzzle_text": "TOUCH (DOWN)",
+    "answer_text": "TOUCHDOWN",
+    "puzzle_image": "dingbat_012_puzzle.png",
+    "answer_image": "dingbat_012_answer.png"
+  },
+  {
+    "day": 13,
+    "puzzle_text": "POT  OOOOOOOO",
+    "answer_text": "POTATOES",
+    "puzzle_image": "dingbat_013_puzzle.png",
+    "answer_image": "dingbat_013_answer.png"
+  },
+  {
+    "day": 14,
+    "puzzle_text": "LE     VEL",
+    "answer_text": "SPLIT LEVEL",
+    "puzzle_image": "dingbat_014_puzzle.png",
+    "answer_image": "dingbat_014_answer.png"
+  },
+  {
+    "day": 15,
+    "puzzle_text": "P WALK ARK",
+    "answer_text": "A WALK IN THE PARK",
+    "puzzle_image": "dingbat_015_puzzle.png",
+    "answer_image": "dingbat_015_answer.png"
+  },
+  {
+    "day": 16,
+    "puzzle_text": "ONCE / 1:00",
+    "answer_text": "ONCE UPON A TIME",
+    "puzzle_image": "dingbat_016_puzzle.png",
+    "answer_image": "dingbat_016_answer.png"
+  },
+  {
+    "day": 17,
+    "puzzle_text": "ALL / WORLD",
+    "answer_text": "ALL OVER THE WORLD",
+    "puzzle_image": "dingbat_017_puzzle.png",
+    "answer_image": "dingbat_017_answer.png"
+  },
+  {
+    "day": 18,
+    "puzzle_text": "SEARCH / AND",
+    "answer_text": "SEARCH HIGH AND LOW",
+    "puzzle_image": "dingbat_018_puzzle.png",
+    "answer_image": "dingbat_018_answer.png"
+  },
+  {
+    "day": 19,
+    "puzzle_text": "TOP / SECRET",
+    "answer_text": "TOP SECRET",
+    "puzzle_image": "dingbat_019_puzzle.png",
+    "answer_image": "dingbat_019_answer.png"
+  },
+  {
+    "day": 20,
+    "puzzle_text": "MAN / BOARD",
+    "answer_text": "MAN OVERBOARD",
+    "puzzle_image": "dingbat_020_puzzle.png",
+    "answer_image": "dingbat_020_answer.png"
+  },
+  {
+    "day": 21,
+    "puzzle_text": "FA     CE",
+    "answer_text": "TWO FACED",
+    "puzzle_image": "dingbat_021_puzzle.png",
+    "answer_image": "dingbat_021_answer.png"
+  },
+  {
+    "day": 22,
+    "puzzle_text": "GIVE GET / GIVE GET",
+    "answer_text": "FORGIVE AND FORGET",
+    "puzzle_image": "dingbat_022_puzzle.png",
+    "answer_image": "dingbat_022_answer.png"
+  },
+  {
+    "day": 23,
+    "puzzle_text": "T O W N (DOWN)",
+    "answer_text": "DOWNTOWN",
+    "puzzle_image": "dingbat_023_puzzle.png",
+    "answer_image": "dingbat_023_answer.png"
+  },
+  {
+    "day": 24,
+    "puzzle_text": "DEAL (GIANT)",
+    "answer_text": "BIG DEAL",
+    "puzzle_image": "dingbat_024_puzzle.png",
+    "answer_image": "dingbat_024_answer.png"
+  },
+  {
+    "day": 25,
+    "puzzle_text": "WINE (TINY)",
+    "answer_text": "A LITTLE WINE",
+    "puzzle_image": "dingbat_025_puzzle.png",
+    "answer_image": "dingbat_025_answer.png"
+  },
+  {
+    "day": 26,
+    "puzzle_text": "PRO   MISE",
+    "answer_text": "BROKEN PROMISE",
+    "puzzle_image": "dingbat_026_puzzle.png",
+    "answer_image": "dingbat_026_answer.png"
+  },
+  {
+    "day": 27,
+    "puzzle_text": "ROADS (CROSSING)",
+    "answer_text": "CROSSROADS",
+    "puzzle_image": "dingbat_027_puzzle.png",
+    "answer_image": "dingbat_027_answer.png"
+  },
+  {
+    "day": 28,
+    "puzzle_text": "TIME / TIME",
+    "answer_text": "TIME AFTER TIME",
+    "puzzle_image": "dingbat_028_puzzle.png",
+    "answer_image": "dingbat_028_answer.png"
+  },
+  {
+    "day": 29,
+    "puzzle_text": "BAN    ANA",
+    "answer_text": "BANANA SPLIT",
+    "puzzle_image": "dingbat_029_puzzle.png",
+    "answer_image": "dingbat_029_answer.png"
+  },
+  {
+    "day": 30,
+    "puzzle_text": "ECNALUBMA",
+    "answer_text": "AMBULANCE",
+    "puzzle_image": "dingbat_030_puzzle.png",
+    "answer_image": "dingbat_030_answer.png"
+  },
+  {
+    "day": 31,
+    "puzzle_text": "DICE  DICE",
+    "answer_text": "PARADISE (PAIR OF DICE)",
+    "puzzle_image": "dingbat_031_puzzle.png",
+    "answer_image": "dingbat_031_answer.png"
+  },
+  {
+    "day": 32,
+    "puzzle_text": "1 2 3 4 5 _ 7 8 9 10",
+    "answer_text": "SIX FEET UNDER",
+    "puzzle_image": "dingbat_032_puzzle.png",
+    "answer_image": "dingbat_032_answer.png"
+  },
+  {
+    "day": 33,
+    "puzzle_text": "CHAIR / WHEEL",
+    "answer_text": "WHEELCHAIR",
+    "puzzle_image": "dingbat_033_puzzle.png",
+    "answer_image": "dingbat_033_answer.png"
+  },
+  {
+    "day": 34,
+    "puzzle_text": "BIRD / HAND",
+    "answer_text": "BIRD IN THE HAND",
+    "puzzle_image": "dingbat_034_puzzle.png",
+    "answer_image": "dingbat_034_answer.png"
+  },
+  {
+    "day": 35,
+    "puzzle_text": "5TH WHEEL",
+    "answer_text": "FIFTH WHEEL",
+    "puzzle_image": "dingbat_035_puzzle.png",
+    "answer_image": "dingbat_035_answer.png"
+  },
+  {
+    "day": 36,
+    "puzzle_text": "RULE / THUMB",
+    "answer_text": "RULE OF THUMB",
+    "puzzle_image": "dingbat_036_puzzle.png",
+    "answer_image": "dingbat_036_answer.png"
+  },
+  {
+    "day": 37,
+    "puzzle_text": "FIRE / SMOKE",
+    "answer_text": "NO SMOKE WITHOUT FIRE",
+    "puzzle_image": "dingbat_037_puzzle.png",
+    "answer_image": "dingbat_037_answer.png"
+  },
+  {
+    "day": 38,
+    "puzzle_text": "WATER / BRIDGE",
+    "answer_text": "WATER UNDER THE BRIDGE",
+    "puzzle_image": "dingbat_038_puzzle.png",
+    "answer_image": "dingbat_038_answer.png"
+  },
+  {
+    "day": 39,
+    "puzzle_text": "ROLLING STONE",
+    "answer_text": "A ROLLING STONE",
+    "puzzle_image": "dingbat_039_puzzle.png",
+    "answer_image": "dingbat_039_answer.png"
+  },
+  {
+    "day": 40,
+    "puzzle_text": "CLOUD 9",
+    "answer_text": "CLOUD NINE",
+    "puzzle_image": "dingbat_040_puzzle.png",
+    "answer_image": "dingbat_040_answer.png"
+  },
+  {
+    "day": 41,
+    "puzzle_text": "CAT OUT OF THE BAG",
+    "answer_text": "CAT OUT OF THE BAG",
+    "puzzle_image": "dingbat_041_puzzle.png",
+    "answer_image": "dingbat_041_answer.png"
+  },
+  {
+    "day": 42,
+    "puzzle_text": "CART BEFORE HORSE",
+    "answer_text": "CART BEFORE THE HORSE",
+    "puzzle_image": "dingbat_042_puzzle.png",
+    "answer_image": "dingbat_042_answer.png"
+  },
+  {
+    "day": 43,
+    "puzzle_text": "NEEDLE IN HAYSTACK",
+    "answer_text": "NEEDLE IN A HAYSTACK",
+    "puzzle_image": "dingbat_043_puzzle.png",
+    "answer_image": "dingbat_043_answer.png"
+  },
+  {
+    "day": 44,
+    "puzzle_text": "CHIP OFF THE OLD BLOCK",
+    "answer_text": "CHIP OFF THE OLD BLOCK",
+    "puzzle_image": "dingbat_044_puzzle.png",
+    "answer_image": "dingbat_044_answer.png"
+  },
+  {
+    "day": 45,
+    "puzzle_text": "PIECE OF CAKE",
+    "answer_text": "A PIECE OF CAKE",
+    "puzzle_image": "dingbat_045_puzzle.png",
+    "answer_image": "dingbat_045_answer.png"
+  },
+  {
+    "day": 46,
+    "puzzle_text": "SILVER / LINING",
+    "answer_text": "SILVER LINING",
+    "puzzle_image": "dingbat_046_puzzle.png",
+    "answer_image": "dingbat_046_answer.png"
+  },
+  {
+    "day": 47,
+    "puzzle_text": "ELEPHANT IN ROOM",
+    "answer_text": "ELEPHANT IN THE ROOM",
+    "puzzle_image": "dingbat_047_puzzle.png",
+    "answer_image": "dingbat_047_answer.png"
+  },
+  {
+    "day": 48,
+    "puzzle_text": "SPILL BEANS",
+    "answer_text": "SPILL THE BEANS",
+    "puzzle_image": "dingbat_048_puzzle.png",
+    "answer_image": "dingbat_048_answer.png"
+  },
+  {
+    "day": 49,
+    "puzzle_text": "BARK / WRONG TREE",
+    "answer_text": "BARKING UP THE WRONG TREE",
+    "puzzle_image": "dingbat_049_puzzle.png",
+    "answer_image": "dingbat_049_answer.png"
+  },
+  {
+    "day": 50,
+    "puzzle_text": "BITE THE BULLET",
+    "answer_text": "BITE THE BULLET",
+    "puzzle_image": "dingbat_050_puzzle.png",
+    "answer_image": "dingbat_050_answer.png"
+  },
+  {
+    "day": 51,
+    "puzzle_text": "BREAK / ICE",
+    "answer_text": "BREAK THE ICE",
+    "puzzle_image": "dingbat_051_puzzle.png",
+    "answer_image": "dingbat_051_answer.png"
+  },
+  {
+    "day": 52,
+    "puzzle_text": "COLD FEET",
+    "answer_text": "COLD FEET",
+    "puzzle_image": "dingbat_052_puzzle.png",
+    "answer_image": "dingbat_052_answer.png"
+  },
+  {
+    "day": 53,
+    "puzzle_text": "BALL / YOUR COURT",
+    "answer_text": "BALL IN YOUR COURT",
+    "puzzle_image": "dingbat_053_puzzle.png",
+    "answer_image": "dingbat_053_answer.png"
+  },
+  {
+    "day": 54,
+    "puzzle_text": "BLESSING (DISGUISE)",
+    "answer_text": "BLESSING IN DISGUISE",
+    "puzzle_image": "dingbat_054_puzzle.png",
+    "answer_image": "dingbat_054_answer.png"
+  },
+  {
+    "day": 55,
+    "puzzle_text": "BEAT AROUND BUSH",
+    "answer_text": "BEAT AROUND THE BUSH",
+    "puzzle_image": "dingbat_055_puzzle.png",
+    "answer_image": "dingbat_055_answer.png"
+  },
+  {
+    "day": 56,
+    "puzzle_text": "BEST / BOTH WORLDS",
+    "answer_text": "BEST OF BOTH WORLDS",
+    "puzzle_image": "dingbat_056_puzzle.png",
+    "answer_image": "dingbat_056_answer.png"
+  },
+  {
+    "day": 57,
+    "puzzle_text": "BURNING / MIDNIGHT OIL",
+    "answer_text": "BURNING THE MIDNIGHT OIL",
+    "puzzle_image": "dingbat_057_puzzle.png",
+    "answer_image": "dingbat_057_answer.png"
+  },
+  {
+    "day": 58,
+    "puzzle_text": "DEVIL'S ADVOCATE",
+    "answer_text": "DEVIL'S ADVOCATE",
+    "puzzle_image": "dingbat_058_puzzle.png",
+    "answer_image": "dingbat_058_answer.png"
+  },
+  {
+    "day": 59,
+    "puzzle_text": "DON'T CRY / SPILT MILK",
+    "answer_text": "DON'T CRY OVER SPILT MILK",
+    "puzzle_image": "dingbat_059_puzzle.png",
+    "answer_image": "dingbat_059_answer.png"
+  },
+  {
+    "day": 60,
+    "puzzle_text": "FEATHER IN CAP",
+    "answer_text": "A FEATHER IN YOUR CAP",
+    "puzzle_image": "dingbat_060_puzzle.png",
+    "answer_image": "dingbat_060_answer.png"
+  },
+  {
+    "day": 61,
+    "puzzle_text": "FISH / WATER",
+    "answer_text": "FISH OUT OF WATER",
+    "puzzle_image": "dingbat_061_puzzle.png",
+    "answer_image": "dingbat_061_answer.png"
+  },
+  {
+    "day": 62,
+    "puzzle_text": "FLASH IN PAN",
+    "answer_text": "FLASH IN THE PAN",
+    "puzzle_image": "dingbat_062_puzzle.png",
+    "answer_image": "dingbat_062_answer.png"
+  },
+  {
+    "day": 63,
+    "puzzle_text": "FLY / WALL",
+    "answer_text": "FLY ON THE WALL",
+    "puzzle_image": "dingbat_063_puzzle.png",
+    "answer_image": "dingbat_063_answer.png"
+  },
+  {
+    "day": 64,
+    "puzzle_text": "GRAIN OF SALT",
+    "answer_text": "TAKE WITH A GRAIN OF SALT",
+    "puzzle_image": "dingbat_064_puzzle.png",
+    "answer_image": "dingbat_064_answer.png"
+  },
+  {
+    "day": 65,
+    "puzzle_text": "HIT NAIL / HEAD",
+    "answer_text": "HIT NAIL ON THE HEAD",
+    "puzzle_image": "dingbat_065_puzzle.png",
+    "answer_image": "dingbat_065_answer.png"
+  },
+  {
+    "day": 66,
+    "puzzle_text": "IN / HOT WATER",
+    "answer_text": "IN HOT WATER",
+    "puzzle_image": "dingbat_066_puzzle.png",
+    "answer_image": "dingbat_066_answer.png"
+  },
+  {
+    "day": 67,
+    "puzzle_text": "IT TAKES TWO",
+    "answer_text": "IT TAKES TWO TO TANGO",
+    "puzzle_image": "dingbat_067_puzzle.png",
+    "answer_image": "dingbat_067_answer.png"
+  },
+  {
+    "day": 68,
+    "puzzle_text": "JUMP / SHIP",
+    "answer_text": "JUMP SHIP",
+    "puzzle_image": "dingbat_068_puzzle.png",
+    "answer_image": "dingbat_068_answer.png"
+  },
+  {
+    "day": 69,
+    "puzzle_text": "KEEP CHIN / UP",
+    "answer_text": "KEEP YOUR CHIN UP",
+    "puzzle_image": "dingbat_069_puzzle.png",
+    "answer_image": "dingbat_069_answer.png"
+  },
+  {
+    "day": 70,
+    "puzzle_text": "KILL 2 BIRDS 1 STONE",
+    "answer_text": "KILL TWO BIRDS WITH ONE STONE",
+    "puzzle_image": "dingbat_070_puzzle.png",
+    "answer_image": "dingbat_070_answer.png"
+  },
+  {
+    "day": 71,
+    "puzzle_text": "THE LAST / STRAW",
+    "answer_text": "THE LAST STRAW",
+    "puzzle_image": "dingbat_071_puzzle.png",
+    "answer_image": "dingbat_071_answer.png"
+  },
+  {
+    "day": 72,
+    "puzzle_text": "LET SLEEPING DOGS",
+    "answer_text": "LET SLEEPING DOGS LIE",
+    "puzzle_image": "dingbat_072_puzzle.png",
+    "answer_image": "dingbat_072_answer.png"
+  },
+  {
+    "day": 73,
+    "puzzle_text": "LOOK / YOU LEAP",
+    "answer_text": "LOOK BEFORE YOU LEAP",
+    "puzzle_image": "dingbat_073_puzzle.png",
+    "answer_image": "dingbat_073_answer.png"
+  },
+  {
+    "day": 74,
+    "puzzle_text": "MAKE HAY / SUN SHINES",
+    "answer_text": "MAKE HAY WHILE SUN SHINES",
+    "puzzle_image": "dingbat_074_puzzle.png",
+    "answer_image": "dingbat_074_answer.png"
+  },
+  {
+    "day": 75,
+    "puzzle_text": "MISS / BOAT",
+    "answer_text": "MISS THE BOAT",
+    "puzzle_image": "dingbat_075_puzzle.png",
+    "answer_image": "dingbat_075_answer.png"
+  },
+  {
+    "day": 76,
+    "puzzle_text": "NO PAIN NO GAIN",
+    "answer_text": "NO PAIN, NO GAIN",
+    "puzzle_image": "dingbat_076_puzzle.png",
+    "answer_image": "dingbat_076_answer.png"
+  },
+  {
+    "day": 77,
+    "puzzle_text": "OFF / THE HOOK",
+    "answer_text": "OFF THE HOOK",
+    "puzzle_image": "dingbat_077_puzzle.png",
+    "answer_image": "dingbat_077_answer.png"
+  },
+  {
+    "day": 78,
+    "puzzle_text": "ON / THIN ICE",
+    "answer_text": "ON THIN ICE",
+    "puzzle_image": "dingbat_078_puzzle.png",
+    "answer_image": "dingbat_078_answer.png"
+  },
+  {
+    "day": 79,
+    "puzzle_text": "FRYING PAN / FIRE",
+    "answer_text": "OUT OF THE FRYING PAN",
+    "puzzle_image": "dingbat_079_puzzle.png",
+    "answer_image": "dingbat_079_answer.png"
+  },
+  {
+    "day": 80,
+    "puzzle_text": "PULL MY LEG",
+    "answer_text": "PULLING MY LEG",
+    "puzzle_image": "dingbat_080_puzzle.png",
+    "answer_image": "dingbat_080_answer.png"
+  },
+  {
+    "day": 81,
+    "puzzle_text": "RAINING / CATS & DOGS",
+    "answer_text": "RAINING CATS AND DOGS",
+    "puzzle_image": "dingbat_081_puzzle.png",
+    "answer_image": "dingbat_081_answer.png"
+  },
+  {
+    "day": 82,
+    "puzzle_text": "SAVE / RAINY DAY",
+    "answer_text": "SAVE FOR A RAINY DAY",
+    "puzzle_image": "dingbat_082_puzzle.png",
+    "answer_image": "dingbat_082_answer.png"
+  },
+  {
+    "day": 83,
+    "puzzle_text": "SEE EYE TO EYE",
+    "answer_text": "SEE EYE TO EYE",
+    "puzzle_image": "dingbat_083_puzzle.png",
+    "answer_image": "dingbat_083_answer.png"
+  },
+  {
+    "day": 84,
+    "puzzle_text": "CROCODILE TEARS",
+    "answer_text": "SHED CROCODILE TEARS",
+    "puzzle_image": "dingbat_084_puzzle.png",
+    "answer_image": "dingbat_084_answer.png"
+  },
+  {
+    "day": 85,
+    "puzzle_text": "SIT ON / FENCE",
+    "answer_text": "SIT ON THE FENCE",
+    "puzzle_image": "dingbat_085_puzzle.png",
+    "answer_image": "dingbat_085_answer.png"
+  },
+  {
+    "day": 86,
+    "puzzle_text": "SKELETON / CLOSET",
+    "answer_text": "SKELETON IN THE CLOSET",
+    "puzzle_image": "dingbat_086_puzzle.png",
+    "answer_image": "dingbat_086_answer.png"
+  },
+  {
+    "day": 87,
+    "puzzle_text": "SLIP OF TONGUE",
+    "answer_text": "SLIP OF THE TONGUE",
+    "puzzle_image": "dingbat_087_puzzle.png",
+    "answer_image": "dingbat_087_answer.png"
+  },
+  {
+    "day": 88,
+    "puzzle_text": "SLOW & STEADY",
+    "answer_text": "SLOW AND STEADY WINS",
+    "puzzle_image": "dingbat_088_puzzle.png",
+    "answer_image": "dingbat_088_answer.png"
+  },
+  {
+    "day": 89,
+    "puzzle_text": "STEAL / THUNDER",
+    "answer_text": "STEAL SOMEONE'S THUNDER",
+    "puzzle_image": "dingbat_089_puzzle.png",
+    "answer_image": "dingbat_089_answer.png"
+  },
+  {
+    "day": 90,
+    "puzzle_text": "TAKE BULL / HORNS",
+    "answer_text": "TAKE BULL BY THE HORNS",
+    "puzzle_image": "dingbat_090_puzzle.png",
+    "answer_image": "dingbat_090_answer.png"
+  },
+  {
+    "day": 91,
+    "puzzle_text": "TASTE / MEDICINE",
+    "answer_text": "TASTE OF YOUR OWN MEDICINE",
+    "puzzle_image": "dingbat_091_puzzle.png",
+    "answer_image": "dingbat_091_answer.png"
+  },
+  {
+    "day": 92,
+    "puzzle_text": "THROW IN / TOWEL",
+    "answer_text": "THROW IN THE TOWEL",
+    "puzzle_image": "dingbat_092_puzzle.png",
+    "answer_image": "dingbat_092_answer.png"
+  },
+  {
+    "day": 93,
+    "puzzle_text": "TIE THE KNOT",
+    "answer_text": "TIE THE KNOT",
+    "puzzle_image": "dingbat_093_puzzle.png",
+    "answer_image": "dingbat_093_answer.png"
+  },
+  {
+    "day": 94,
+    "puzzle_text": "TIME / ALL WOUNDS",
+    "answer_text": "TIME HEALS ALL WOUNDS",
+    "puzzle_image": "dingbat_094_puzzle.png",
+    "answer_image": "dingbat_094_answer.png"
+  },
+  {
+    "day": 95,
+    "puzzle_text": "TIP OF / ICEBERG",
+    "answer_text": "TIP OF THE ICEBERG",
+    "puzzle_image": "dingbat_095_puzzle.png",
+    "answer_image": "dingbat_095_answer.png"
+  },
+  {
+    "day": 96,
+    "puzzle_text": "TURN / BLIND EYE",
+    "answer_text": "TURN A BLIND EYE",
+    "puzzle_image": "dingbat_096_puzzle.png",
+    "answer_image": "dingbat_096_answer.png"
+  },
+  {
+    "day": 97,
+    "puzzle_text": "UNDER / WEATHER",
+    "answer_text": "UNDER THE WEATHER",
+    "puzzle_image": "dingbat_097_puzzle.png",
+    "answer_image": "dingbat_097_answer.png"
+  },
+  {
+    "day": 98,
+    "puzzle_text": "UP IN / THE AIR",
+    "answer_text": "UP IN THE AIR",
+    "puzzle_image": "dingbat_098_puzzle.png",
+    "answer_image": "dingbat_098_answer.png"
+  },
+  {
+    "day": 99,
+    "puzzle_text": "WAKE UP / SMELL COFFEE",
+    "answer_text": "WAKE UP AND SMELL THE COFFEE",
+    "puzzle_image": "dingbat_099_puzzle.png",
+    "answer_image": "dingbat_099_answer.png"
+  },
+  {
+    "day": 100,
+    "puzzle_text": "WALK ON / EGGSHELLS",
+    "answer_text": "WALKING ON EGGSHELLS",
+    "puzzle_image": "dingbat_100_puzzle.png",
+    "answer_image": "dingbat_100_answer.png"
+  },
+  {
+    "day": 101,
+    "puzzle_text": "WILD GOOSE CHASE",
+    "answer_text": "WILD GOOSE CHASE",
+    "puzzle_image": "dingbat_101_puzzle.png",
+    "answer_image": "dingbat_101_answer.png"
+  },
+  {
+    "day": 102,
+    "puzzle_text": "JUDGE BOOK / COVER",
+    "answer_text": "JUDGE A BOOK BY ITS COVER",
+    "puzzle_image": "dingbat_102_puzzle.png",
+    "answer_image": "dingbat_102_answer.png"
+  },
+  {
+    "day": 103,
+    "puzzle_text": "ZERO / TOLERANCE",
+    "answer_text": "ZERO TOLERANCE",
+    "puzzle_image": "dingbat_103_puzzle.png",
+    "answer_image": "dingbat_103_answer.png"
+  },
+  {
+    "day": 104,
+    "puzzle_text": "A  C  E",
+    "answer_text": "ACE IN THE HOLE",
+    "puzzle_image": "dingbat_104_puzzle.png",
+    "answer_image": "dingbat_104_answer.png"
+  },
+  {
+    "day": 105,
+    "puzzle_text": "ACTIONS / WORDS",
+    "answer_text": "ACTIONS SPEAK LOUDER",
+    "puzzle_image": "dingbat_105_puzzle.png",
+    "answer_image": "dingbat_105_answer.png"
+  },
+  {
+    "day": 106,
+    "puzzle_text": "ADD FUEL / FIRE",
+    "answer_text": "ADD FUEL TO THE FIRE",
+    "puzzle_image": "dingbat_106_puzzle.png",
+    "answer_image": "dingbat_106_answer.png"
+  },
+  {
+    "day": 107,
+    "puzzle_text": "AGAINST THE CLOCK",
+    "answer_text": "AGAINST THE CLOCK",
+    "puzzle_image": "dingbat_107_puzzle.png",
+    "answer_image": "dingbat_107_answer.png"
+  },
+  {
+    "day": 108,
+    "puzzle_text": "ALL EARS / I'M",
+    "answer_text": "I'M ALL EARS",
+    "puzzle_image": "dingbat_108_puzzle.png",
+    "answer_image": "dingbat_108_answer.png"
+  },
+  {
+    "day": 109,
+    "puzzle_text": "ALL IN / SAME BOAT",
+    "answer_text": "IN THE SAME BOAT",
+    "puzzle_image": "dingbat_109_puzzle.png",
+    "answer_image": "dingbat_109_answer.png"
+  },
+  {
+    "day": 110,
+    "puzzle_text": "APPLE OF MY EYE",
+    "answer_text": "APPLE OF MY EYE",
+    "puzzle_image": "dingbat_110_puzzle.png",
+    "answer_image": "dingbat_110_answer.png"
+  },
+  {
+    "day": 111,
+    "puzzle_text": "COST ARM / LEG",
+    "answer_text": "COST AN ARM AND A LEG",
+    "puzzle_image": "dingbat_111_puzzle.png",
+    "answer_image": "dingbat_111_answer.png"
+  },
+  {
+    "day": 112,
+    "puzzle_text": "BACK TO / SQUARE ONE",
+    "answer_text": "BACK TO SQUARE ONE",
+    "puzzle_image": "dingbat_112_puzzle.png",
+    "answer_image": "dingbat_112_answer.png"
+  },
+  {
+    "day": 113,
+    "puzzle_text": "BACK TO / DRAWING BOARD",
+    "answer_text": "BACK TO DRAWING BOARD",
+    "puzzle_image": "dingbat_113_puzzle.png",
+    "answer_image": "dingbat_113_answer.png"
+  },
+  {
+    "day": 114,
+    "puzzle_text": "BAD / APPLE",
+    "answer_text": "ONE BAD APPLE",
+    "puzzle_image": "dingbat_114_puzzle.png",
+    "answer_image": "dingbat_114_answer.png"
+  },
+  {
+    "day": 115,
+    "puzzle_text": "BARK / BITE",
+    "answer_text": "BARK WORSE THAN BITE",
+    "puzzle_image": "dingbat_115_puzzle.png",
+    "answer_image": "dingbat_115_answer.png"
+  },
+  {
+    "day": 116,
+    "puzzle_text": "BAT OUT / HELL",
+    "answer_text": "LIKE A BAT OUT OF HELL",
+    "puzzle_image": "dingbat_116_puzzle.png",
+    "answer_image": "dingbat_116_answer.png"
+  },
+  {
+    "day": 117,
+    "puzzle_text": "BE ALL / END ALL",
+    "answer_text": "BE ALL AND END ALL",
+    "puzzle_image": "dingbat_117_puzzle.png",
+    "answer_image": "dingbat_117_answer.png"
+  },
+  {
+    "day": 118,
+    "puzzle_text": "BEAT / DEAD HORSE",
+    "answer_text": "BEAT A DEAD HORSE",
+    "puzzle_image": "dingbat_118_puzzle.png",
+    "answer_image": "dingbat_118_answer.png"
+  },
+  {
+    "day": 119,
+    "puzzle_text": "BEE IN / BONNET",
+    "answer_text": "BEE IN YOUR BONNET",
+    "puzzle_image": "dingbat_119_puzzle.png",
+    "answer_image": "dingbat_119_answer.png"
+  },
+  {
+    "day": 120,
+    "puzzle_text": "BEG BORROW / STEAL",
+    "answer_text": "BEG, BORROW OR STEAL",
+    "puzzle_image": "dingbat_120_puzzle.png",
+    "answer_image": "dingbat_120_answer.png"
+  },
+  {
+    "day": 121,
+    "puzzle_text": "BEHIND / EIGHT BALL",
+    "answer_text": "BEHIND THE EIGHT BALL",
+    "puzzle_image": "dingbat_121_puzzle.png",
+    "answer_image": "dingbat_121_answer.png"
+  },
+  {
+    "day": 122,
+    "puzzle_text": "BELL / CAT",
+    "answer_text": "BELL THE CAT",
+    "puzzle_image": "dingbat_122_puzzle.png",
+    "answer_image": "dingbat_122_answer.png"
+  },
+  {
+    "day": 123,
+    "puzzle_text": "ROCK / HARD PLACE",
+    "answer_text": "BETWEEN A ROCK & HARD PLACE",
+    "puzzle_image": "dingbat_123_puzzle.png",
+    "answer_image": "dingbat_123_answer.png"
+  },
+  {
+    "day": 124,
+    "puzzle_text": "BIGGER / THEY COME",
+    "answer_text": "THE BIGGER THEY COME",
+    "puzzle_image": "dingbat_124_puzzle.png",
+    "answer_image": "dingbat_124_answer.png"
+  },
+  {
+    "day": 125,
+    "puzzle_text": "BIRD'S / EYE VIEW",
+    "answer_text": "BIRD'S EYE VIEW",
+    "puzzle_image": "dingbat_125_puzzle.png",
+    "answer_image": "dingbat_125_answer.png"
+  },
+  {
+    "day": 126,
+    "puzzle_text": "BITE OFF / CHEW",
+    "answer_text": "BITE OFF MORE THAN CHEW",
+    "puzzle_image": "dingbat_126_puzzle.png",
+    "answer_image": "dingbat_126_answer.png"
+  },
+  {
+    "day": 127,
+    "puzzle_text": "BLACK / SHEEP",
+    "answer_text": "BLACK SHEEP OF THE FAMILY",
+    "puzzle_image": "dingbat_127_puzzle.png",
+    "answer_image": "dingbat_127_answer.png"
+  },
+  {
+    "day": 128,
+    "puzzle_text": "BLOW HOT & COLD",
+    "answer_text": "BLOW HOT AND COLD",
+    "puzzle_image": "dingbat_128_puzzle.png",
+    "answer_image": "dingbat_128_answer.png"
+  },
+  {
+    "day": 129,
+    "puzzle_text": "BLOW OFF / STEAM",
+    "answer_text": "BLOW OFF STEAM",
+    "puzzle_image": "dingbat_129_puzzle.png",
+    "answer_image": "dingbat_129_answer.png"
+  },
+  {
+    "day": 130,
+    "puzzle_text": "BLOW / OWN HORN",
+    "answer_text": "TOOT YOUR OWN HORN",
+    "puzzle_image": "dingbat_130_puzzle.png",
+    "answer_image": "dingbat_130_answer.png"
+  },
+  {
+    "day": 131,
+    "puzzle_text": "ONCE IN / BLUE MOON",
+    "answer_text": "ONCE IN A BLUE MOON",
+    "puzzle_image": "dingbat_131_puzzle.png",
+    "answer_image": "dingbat_131_answer.png"
+  },
+  {
+    "day": 132,
+    "puzzle_text": "BOTTOM / LINE",
+    "answer_text": "THE BOTTOM LINE",
+    "puzzle_image": "dingbat_132_puzzle.png",
+    "answer_image": "dingbat_132_answer.png"
+  },
+  {
+    "day": 133,
+    "puzzle_text": "BREAK / A LEG",
+    "answer_text": "BREAK A LEG",
+    "puzzle_image": "dingbat_133_puzzle.png",
+    "answer_image": "dingbat_133_answer.png"
+  },
+  {
+    "day": 134,
+    "puzzle_text": "BRING HOME / BACON",
+    "answer_text": "BRING HOME THE BACON",
+    "puzzle_image": "dingbat_134_puzzle.png",
+    "answer_image": "dingbat_134_answer.png"
+  },
+  {
+    "day": 135,
+    "puzzle_text": "BULL / CHINA SHOP",
+    "answer_text": "BULL IN A CHINA SHOP",
+    "puzzle_image": "dingbat_135_puzzle.png",
+    "answer_image": "dingbat_135_answer.png"
+  },
+  {
+    "day": 136,
+    "puzzle_text": "BURN / BRIDGES",
+    "answer_text": "BURN YOUR BRIDGES",
+    "puzzle_image": "dingbat_136_puzzle.png",
+    "answer_image": "dingbat_136_answer.png"
+  },
+  {
+    "day": 137,
+    "puzzle_text": "BURN CANDLE / BOTH ENDS",
+    "answer_text": "BURN CANDLE AT BOTH ENDS",
+    "puzzle_image": "dingbat_137_puzzle.png",
+    "answer_image": "dingbat_137_answer.png"
+  },
+  {
+    "day": 138,
+    "puzzle_text": "BURY / HATCHET",
+    "answer_text": "BURY THE HATCHET",
+    "puzzle_image": "dingbat_138_puzzle.png",
+    "answer_image": "dingbat_138_answer.png"
+  },
+  {
+    "day": 139,
+    "puzzle_text": "HEAD IN / SAND",
+    "answer_text": "BURY HEAD IN THE SAND",
+    "puzzle_image": "dingbat_139_puzzle.png",
+    "answer_image": "dingbat_139_answer.png"
+  },
+  {
+    "day": 140,
+    "puzzle_text": "BUSMAN'S HOLIDAY",
+    "answer_text": "BUSMAN'S HOLIDAY",
+    "puzzle_image": "dingbat_140_puzzle.png",
+    "answer_image": "dingbat_140_answer.png"
+  },
+  {
+    "day": 141,
+    "puzzle_text": "BUTTER / FINGERS",
+    "answer_text": "BUTTERFINGERS",
+    "puzzle_image": "dingbat_141_puzzle.png",
+    "answer_image": "dingbat_141_answer.png"
+  },
+  {
+    "day": 142,
+    "puzzle_text": "BY THE BOOK",
+    "answer_text": "BY THE BOOK",
+    "puzzle_image": "dingbat_142_puzzle.png",
+    "answer_image": "dingbat_142_answer.png"
+  },
+  {
+    "day": 143,
+    "puzzle_text": "SKIN OF TEETH",
+    "answer_text": "BY THE SKIN OF YOUR TEETH",
+    "puzzle_image": "dingbat_143_puzzle.png",
+    "answer_image": "dingbat_143_answer.png"
+  },
+  {
+    "day": 144,
+    "puzzle_text": "SPADE / SPADE",
+    "answer_text": "CALL A SPADE A SPADE",
+    "puzzle_image": "dingbat_144_puzzle.png",
+    "answer_image": "dingbat_144_answer.png"
+  },
+  {
+    "day": 145,
+    "puzzle_text": "CALL IT / A DAY",
+    "answer_text": "CALL IT A DAY",
+    "puzzle_image": "dingbat_145_puzzle.png",
+    "answer_image": "dingbat_145_answer.png"
+  },
+  {
+    "day": 146,
+    "puzzle_text": "CUT / MUSTARD",
+    "answer_text": "CAN'T CUT THE MUSTARD",
+    "puzzle_image": "dingbat_146_puzzle.png",
+    "answer_image": "dingbat_146_answer.png"
+  },
+  {
+    "day": 147,
+    "puzzle_text": "CAKE / EAT IT TOO",
+    "answer_text": "HAVE CAKE AND EAT IT TOO",
+    "puzzle_image": "dingbat_147_puzzle.png",
+    "answer_image": "dingbat_147_answer.png"
+  },
+  {
+    "day": 148,
+    "puzzle_text": "WOOD / TREES",
+    "answer_text": "CAN'T SEE WOOD FOR TREES",
+    "puzzle_image": "dingbat_148_puzzle.png",
+    "answer_image": "dingbat_148_answer.png"
+  },
+  {
+    "day": 149,
+    "puzzle_text": "COALS / NEWCASTLE",
+    "answer_text": "COALS TO NEWCASTLE",
+    "puzzle_image": "dingbat_149_puzzle.png",
+    "answer_image": "dingbat_149_answer.png"
+  },
+  {
+    "day": 150,
+    "puzzle_text": "PEARLS / SWINE",
+    "answer_text": "CAST PEARLS BEFORE SWINE",
+    "puzzle_image": "dingbat_150_puzzle.png",
+    "answer_image": "dingbat_150_answer.png"
+  },
+  {
+    "day": 151,
+    "puzzle_text": "CATCH 22",
+    "answer_text": "CATCH-22",
+    "puzzle_image": "dingbat_151_puzzle.png",
+    "answer_image": "dingbat_151_answer.png"
+  },
+  {
+    "day": 152,
+    "puzzle_text": "RED / HANDED",
+    "answer_text": "CAUGHT RED HANDED",
+    "puzzle_image": "dingbat_152_puzzle.png",
+    "answer_image": "dingbat_152_answer.png"
+  },
+  {
+    "day": 153,
+    "puzzle_text": "CHALK / CHEESE",
+    "answer_text": "CHALK AND CHEESE",
+    "puzzle_image": "dingbat_153_puzzle.png",
+    "answer_image": "dingbat_153_answer.png"
+  },
+  {
+    "day": 154,
+    "puzzle_text": "CHANCE / MILLION",
+    "answer_text": "ONE IN A MILLION",
+    "puzzle_image": "dingbat_154_puzzle.png",
+    "answer_image": "dingbat_154_answer.png"
+  },
+  {
+    "day": 155,
+    "puzzle_text": "CHANGE / HEART",
+    "answer_text": "CHANGE OF HEART",
+    "puzzle_image": "dingbat_155_puzzle.png",
+    "answer_image": "dingbat_155_answer.png"
+  },
+  {
+    "day": 156,
+    "puzzle_text": "CHASING / RAINBOWS",
+    "answer_text": "CHASING RAINBOWS",
+    "puzzle_image": "dingbat_156_puzzle.png",
+    "answer_image": "dingbat_156_answer.png"
+  },
+  {
+    "day": 157,
+    "puzzle_text": "CHEAP / HALF PRICE",
+    "answer_text": "CHEAP AT HALF THE PRICE",
+    "puzzle_image": "dingbat_157_puzzle.png",
+    "answer_image": "dingbat_157_answer.png"
+  },
+  {
+    "day": 158,
+    "puzzle_text": "OLD / CHESTNUT",
+    "answer_text": "AN OLD CHESTNUT",
+    "puzzle_image": "dingbat_158_puzzle.png",
+    "answer_image": "dingbat_158_answer.png"
+  },
+  {
+    "day": 159,
+    "puzzle_text": "CHEW / FAT",
+    "answer_text": "CHEW THE FAT",
+    "puzzle_image": "dingbat_159_puzzle.png",
+    "answer_image": "dingbat_159_answer.png"
+  },
+  {
+    "day": 160,
+    "puzzle_text": "CHINK / ARMOUR",
+    "answer_text": "CHINK IN THE ARMOUR",
+    "puzzle_image": "dingbat_160_puzzle.png",
+    "answer_image": "dingbat_160_answer.png"
+  },
+  {
+    "day": 161,
+    "puzzle_text": "CLEAN AS / WHISTLE",
+    "answer_text": "CLEAN AS A WHISTLE",
+    "puzzle_image": "dingbat_161_puzzle.png",
+    "answer_image": "dingbat_161_answer.png"
+  },
+  {
+    "day": 162,
+    "puzzle_text": "CLEAR AS / MUD",
+    "answer_text": "CLEAR AS MUD",
+    "puzzle_image": "dingbat_162_puzzle.png",
+    "answer_image": "dingbat_162_answer.png"
+  },
+  {
+    "day": 163,
+    "puzzle_text": "CLIFF / HANGER",
+    "answer_text": "CLIFFHANGER",
+    "puzzle_image": "dingbat_163_puzzle.png",
+    "answer_image": "dingbat_163_answer.png"
+  },
+  {
+    "day": 164,
+    "puzzle_text": "CLIMB / BANDWAGON",
+    "answer_text": "JUMP ON THE BANDWAGON",
+    "puzzle_image": "dingbat_164_puzzle.png",
+    "answer_image": "dingbat_164_answer.png"
+  },
+  {
+    "day": 165,
+    "puzzle_text": "CLOSE / NO CIGAR",
+    "answer_text": "CLOSE BUT NO CIGAR",
+    "puzzle_image": "dingbat_165_puzzle.png",
+    "answer_image": "dingbat_165_answer.png"
+  },
+  {
+    "day": 166,
+    "puzzle_text": "COCK & BULL",
+    "answer_text": "A COCK AND BULL STORY",
+    "puzzle_image": "dingbat_166_puzzle.png",
+    "answer_image": "dingbat_166_answer.png"
+  },
+  {
+    "day": 167,
+    "puzzle_text": "COME CLEAN / TRUTH",
+    "answer_text": "COME CLEAN",
+    "puzzle_image": "dingbat_167_puzzle.png",
+    "answer_image": "dingbat_167_answer.png"
+  },
+  {
+    "day": 168,
+    "puzzle_text": "RAIN / SHINE",
+    "answer_text": "COME RAIN OR SHINE",
+    "puzzle_image": "dingbat_168_puzzle.png",
+    "answer_image": "dingbat_168_answer.png"
+  },
+  {
+    "day": 169,
+    "puzzle_text": "COOK / BOOKS",
+    "answer_text": "COOK THE BOOKS",
+    "puzzle_image": "dingbat_169_puzzle.png",
+    "answer_image": "dingbat_169_answer.png"
+  },
+  {
+    "day": 170,
+    "puzzle_text": "COOL AS / CUCUMBER",
+    "answer_text": "COOL AS A CUCUMBER",
+    "puzzle_image": "dingbat_170_puzzle.png",
+    "answer_image": "dingbat_170_answer.png"
+  },
+  {
+    "day": 171,
+    "puzzle_text": "COUCH / POTATO",
+    "answer_text": "COUCH POTATO",
+    "puzzle_image": "dingbat_171_puzzle.png",
+    "answer_image": "dingbat_171_answer.png"
+  },
+  {
+    "day": 172,
+    "puzzle_text": "CRACK / DAWN",
+    "answer_text": "AT CRACK OF DAWN",
+    "puzzle_image": "dingbat_172_puzzle.png",
+    "answer_image": "dingbat_172_answer.png"
+  },
+  {
+    "day": 173,
+    "puzzle_text": "CRASH / BURN",
+    "answer_text": "CRASH AND BURN",
+    "puzzle_image": "dingbat_173_puzzle.png",
+    "answer_image": "dingbat_173_answer.png"
+  },
+  {
+    "day": 174,
+    "puzzle_text": "CROSS BRIDGE / COME TO",
+    "answer_text": "CROSS THAT BRIDGE",
+    "puzzle_image": "dingbat_174_puzzle.png",
+    "answer_image": "dingbat_174_answer.png"
+  },
+  {
+    "day": 175,
+    "puzzle_text": "CRY / SPILT MILK",
+    "answer_text": "CRY OVER SPILT MILK",
+    "puzzle_image": "dingbat_175_puzzle.png",
+    "answer_image": "dingbat_175_answer.png"
+  },
+  {
+    "day": 176,
+    "puzzle_text": "CRYING / WOLF",
+    "answer_text": "CRYING WOLF",
+    "puzzle_image": "dingbat_176_puzzle.png",
+    "answer_image": "dingbat_176_answer.png"
+  },
+  {
+    "day": 177,
+    "puzzle_text": "NOT MY / CUP OF TEA",
+    "answer_text": "NOT MY CUP OF TEA",
+    "puzzle_image": "dingbat_177_puzzle.png",
+    "answer_image": "dingbat_177_answer.png"
+  },
+  {
+    "day": 178,
+    "puzzle_text": "CURIOSITY / CAT",
+    "answer_text": "CURIOSITY KILLED THE CAT",
+    "puzzle_image": "dingbat_178_puzzle.png",
+    "answer_image": "dingbat_178_answer.png"
+  },
+  {
+    "day": 179,
+    "puzzle_text": "CUT / CORNERS",
+    "answer_text": "CUT CORNERS",
+    "puzzle_image": "dingbat_179_puzzle.png",
+    "answer_image": "dingbat_179_answer.png"
+  },
+  {
+    "day": 180,
+    "puzzle_text": "SAME / CLOTH",
+    "answer_text": "CUT FROM THE SAME CLOTH",
+    "puzzle_image": "dingbat_180_puzzle.png",
+    "answer_image": "dingbat_180_answer.png"
+  },
+  {
+    "day": 181,
+    "puzzle_text": "DARK / HORSE",
+    "answer_text": "A DARK HORSE",
+    "puzzle_image": "dingbat_181_puzzle.png",
+    "answer_image": "dingbat_181_answer.png"
+  },
+  {
+    "day": 182,
+    "puzzle_text": "DEAD / RINGER",
+    "answer_text": "DEAD RINGER",
+    "puzzle_image": "dingbat_182_puzzle.png",
+    "answer_image": "dingbat_182_answer.png"
+  },
+  {
+    "day": 183,
+    "puzzle_text": "DIAMOND / ROUGH",
+    "answer_text": "DIAMOND IN THE ROUGH",
+    "puzzle_image": "dingbat_183_puzzle.png",
+    "answer_image": "dingbat_183_answer.png"
+  },
+  {
+    "day": 184,
+    "puzzle_text": "DIE IS / CAST",
+    "answer_text": "THE DIE IS CAST",
+    "puzzle_image": "dingbat_184_puzzle.png",
+    "answer_image": "dingbat_184_answer.png"
+  },
+  {
+    "day": 185,
+    "puzzle_text": "DODGE / BULLET",
+    "answer_text": "DODGE A BULLET",
+    "puzzle_image": "dingbat_185_puzzle.png",
+    "answer_image": "dingbat_185_answer.png"
+  },
+  {
+    "day": 186,
+    "puzzle_text": "DOG EAT / DOG",
+    "answer_text": "DOG EAT DOG WORLD",
+    "puzzle_image": "dingbat_186_puzzle.png",
+    "answer_image": "dingbat_186_answer.png"
+  },
+  {
+    "day": 187,
+    "puzzle_text": "DOWN TO / EARTH",
+    "answer_text": "DOWN TO EARTH",
+    "puzzle_image": "dingbat_187_puzzle.png",
+    "answer_image": "dingbat_187_answer.png"
+  },
+  {
+    "day": 188,
+    "puzzle_text": "DOWN TO / WIRE",
+    "answer_text": "DOWN TO THE WIRE",
+    "puzzle_image": "dingbat_188_puzzle.png",
+    "answer_image": "dingbat_188_answer.png"
+  },
+  {
+    "day": 189,
+    "puzzle_text": "DRAW / THE LINE",
+    "answer_text": "DRAW THE LINE",
+    "puzzle_image": "dingbat_189_puzzle.png",
+    "answer_image": "dingbat_189_answer.png"
+  },
+  {
+    "day": 190,
+    "puzzle_text": "DROP IN / OCEAN",
+    "answer_text": "A DROP IN THE OCEAN",
+    "puzzle_image": "dingbat_190_puzzle.png",
+    "answer_image": "dingbat_190_answer.png"
+  },
+  {
+    "day": 191,
+    "puzzle_text": "EARLY BIRD / WORM",
+    "answer_text": "EARLY BIRD CATCHES WORM",
+    "puzzle_image": "dingbat_191_puzzle.png",
+    "answer_image": "dingbat_191_answer.png"
+  },
+  {
+    "day": 192,
+    "puzzle_text": "EASY AS / PIE",
+    "answer_text": "EASY AS PIE",
+    "puzzle_image": "dingbat_192_puzzle.png",
+    "answer_image": "dingbat_192_answer.png"
+  },
+  {
+    "day": 193,
+    "puzzle_text": "EAT / HUMBLE PIE",
+    "answer_text": "EAT HUMBLE PIE",
+    "puzzle_image": "dingbat_193_puzzle.png",
+    "answer_image": "dingbat_193_answer.png"
+  },
+  {
+    "day": 194,
+    "puzzle_text": "EAT / HEART OUT",
+    "answer_text": "EAT YOUR HEART OUT",
+    "puzzle_image": "dingbat_194_puzzle.png",
+    "answer_image": "dingbat_194_answer.png"
+  },
+  {
+    "day": 195,
+    "puzzle_text": "EGG ON / FACE",
+    "answer_text": "EGG ON YOUR FACE",
+    "puzzle_image": "dingbat_195_puzzle.png",
+    "answer_image": "dingbat_195_answer.png"
+  },
+  {
+    "day": 196,
+    "puzzle_text": "FACE / MUSIC",
+    "answer_text": "FACE THE MUSIC",
+    "puzzle_image": "dingbat_196_puzzle.png",
+    "answer_image": "dingbat_196_answer.png"
+  },
+  {
+    "day": 197,
+    "puzzle_text": "FAIR WEATHER / FRIEND",
+    "answer_text": "FAIR WEATHER FRIEND",
+    "puzzle_image": "dingbat_197_puzzle.png",
+    "answer_image": "dingbat_197_answer.png"
+  },
+  {
+    "day": 198,
+    "puzzle_text": "FALL / GRACE",
+    "answer_text": "A FALL FROM GRACE",
+    "puzzle_image": "dingbat_198_puzzle.png",
+    "answer_image": "dingbat_198_answer.png"
+  },
+  {
+    "day": 199,
+    "puzzle_text": "LIFE IN / FAST LANE",
+    "answer_text": "LIFE IN THE FAST LANE",
+    "puzzle_image": "dingbat_199_puzzle.png",
+    "answer_image": "dingbat_199_answer.png"
+  },
+  {
+    "day": 200,
+    "puzzle_text": "FAT / CHANCE",
+    "answer_text": "FAT CHANCE",
+    "puzzle_image": "dingbat_200_puzzle.png",
+    "answer_image": "dingbat_200_answer.png"
+  },
+  {
+    "day": 201,
+    "puzzle_text": "FEAST / FAMINE",
+    "answer_text": "FEAST OR FAMINE",
+    "puzzle_image": "dingbat_201_puzzle.png",
+    "answer_image": "dingbat_201_answer.png"
+  },
+  {
+    "day": 202,
+    "puzzle_text": "FIRE / FIRE",
+    "answer_text": "FIGHT FIRE WITH FIRE",
+    "puzzle_image": "dingbat_202_puzzle.png",
+    "answer_image": "dingbat_202_answer.png"
+  },
+  {
+    "day": 203,
+    "puzzle_text": "FIND / FEET",
+    "answer_text": "FIND YOUR FEET",
+    "puzzle_image": "dingbat_203_puzzle.png",
+    "answer_image": "dingbat_203_answer.png"
+  },
+  {
+    "day": 204,
+    "puzzle_text": "FIRST COME / SERVED",
+    "answer_text": "FIRST COME FIRST SERVED",
+    "puzzle_image": "dingbat_204_puzzle.png",
+    "answer_image": "dingbat_204_answer.png"
+  },
+  {
+    "day": 205,
+    "puzzle_text": "FIT AS / FIDDLE",
+    "answer_text": "FIT AS A FIDDLE",
+    "puzzle_image": "dingbat_205_puzzle.png",
+    "answer_image": "dingbat_205_answer.png"
+  },
+  {
+    "day": 206,
+    "puzzle_text": "FIT LIKE / GLOVE",
+    "answer_text": "FITS LIKE A GLOVE",
+    "puzzle_image": "dingbat_206_puzzle.png",
+    "answer_image": "dingbat_206_answer.png"
+  },
+  {
+    "day": 207,
+    "puzzle_text": "FLY IN / OINTMENT",
+    "answer_text": "FLY IN THE OINTMENT",
+    "puzzle_image": "dingbat_207_puzzle.png",
+    "answer_image": "dingbat_207_answer.png"
+  },
+  {
+    "day": 208,
+    "puzzle_text": "FOOL'S / GOLD",
+    "answer_text": "FOOL'S GOLD",
+    "puzzle_image": "dingbat_208_puzzle.png",
+    "answer_image": "dingbat_208_answer.png"
+  },
+  {
+    "day": 209,
+    "puzzle_text": "FOOT IN / DOOR",
+    "answer_text": "FOOT IN THE DOOR",
+    "puzzle_image": "dingbat_209_puzzle.png",
+    "answer_image": "dingbat_209_answer.png"
+  },
+  {
+    "day": 210,
+    "puzzle_text": "FOOT IN / MOUTH",
+    "answer_text": "FOOT IN MOUTH",
+    "puzzle_image": "dingbat_210_puzzle.png",
+    "answer_image": "dingbat_210_answer.png"
+  },
+  {
+    "day": 211,
+    "puzzle_text": "CRYING / OUT LOUD",
+    "answer_text": "FOR CRYING OUT LOUD",
+    "puzzle_image": "dingbat_211_puzzle.png",
+    "answer_image": "dingbat_211_answer.png"
+  },
+  {
+    "day": 212,
+    "puzzle_text": "BOUGHT FOR / SONG",
+    "answer_text": "BOUGHT FOR A SONG",
+    "puzzle_image": "dingbat_212_puzzle.png",
+    "answer_image": "dingbat_212_answer.png"
+  },
+  {
+    "day": 213,
+    "puzzle_text": "FORTY / WINKS",
+    "answer_text": "FORTY WINKS",
+    "puzzle_image": "dingbat_213_puzzle.png",
+    "answer_image": "dingbat_213_answer.png"
+  },
+  {
+    "day": 214,
+    "puzzle_text": "PILLAR / POST",
+    "answer_text": "FROM PILLAR TO POST",
+    "puzzle_image": "dingbat_214_puzzle.png",
+    "answer_image": "dingbat_214_answer.png"
+  },
+  {
+    "day": 215,
+    "puzzle_text": "RAGS / RICHES",
+    "answer_text": "RAGS TO RICHES",
+    "puzzle_image": "dingbat_215_puzzle.png",
+    "answer_image": "dingbat_215_answer.png"
+  },
+  {
+    "day": 216,
+    "puzzle_text": "FULL OF / HOT AIR",
+    "answer_text": "FULL OF HOT AIR",
+    "puzzle_image": "dingbat_216_puzzle.png",
+    "answer_image": "dingbat_216_answer.png"
+  },
+  {
+    "day": 217,
+    "puzzle_text": "GAME / TWO HALVES",
+    "answer_text": "GAME OF TWO HALVES",
+    "puzzle_image": "dingbat_217_puzzle.png",
+    "answer_image": "dingbat_217_answer.png"
+  },
+  {
+    "day": 218,
+    "puzzle_text": "GET ACT / TOGETHER",
+    "answer_text": "GET YOUR ACT TOGETHER",
+    "puzzle_image": "dingbat_218_puzzle.png",
+    "answer_image": "dingbat_218_answer.png"
+  },
+  {
+    "day": 219,
+    "puzzle_text": "GET / THE SACK",
+    "answer_text": "GET THE SACK",
+    "puzzle_image": "dingbat_219_puzzle.png",
+    "answer_image": "dingbat_219_answer.png"
+  },
+  {
+    "day": 220,
+    "puzzle_text": "GET WIND / OF IT",
+    "answer_text": "GET WIND OF SOMETHING",
+    "puzzle_image": "dingbat_220_puzzle.png",
+    "answer_image": "dingbat_220_answer.png"
+  },
+  {
+    "day": 221,
+    "puzzle_text": "GHOST / TOWN",
+    "answer_text": "GHOST TOWN",
+    "puzzle_image": "dingbat_221_puzzle.png",
+    "answer_image": "dingbat_221_answer.png"
+  },
+  {
+    "day": 222,
+    "puzzle_text": "GIFT HORSE / MOUTH",
+    "answer_text": "DON'T LOOK GIFT HORSE",
+    "puzzle_image": "dingbat_222_puzzle.png",
+    "answer_image": "dingbat_222_answer.png"
+  },
+  {
+    "day": 223,
+    "puzzle_text": "GILD / LILY",
+    "answer_text": "GILD THE LILY",
+    "puzzle_image": "dingbat_223_puzzle.png",
+    "answer_image": "dingbat_223_answer.png"
+  },
+  {
+    "day": 224,
+    "puzzle_text": "GO DOWN / FLAMES",
+    "answer_text": "GO DOWN IN FLAMES",
+    "puzzle_image": "dingbat_224_puzzle.png",
+    "answer_image": "dingbat_224_answer.png"
+  },
+  {
+    "day": 225,
+    "puzzle_text": "GO EXTRA / MILE",
+    "answer_text": "GO THE EXTRA MILE",
+    "puzzle_image": "dingbat_225_puzzle.png",
+    "answer_image": "dingbat_225_answer.png"
+  },
+  {
+    "day": 226,
+    "puzzle_text": "GO FOR / BROKE",
+    "answer_text": "GO FOR BROKE",
+    "puzzle_image": "dingbat_226_puzzle.png",
+    "answer_image": "dingbat_226_answer.png"
+  },
+  {
+    "day": 227,
+    "puzzle_text": "OUT ON / LIMB",
+    "answer_text": "GO OUT ON A LIMB",
+    "puzzle_image": "dingbat_227_puzzle.png",
+    "answer_image": "dingbat_227_answer.png"
+  },
+  {
+    "day": 228,
+    "puzzle_text": "GO WITH / FLOW",
+    "answer_text": "GO WITH THE FLOW",
+    "puzzle_image": "dingbat_228_puzzle.png",
+    "answer_image": "dingbat_228_answer.png"
+  },
+  {
+    "day": 229,
+    "puzzle_text": "GOLDEN / OPPORTUNITY",
+    "answer_text": "GOLDEN OPPORTUNITY",
+    "puzzle_image": "dingbat_229_puzzle.png",
+    "answer_image": "dingbat_229_answer.png"
+  },
+  {
+    "day": 230,
+    "puzzle_text": "GONE TO / DOGS",
+    "answer_text": "GONE TO THE DOGS",
+    "puzzle_image": "dingbat_230_puzzle.png",
+    "answer_image": "dingbat_230_answer.png"
+  },
+  {
+    "day": 231,
+    "puzzle_text": "GOOD AS / GOLD",
+    "answer_text": "GOOD AS GOLD",
+    "puzzle_image": "dingbat_231_puzzle.png",
+    "answer_image": "dingbat_231_answer.png"
+  },
+  {
+    "day": 232,
+    "puzzle_text": "GRASP / NETTLE",
+    "answer_text": "GRASP THE NETTLE",
+    "puzzle_image": "dingbat_232_puzzle.png",
+    "answer_image": "dingbat_232_answer.png"
+  },
+  {
+    "day": 233,
+    "puzzle_text": "GRAVEYARD / SHIFT",
+    "answer_text": "GRAVEYARD SHIFT",
+    "puzzle_image": "dingbat_233_puzzle.png",
+    "answer_image": "dingbat_233_answer.png"
+  },
+  {
+    "day": 234,
+    "puzzle_text": "GREASE / WHEELS",
+    "answer_text": "GREASE THE WHEELS",
+    "puzzle_image": "dingbat_234_puzzle.png",
+    "answer_image": "dingbat_234_answer.png"
+  },
+  {
+    "day": 235,
+    "puzzle_text": "GIVE / GREEN LIGHT",
+    "answer_text": "GIVE THE GREEN LIGHT",
+    "puzzle_image": "dingbat_235_puzzle.png",
+    "answer_image": "dingbat_235_answer.png"
+  },
+  {
+    "day": 236,
+    "puzzle_text": "GREEN EYED / MONSTER",
+    "answer_text": "GREEN EYED MONSTER",
+    "puzzle_image": "dingbat_236_puzzle.png",
+    "answer_image": "dingbat_236_answer.png"
+  },
+  {
+    "day": 237,
+    "puzzle_text": "GRIN / BEAR IT",
+    "answer_text": "GRIN AND BEAR IT",
+    "puzzle_image": "dingbat_237_puzzle.png",
+    "answer_image": "dingbat_237_answer.png"
+  },
+  {
+    "day": 238,
+    "puzzle_text": "HAIR OF / DOG",
+    "answer_text": "HAIR OF THE DOG",
+    "puzzle_image": "dingbat_238_puzzle.png",
+    "answer_image": "dingbat_238_answer.png"
+  },
+  {
+    "day": 239,
+    "puzzle_text": "HALE / HEARTY",
+    "answer_text": "HALE AND HEARTY",
+    "puzzle_image": "dingbat_239_puzzle.png",
+    "answer_image": "dingbat_239_answer.png"
+  },
+  {
+    "day": 240,
+    "puzzle_text": "HAND IN / GLOVE",
+    "answer_text": "HAND IN GLOVE",
+    "puzzle_image": "dingbat_240_puzzle.png",
+    "answer_image": "dingbat_240_answer.png"
+  },
+  {
+    "day": 241,
+    "puzzle_text": "HARD ACT / FOLLOW",
+    "answer_text": "HARD ACT TO FOLLOW",
+    "puzzle_image": "dingbat_241_puzzle.png",
+    "answer_image": "dingbat_241_answer.png"
+  },
+  {
+    "day": 242,
+    "puzzle_text": "HARD NUT / CRACK",
+    "answer_text": "HARD NUT TO CRACK",
+    "puzzle_image": "dingbat_242_puzzle.png",
+    "answer_image": "dingbat_242_answer.png"
+  },
+  {
+    "day": 243,
+    "puzzle_text": "AXE TO / GRIND",
+    "answer_text": "AXE TO GRIND",
+    "puzzle_image": "dingbat_243_puzzle.png",
+    "answer_image": "dingbat_243_answer.png"
+  },
+  {
+    "day": 244,
+    "puzzle_text": "HEAD IN / CLOUDS",
+    "answer_text": "HEAD IN THE CLOUDS",
+    "puzzle_image": "dingbat_244_puzzle.png",
+    "answer_image": "dingbat_244_answer.png"
+  },
+  {
+    "day": 245,
+    "puzzle_text": "ON THE / GRAPEVINE",
+    "answer_text": "HEARD ON THE GRAPEVINE",
+    "puzzle_image": "dingbat_245_puzzle.png",
+    "answer_image": "dingbat_245_answer.png"
+  },
+  {
+    "day": 246,
+    "puzzle_text": "HEART / RIGHT PLACE",
+    "answer_text": "HEART IN RIGHT PLACE",
+    "puzzle_image": "dingbat_246_puzzle.png",
+    "answer_image": "dingbat_246_answer.png"
+  },
+  {
+    "day": 247,
+    "puzzle_text": "WITH HEAVY / HEART",
+    "answer_text": "WITH A HEAVY HEART",
+    "puzzle_image": "dingbat_247_puzzle.png",
+    "answer_image": "dingbat_247_answer.png"
+  },
+  {
+    "day": 248,
+    "puzzle_text": "HIGH & / DRY",
+    "answer_text": "HIGH AND DRY",
+    "puzzle_image": "dingbat_248_puzzle.png",
+    "answer_image": "dingbat_248_answer.png"
+  },
+  {
+    "day": 249,
+    "puzzle_text": "HIGH & / MIGHTY",
+    "answer_text": "HIGH AND MIGHTY",
+    "puzzle_image": "dingbat_249_puzzle.png",
+    "answer_image": "dingbat_249_answer.png"
+  },
+  {
+    "day": 250,
+    "puzzle_text": "HIT THE / HAY",
+    "answer_text": "HIT THE HAY",
+    "puzzle_image": "dingbat_250_puzzle.png",
+    "answer_image": "dingbat_250_answer.png"
+  },
+  {
+    "day": 251,
+    "puzzle_text": "HIT / JACKPOT",
+    "answer_text": "HIT THE JACKPOT",
+    "puzzle_image": "dingbat_251_puzzle.png",
+    "answer_image": "dingbat_251_answer.png"
+  },
+  {
+    "day": 252,
+    "puzzle_text": "HOLD / HORSES",
+    "answer_text": "HOLD YOUR HORSES",
+    "puzzle_image": "dingbat_252_puzzle.png",
+    "answer_image": "dingbat_252_answer.png"
+  },
+  {
+    "day": 253,
+    "puzzle_text": "HORSE / ANOTHER COLOR",
+    "answer_text": "HORSE OF ANOTHER COLOR",
+    "puzzle_image": "dingbat_253_puzzle.png",
+    "answer_image": "dingbat_253_answer.png"
+  },
+  {
+    "day": 254,
+    "puzzle_text": "HOT UNDER / COLLAR",
+    "answer_text": "HOT UNDER THE COLLAR",
+    "puzzle_image": "dingbat_254_puzzle.png",
+    "answer_image": "dingbat_254_answer.png"
+  },
+  {
+    "day": 255,
+    "puzzle_text": "IN HOUR / NEED",
+    "answer_text": "IN HOUR OF NEED",
+    "puzzle_image": "dingbat_255_puzzle.png",
+    "answer_image": "dingbat_255_answer.png"
+  },
+  {
+    "day": 256,
+    "puzzle_text": "HOUSE OF / CARDS",
+    "answer_text": "HOUSE OF CARDS",
+    "puzzle_image": "dingbat_256_puzzle.png",
+    "answer_image": "dingbat_256_answer.png"
+  },
+  {
+    "day": 257,
+    "puzzle_text": "ICING ON / CAKE",
+    "answer_text": "ICING ON THE CAKE",
+    "puzzle_image": "dingbat_257_puzzle.png",
+    "answer_image": "dingbat_257_answer.png"
+  },
+  {
+    "day": 258,
+    "puzzle_text": "ILL AT / EASE",
+    "answer_text": "ILL AT EASE",
+    "puzzle_image": "dingbat_258_puzzle.png",
+    "answer_image": "dingbat_258_answer.png"
+  },
+  {
+    "day": 259,
+    "puzzle_text": "IN A / NUTSHELL",
+    "answer_text": "IN A NUTSHELL",
+    "puzzle_image": "dingbat_259_puzzle.png",
+    "answer_image": "dingbat_259_answer.png"
+  },
+  {
+    "day": 260,
+    "puzzle_text": "BROAD / DAYLIGHT",
+    "answer_text": "IN BROAD DAYLIGHT",
+    "puzzle_image": "dingbat_260_puzzle.png",
+    "answer_image": "dingbat_260_answer.png"
+  },
+  {
+    "day": 261,
+    "puzzle_text": "IN FULL / SWING",
+    "answer_text": "IN FULL SWING",
+    "puzzle_image": "dingbat_261_puzzle.png",
+    "answer_image": "dingbat_261_answer.png"
+  },
+  {
+    "day": 262,
+    "puzzle_text": "BLINK OF / EYE",
+    "answer_text": "IN THE BLINK OF AN EYE",
+    "puzzle_image": "dingbat_262_puzzle.png",
+    "answer_image": "dingbat_262_answer.png"
+  },
+  {
+    "day": 263,
+    "puzzle_text": "IN THE / LIMELIGHT",
+    "answer_text": "IN THE LIMELIGHT",
+    "puzzle_image": "dingbat_263_puzzle.png",
+    "answer_image": "dingbat_263_answer.png"
+  },
+  {
+    "day": 264,
+    "puzzle_text": "NICK OF / TIME",
+    "answer_text": "IN THE NICK OF TIME",
+    "puzzle_image": "dingbat_264_puzzle.png",
+    "answer_image": "dingbat_264_answer.png"
+  },
+  {
+    "day": 265,
+    "puzzle_text": "IN THE / PIPELINE",
+    "answer_text": "IN THE PIPELINE",
+    "puzzle_image": "dingbat_265_puzzle.png",
+    "answer_image": "dingbat_265_answer.png"
+  },
+  {
+    "day": 266,
+    "puzzle_text": "IN THE / RED",
+    "answer_text": "IN THE RED",
+    "puzzle_image": "dingbat_266_puzzle.png",
+    "answer_image": "dingbat_266_answer.png"
+  },
+  {
+    "day": 267,
+    "puzzle_text": "IN THE / RUNNING",
+    "answer_text": "IN THE RUNNING",
+    "puzzle_image": "dingbat_267_puzzle.png",
+    "answer_image": "dingbat_267_answer.png"
+  },
+  {
+    "day": 268,
+    "puzzle_text": "IRONS IN / FIRE",
+    "answer_text": "IRONS IN THE FIRE",
+    "puzzle_image": "dingbat_268_puzzle.png",
+    "answer_image": "dingbat_268_answer.png"
+  },
+  {
+    "day": 269,
+    "puzzle_text": "ITCHY / FEET",
+    "answer_text": "ITCHY FEET",
+    "puzzle_image": "dingbat_269_puzzle.png",
+    "answer_image": "dingbat_269_answer.png"
+  },
+  {
+    "day": 270,
+    "puzzle_text": "IVORY / TOWER",
+    "answer_text": "IVORY TOWER",
+    "puzzle_image": "dingbat_270_puzzle.png",
+    "answer_image": "dingbat_270_answer.png"
+  },
+  {
+    "day": 271,
+    "puzzle_text": "JACK OF / ALL TRADES",
+    "answer_text": "JACK OF ALL TRADES",
+    "puzzle_image": "dingbat_271_puzzle.png",
+    "answer_image": "dingbat_271_answer.png"
+  },
+  {
+    "day": 272,
+    "puzzle_text": "JUMP TO / CONCLUSIONS",
+    "answer_text": "JUMP TO CONCLUSIONS",
+    "puzzle_image": "dingbat_272_puzzle.png",
+    "answer_image": "dingbat_272_answer.png"
+  },
+  {
+    "day": 273,
+    "puzzle_text": "KEEP AT / BAY",
+    "answer_text": "KEEP AT BAY",
+    "puzzle_image": "dingbat_273_puzzle.png",
+    "answer_image": "dingbat_273_answer.png"
+  },
+  {
+    "day": 274,
+    "puzzle_text": "ARM'S / LENGTH",
+    "answer_text": "AT ARM'S LENGTH",
+    "puzzle_image": "dingbat_274_puzzle.png",
+    "answer_image": "dingbat_274_answer.png"
+  },
+  {
+    "day": 275,
+    "puzzle_text": "BODY & SOUL / TOGETHER",
+    "answer_text": "BODY AND SOUL TOGETHER",
+    "puzzle_image": "dingbat_275_puzzle.png",
+    "answer_image": "dingbat_275_answer.png"
+  },
+  {
+    "day": 276,
+    "puzzle_text": "CARDS / CHEST",
+    "answer_text": "PLAY CARDS CLOSE TO CHEST",
+    "puzzle_image": "dingbat_276_puzzle.png",
+    "answer_image": "dingbat_276_answer.png"
+  },
+  {
+    "day": 277,
+    "puzzle_text": "EYE ON / BALL",
+    "answer_text": "KEEP YOUR EYE ON THE BALL",
+    "puzzle_image": "dingbat_277_puzzle.png",
+    "answer_image": "dingbat_277_answer.png"
+  },
+  {
+    "day": 278,
+    "puzzle_text": "NOSE TO / GRINDSTONE",
+    "answer_text": "NOSE TO THE GRINDSTONE",
+    "puzzle_image": "dingbat_278_puzzle.png",
+    "answer_image": "dingbat_278_answer.png"
+  },
+  {
+    "day": 279,
+    "puzzle_text": "KEEP TABS / ON",
+    "answer_text": "KEEP TABS ON",
+    "puzzle_image": "dingbat_279_puzzle.png",
+    "answer_image": "dingbat_279_answer.png"
+  },
+  {
+    "day": 280,
+    "puzzle_text": "UNDER / WRAPS",
+    "answer_text": "KEEP UNDER WRAPS",
+    "puzzle_image": "dingbat_280_puzzle.png",
+    "answer_image": "dingbat_280_answer.png"
+  },
+  {
+    "day": 281,
+    "puzzle_text": "KICK / BUCKET",
+    "answer_text": "KICK THE BUCKET",
+    "puzzle_image": "dingbat_281_puzzle.png",
+    "answer_image": "dingbat_281_answer.png"
+  },
+  {
+    "day": 282,
+    "puzzle_text": "KICK UP / HEELS",
+    "answer_text": "KICK UP YOUR HEELS",
+    "puzzle_image": "dingbat_282_puzzle.png",
+    "answer_image": "dingbat_282_answer.png"
+  },
+  {
+    "day": 283,
+    "puzzle_text": "KNOCK ON / WOOD",
+    "answer_text": "KNOCK ON WOOD",
+    "puzzle_image": "dingbat_283_puzzle.png",
+    "answer_image": "dingbat_283_answer.png"
+  },
+  {
+    "day": 284,
+    "puzzle_text": "KNOW THE / ROPES",
+    "answer_text": "KNOW THE ROPES",
+    "puzzle_image": "dingbat_284_puzzle.png",
+    "answer_image": "dingbat_284_answer.png"
+  },
+  {
+    "day": 285,
+    "puzzle_text": "LABOUR OF / LOVE",
+    "answer_text": "A LABOUR OF LOVE",
+    "puzzle_image": "dingbat_285_puzzle.png",
+    "answer_image": "dingbat_285_answer.png"
+  },
+  {
+    "day": 286,
+    "puzzle_text": "LAME / DUCK",
+    "answer_text": "LAME DUCK",
+    "puzzle_image": "dingbat_286_puzzle.png",
+    "answer_image": "dingbat_286_answer.png"
+  },
+  {
+    "day": 287,
+    "puzzle_text": "LAND ON / FEET",
+    "answer_text": "LAND ON YOUR FEET",
+    "puzzle_image": "dingbat_287_puzzle.png",
+    "answer_image": "dingbat_287_answer.png"
+  },
+  {
+    "day": 288,
+    "puzzle_text": "LAST NOT / LEAST",
+    "answer_text": "LAST BUT NOT LEAST",
+    "puzzle_image": "dingbat_288_puzzle.png",
+    "answer_image": "dingbat_288_answer.png"
+  },
+  {
+    "day": 289,
+    "puzzle_text": "LAUGHING / STOCK",
+    "answer_text": "A LAUGHING STOCK",
+    "puzzle_image": "dingbat_289_puzzle.png",
+    "answer_image": "dingbat_289_answer.png"
+  },
+  {
+    "day": 290,
+    "puzzle_text": "NO STONE / UNTURNED",
+    "answer_text": "LEAVE NO STONE UNTURNED",
+    "puzzle_image": "dingbat_290_puzzle.png",
+    "answer_image": "dingbat_290_answer.png"
+  },
+  {
+    "day": 291,
+    "puzzle_text": "LEND AN / EAR",
+    "answer_text": "LEND AN EAR",
+    "puzzle_image": "dingbat_291_puzzle.png",
+    "answer_image": "dingbat_291_answer.png"
+  },
+  {
+    "day": 292,
+    "puzzle_text": "CAT OUT / BAG",
+    "answer_text": "LET THE CAT OUT OF THE BAG",
+    "puzzle_image": "dingbat_292_puzzle.png",
+    "answer_image": "dingbat_292_answer.png"
+  },
+  {
+    "day": 293,
+    "puzzle_text": "LEVEL / PLAYING FIELD",
+    "answer_text": "LEVEL PLAYING FIELD",
+    "puzzle_image": "dingbat_293_puzzle.png",
+    "answer_image": "dingbat_293_answer.png"
+  },
+  {
+    "day": 294,
+    "puzzle_text": "LIGHT / TUNNEL",
+    "answer_text": "LIGHT AT END OF TUNNEL",
+    "puzzle_image": "dingbat_294_puzzle.png",
+    "answer_image": "dingbat_294_answer.png"
+  },
+  {
+    "day": 295,
+    "puzzle_text": "LIKE CLOCK / WORK",
+    "answer_text": "LIKE CLOCKWORK",
+    "puzzle_image": "dingbat_295_puzzle.png",
+    "answer_image": "dingbat_295_answer.png"
+  },
+  {
+    "day": 296,
+    "puzzle_text": "LINE / POCKETS",
+    "answer_text": "LINE YOUR POCKETS",
+    "puzzle_image": "dingbat_296_puzzle.png",
+    "answer_image": "dingbat_296_answer.png"
+  },
+  {
+    "day": 297,
+    "puzzle_text": "LION'S / SHARE",
+    "answer_text": "THE LION'S SHARE",
+    "puzzle_image": "dingbat_297_puzzle.png",
+    "answer_image": "dingbat_297_answer.png"
+  },
+  {
+    "day": 298,
+    "puzzle_text": "LIVE & / LET LIVE",
+    "answer_text": "LIVE AND LET LIVE",
+    "puzzle_image": "dingbat_298_puzzle.png",
+    "answer_image": "dingbat_298_answer.png"
+  },
+  {
+    "day": 299,
+    "puzzle_text": "LOCK STOCK / BARREL",
+    "answer_text": "LOCK, STOCK AND BARREL",
+    "puzzle_image": "dingbat_299_puzzle.png",
+    "answer_image": "dingbat_299_answer.png"
+  },
+  {
+    "day": 300,
+    "puzzle_text": "LOOSE / CANNON",
+    "answer_text": "A LOOSE CANNON",
+    "puzzle_image": "dingbat_300_puzzle.png",
+    "answer_image": "dingbat_300_answer.png"
+  },
+  {
+    "day": 301,
+    "puzzle_text": "LOST IN / TRANSLATION",
+    "answer_text": "LOST IN TRANSLATION",
+    "puzzle_image": "dingbat_301_puzzle.png",
+    "answer_image": "dingbat_301_answer.png"
+  },
+  {
+    "day": 302,
+    "puzzle_text": "LOW HANGING / FRUIT",
+    "answer_text": "LOW HANGING FRUIT",
+    "puzzle_image": "dingbat_302_puzzle.png",
+    "answer_image": "dingbat_302_answer.png"
+  },
+  {
+    "day": 303,
+    "puzzle_text": "CLEAN BREAST / OF IT",
+    "answer_text": "MAKE A CLEAN BREAST",
+    "puzzle_image": "dingbat_303_puzzle.png",
+    "answer_image": "dingbat_303_answer.png"
+  },
+  {
+    "day": 304,
+    "puzzle_text": "MAKE ENDS / MEET",
+    "answer_text": "MAKE ENDS MEET",
+    "puzzle_image": "dingbat_304_puzzle.png",
+    "answer_image": "dingbat_304_answer.png"
+  },
+  {
+    "day": 305,
+    "puzzle_text": "MOUNTAIN / MOLEHILL",
+    "answer_text": "MOUNTAIN OUT OF MOLEHILL",
+    "puzzle_image": "dingbat_305_puzzle.png",
+    "answer_image": "dingbat_305_answer.png"
+  },
+  {
+    "day": 306,
+    "puzzle_text": "MELTING / POT",
+    "answer_text": "MELTING POT",
+    "puzzle_image": "dingbat_306_puzzle.png",
+    "answer_image": "dingbat_306_answer.png"
+  },
+  {
+    "day": 307,
+    "puzzle_text": "METHOD IN / MADNESS",
+    "answer_text": "METHOD IN THE MADNESS",
+    "puzzle_image": "dingbat_307_puzzle.png",
+    "answer_image": "dingbat_307_answer.png"
+  },
+  {
+    "day": 308,
+    "puzzle_text": "MIDAS / TOUCH",
+    "answer_text": "THE MIDAS TOUCH",
+    "puzzle_image": "dingbat_308_puzzle.png",
+    "answer_image": "dingbat_308_answer.png"
+  },
+  {
+    "day": 309,
+    "puzzle_text": "DON'T MINCE / WORDS",
+    "answer_text": "DON'T MINCE WORDS",
+    "puzzle_image": "dingbat_309_puzzle.png",
+    "answer_image": "dingbat_309_answer.png"
+  },
+  {
+    "day": 310,
+    "puzzle_text": "MONKEY / BUSINESS",
+    "answer_text": "MONKEY BUSINESS",
+    "puzzle_image": "dingbat_310_puzzle.png",
+    "answer_image": "dingbat_310_answer.png"
+  },
+  {
+    "day": 311,
+    "puzzle_text": "MUSIC TO / EARS",
+    "answer_text": "MUSIC TO MY EARS",
+    "puzzle_image": "dingbat_311_puzzle.png",
+    "answer_image": "dingbat_311_answer.png"
+  },
+  {
+    "day": 312,
+    "puzzle_text": "NECK / NECK",
+    "answer_text": "NECK AND NECK",
+    "puzzle_image": "dingbat_312_puzzle.png",
+    "answer_image": "dingbat_312_answer.png"
+  },
+  {
+    "day": 313,
+    "puzzle_text": "NEST / EGG",
+    "answer_text": "NEST EGG",
+    "puzzle_image": "dingbat_313_puzzle.png",
+    "answer_image": "dingbat_313_answer.png"
+  },
+  {
+    "day": 314,
+    "puzzle_text": "NIGHT / OWL",
+    "answer_text": "NIGHT OWL",
+    "puzzle_image": "dingbat_314_puzzle.png",
+    "answer_image": "dingbat_314_answer.png"
+  },
+  {
+    "day": 315,
+    "puzzle_text": "NIP IN / BUD",
+    "answer_text": "NIP IN THE BUD",
+    "puzzle_image": "dingbat_315_puzzle.png",
+    "answer_image": "dingbat_315_answer.png"
+  },
+  {
+    "day": 316,
+    "puzzle_text": "NO BONES / ABOUT IT",
+    "answer_text": "MAKE NO BONES ABOUT IT",
+    "puzzle_image": "dingbat_316_puzzle.png",
+    "answer_image": "dingbat_316_answer.png"
+  },
+  {
+    "day": 317,
+    "puzzle_text": "NO LAUGHING / MATTER",
+    "answer_text": "NO LAUGHING MATTER",
+    "puzzle_image": "dingbat_317_puzzle.png",
+    "answer_image": "dingbat_317_answer.png"
+  },
+  {
+    "day": 318,
+    "puzzle_text": "NO STONE / LEFT",
+    "answer_text": "NO STONE UNTURNED",
+    "puzzle_image": "dingbat_318_puzzle.png",
+    "answer_image": "dingbat_318_answer.png"
+  },
+  {
+    "day": 319,
+    "puzzle_text": "NO STRINGS / ATTACHED",
+    "answer_text": "NO STRINGS ATTACHED",
+    "puzzle_image": "dingbat_319_puzzle.png",
+    "answer_image": "dingbat_319_answer.png"
+  },
+  {
+    "day": 320,
+    "puzzle_text": "SWING / CAT",
+    "answer_text": "NO ROOM TO SWING A CAT",
+    "puzzle_image": "dingbat_320_puzzle.png",
+    "answer_image": "dingbat_320_answer.png"
+  },
+  {
+    "day": 321,
+    "puzzle_text": "OFF BEATEN / TRACK",
+    "answer_text": "OFF THE BEATEN TRACK",
+    "puzzle_image": "dingbat_321_puzzle.png",
+    "answer_image": "dingbat_321_answer.png"
+  },
+  {
+    "day": 322,
+    "puzzle_text": "OFF THE / RECORD",
+    "answer_text": "OFF THE RECORD",
+    "puzzle_image": "dingbat_322_puzzle.png",
+    "answer_image": "dingbat_322_answer.png"
+  },
+  {
+    "day": 323,
+    "puzzle_text": "HABITS / DIE HARD",
+    "answer_text": "OLD HABITS DIE HARD",
+    "puzzle_image": "dingbat_323_puzzle.png",
+    "answer_image": "dingbat_323_answer.png"
+  },
+  {
+    "day": 324,
+    "puzzle_text": "ON A / ROLL",
+    "answer_text": "ON A ROLL",
+    "puzzle_image": "dingbat_324_puzzle.png",
+    "answer_image": "dingbat_324_answer.png"
+  },
+  {
+    "day": 325,
+    "puzzle_text": "ON CLOUD / NINE",
+    "answer_text": "ON CLOUD NINE",
+    "puzzle_image": "dingbat_325_puzzle.png",
+    "answer_image": "dingbat_325_answer.png"
+  },
+  {
+    "day": 326,
+    "puzzle_text": "PINS & / NEEDLES",
+    "answer_text": "ON PINS AND NEEDLES",
+    "puzzle_image": "dingbat_326_puzzle.png",
+    "answer_image": "dingbat_326_answer.png"
+  },
+  {
+    "day": 327,
+    "puzzle_text": "ON THE / BALL",
+    "answer_text": "ON THE BALL",
+    "puzzle_image": "dingbat_327_puzzle.png",
+    "answer_image": "dingbat_327_answer.png"
+  },
+  {
+    "day": 328,
+    "puzzle_text": "ON THE / FENCE",
+    "answer_text": "ON THE FENCE",
+    "puzzle_image": "dingbat_328_puzzle.png",
+    "answer_image": "dingbat_328_answer.png"
+  },
+  {
+    "day": 329,
+    "puzzle_text": "ON THE / HOUSE",
+    "answer_text": "ON THE HOUSE",
+    "puzzle_image": "dingbat_329_puzzle.png",
+    "answer_image": "dingbat_329_answer.png"
+  },
+  {
+    "day": 330,
+    "puzzle_text": "ON SAME / PAGE",
+    "answer_text": "ON THE SAME PAGE",
+    "puzzle_image": "dingbat_330_puzzle.png",
+    "answer_image": "dingbat_330_answer.png"
+  },
+  {
+    "day": 331,
+    "puzzle_text": "ONCE BITTEN / TWICE SHY",
+    "answer_text": "ONCE BITTEN TWICE SHY",
+    "puzzle_image": "dingbat_331_puzzle.png",
+    "answer_image": "dingbat_331_answer.png"
+  },
+  {
+    "day": 332,
+    "puzzle_text": "CAN OF / WORMS",
+    "answer_text": "CAN OF WORMS",
+    "puzzle_image": "dingbat_332_puzzle.png",
+    "answer_image": "dingbat_332_answer.png"
+  },
+  {
+    "day": 333,
+    "puzzle_text": "OUT OF / THE BLUE",
+    "answer_text": "OUT OF THE BLUE",
+    "puzzle_image": "dingbat_333_puzzle.png",
+    "answer_image": "dingbat_333_answer.png"
+  },
+  {
+    "day": 334,
+    "puzzle_text": "OUT OF / WOODS",
+    "answer_text": "OUT OF THE WOODS",
+    "puzzle_image": "dingbat_334_puzzle.png",
+    "answer_image": "dingbat_334_answer.png"
+  },
+  {
+    "day": 335,
+    "puzzle_text": "OVER THE / MOON",
+    "answer_text": "OVER THE MOON",
+    "puzzle_image": "dingbat_335_puzzle.png",
+    "answer_image": "dingbat_335_answer.png"
+  },
+  {
+    "day": 336,
+    "puzzle_text": "LIKE / SARDINES",
+    "answer_text": "PACKED LIKE SARDINES",
+    "puzzle_image": "dingbat_336_puzzle.png",
+    "answer_image": "dingbat_336_answer.png"
+  },
+  {
+    "day": 337,
+    "puzzle_text": "FLYING / COLORS",
+    "answer_text": "WITH FLYING COLORS",
+    "puzzle_image": "dingbat_337_puzzle.png",
+    "answer_image": "dingbat_337_answer.png"
+  },
+  {
+    "day": 338,
+    "puzzle_text": "PAY / NOSE",
+    "answer_text": "PAY THROUGH THE NOSE",
+    "puzzle_image": "dingbat_338_puzzle.png",
+    "answer_image": "dingbat_338_answer.png"
+  },
+  {
+    "day": 339,
+    "puzzle_text": "PENNY FOR / THOUGHTS",
+    "answer_text": "PENNY FOR YOUR THOUGHTS",
+    "puzzle_image": "dingbat_339_puzzle.png",
+    "answer_image": "dingbat_339_answer.png"
+  },
+  {
+    "day": 340,
+    "puzzle_text": "PICTURE / 1000 WORDS",
+    "answer_text": "PICTURE PAINTS 1000 WORDS",
+    "puzzle_image": "dingbat_340_puzzle.png",
+    "answer_image": "dingbat_340_answer.png"
+  },
+  {
+    "day": 341,
+    "puzzle_text": "PIE IN / SKY",
+    "answer_text": "PIE IN THE SKY",
+    "puzzle_image": "dingbat_341_puzzle.png",
+    "answer_image": "dingbat_341_answer.png"
+  },
+  {
+    "day": 342,
+    "puzzle_text": "PLAY WITH / FIRE",
+    "answer_text": "PLAYING WITH FIRE",
+    "puzzle_image": "dingbat_342_puzzle.png",
+    "answer_image": "dingbat_342_answer.png"
+  },
+  {
+    "day": 343,
+    "puzzle_text": "PULL THE / PLUG",
+    "answer_text": "PULL THE PLUG",
+    "puzzle_image": "dingbat_343_puzzle.png",
+    "answer_image": "dingbat_343_answer.png"
+  },
+  {
+    "day": 344,
+    "puzzle_text": "PULL OUT / ALL STOPS",
+    "answer_text": "PULL OUT ALL THE STOPS",
+    "puzzle_image": "dingbat_344_puzzle.png",
+    "answer_image": "dingbat_344_answer.png"
+  },
+  {
+    "day": 345,
+    "puzzle_text": "EGGS / BASKET",
+    "answer_text": "EGGS IN ONE BASKET",
+    "puzzle_image": "dingbat_345_puzzle.png",
+    "answer_image": "dingbat_345_answer.png"
+  },
+  {
+    "day": 346,
+    "puzzle_text": "QUICK AS / FLASH",
+    "answer_text": "QUICK AS A FLASH",
+    "puzzle_image": "dingbat_346_puzzle.png",
+    "answer_image": "dingbat_346_answer.png"
+  },
+  {
+    "day": 347,
+    "puzzle_text": "READ BETWEEN / LINES",
+    "answer_text": "READ BETWEEN THE LINES",
+    "puzzle_image": "dingbat_347_puzzle.png",
+    "answer_image": "dingbat_347_answer.png"
+  },
+  {
+    "day": 348,
+    "puzzle_text": "RED / TAPE",
+    "answer_text": "RED TAPE",
+    "puzzle_image": "dingbat_348_puzzle.png",
+    "answer_image": "dingbat_348_answer.png"
+  },
+  {
+    "day": 349,
+    "puzzle_text": "ROUND THE / CLOCK",
+    "answer_text": "ROUND THE CLOCK",
+    "puzzle_image": "dingbat_349_puzzle.png",
+    "answer_image": "dingbat_349_answer.png"
+  },
+  {
+    "day": 350,
+    "puzzle_text": "SALT IN / WOUND",
+    "answer_text": "RUB SALT IN THE WOUND",
+    "puzzle_image": "dingbat_350_puzzle.png",
+    "answer_image": "dingbat_350_answer.png"
+  },
+  {
+    "day": 351,
+    "puzzle_text": "RUN OF / MILL",
+    "answer_text": "RUN OF THE MILL",
+    "puzzle_image": "dingbat_351_puzzle.png",
+    "answer_image": "dingbat_351_answer.png"
+  },
+  {
+    "day": 352,
+    "puzzle_text": "SAFE & / SOUND",
+    "answer_text": "SAFE AND SOUND",
+    "puzzle_image": "dingbat_352_puzzle.png",
+    "answer_image": "dingbat_352_answer.png"
+  },
+  {
+    "day": 353,
+    "puzzle_text": "SAIL CLOSE / WIND",
+    "answer_text": "SAIL CLOSE TO THE WIND",
+    "puzzle_image": "dingbat_353_puzzle.png",
+    "answer_image": "dingbat_353_answer.png"
+  },
+  {
+    "day": 354,
+    "puzzle_text": "SAVED BY / BELL",
+    "answer_text": "SAVED BY THE BELL",
+    "puzzle_image": "dingbat_354_puzzle.png",
+    "answer_image": "dingbat_354_answer.png"
+  },
+  {
+    "day": 355,
+    "puzzle_text": "HEN'S / TEETH",
+    "answer_text": "SCARCE AS HEN'S TEETH",
+    "puzzle_image": "dingbat_355_puzzle.png",
+    "answer_image": "dingbat_355_answer.png"
+  },
+  {
+    "day": 356,
+    "puzzle_text": "SECOND / NATURE",
+    "answer_text": "SECOND NATURE",
+    "puzzle_image": "dingbat_356_puzzle.png",
+    "answer_image": "dingbat_356_answer.png"
+  },
+  {
+    "day": 357,
+    "puzzle_text": "SIGHT FOR / SORE EYES",
+    "answer_text": "SIGHT FOR SORE EYES",
+    "puzzle_image": "dingbat_357_puzzle.png",
+    "answer_image": "dingbat_357_answer.png"
+  },
+  {
+    "day": 358,
+    "puzzle_text": "BORN WITH / SILVER SPOON",
+    "answer_text": "BORN WITH SILVER SPOON",
+    "puzzle_image": "dingbat_358_puzzle.png",
+    "answer_image": "dingbat_358_answer.png"
+  },
+  {
+    "day": 359,
+    "puzzle_text": "SINK OR / SWIM",
+    "answer_text": "SINK OR SWIM",
+    "puzzle_image": "dingbat_359_puzzle.png",
+    "answer_image": "dingbat_359_answer.png"
+  },
+  {
+    "day": 360,
+    "puzzle_text": "SKATING / THIN ICE",
+    "answer_text": "SKATING ON THIN ICE",
+    "puzzle_image": "dingbat_360_puzzle.png",
+    "answer_image": "dingbat_360_answer.png"
+  },
+  {
+    "day": 361,
+    "puzzle_text": "SMOOTH / SAILING",
+    "answer_text": "SMOOTH SAILING",
+    "puzzle_image": "dingbat_361_puzzle.png",
+    "answer_image": "dingbat_361_answer.png"
+  },
+  {
+    "day": 362,
+    "puzzle_text": "SPINNING / WHEELS",
+    "answer_text": "SPINNING YOUR WHEELS",
+    "puzzle_image": "dingbat_362_puzzle.png",
+    "answer_image": "dingbat_362_answer.png"
+  },
+  {
+    "day": 363,
+    "puzzle_text": "START FROM / SCRATCH",
+    "answer_text": "START FROM SCRATCH",
+    "puzzle_image": "dingbat_363_puzzle.png",
+    "answer_image": "dingbat_363_answer.png"
+  },
+  {
+    "day": 364,
+    "puzzle_text": "DON'T SWEAT / SMALL STUFF",
+    "answer_text": "DON'T SWEAT SMALL STUFF",
+    "puzzle_image": "dingbat_364_puzzle.png",
+    "answer_image": "dingbat_364_answer.png"
+  },
+  {
+    "day": 365,
+    "puzzle_text": "THICK & / THIN",
+    "answer_text": "THROUGH THICK AND THIN",
+    "puzzle_image": "dingbat_365_puzzle.png",
+    "answer_image": "dingbat_365_answer.png"
+  },
+  {
+    "day": 366,
+    "puzzle_text": "HAPPY NEW / YEAR",
+    "answer_text": "HAPPY NEW YEAR",
+    "puzzle_image": "dingbat_366_puzzle.png",
+    "answer_image": "dingbat_366_answer.png"
+  }
+]

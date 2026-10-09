@@ -14,10 +14,7 @@
 ^FB812,1,0,C,0
 ^FD{{CWRD2}}\&^FS
 
-^FX ==== LOWER SECTION: CENTERED MONOCHROME GRAPHIC CELL ====
-^FO186,250
-^FX === This centering instruction doesn't seem to work ^FB812,1,0,C,0 ====
-^FX === Replaced it by calculating a reasonable Left Field Origin of 186 ===
+^FX ==== LOWER SECTION: MONOCHROME GRAPHIC CELL ====
 ^XGE:IMGTEMP.GRF,1,1^FS
 
 ^XZ

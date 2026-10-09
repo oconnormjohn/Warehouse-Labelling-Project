@@ -512,8 +512,137 @@ function sidebarAction(action) {
 // 4. CATEGORY & PLAIN LABELS MATRIX LOADERS (SCREENS 1 & 4)
 // ==========================================================================
 
+// Daily Dingbat registry and runtime trackers
+let dingbatsManifestArray = [];
+
+/**
+ * Loads the pre-compiled 366 offline Daily Dingbat manifest.
+ */
+function loadDingbatsManifest() {
+    const baseUrl = getApiBaseUrl();
+    return fetch(`${baseUrl}/dingbats.json`)
+        .then(res => {
+            if (!res.ok) throw new Error("Dingbats manifest missing or unreachable.");
+            return res.json();
+        })
+        .then(data => {
+            if (Array.isArray(data)) {
+                dingbatsManifestArray = data;
+            }
+            return dingbatsManifestArray;
+        })
+        .catch(err => {
+            console.warn("Using offline fallback generator for dingbats:", err);
+            return [];
+        });
+}
+
+/**
+ * Calculates current day of year (1-366) based on system local time.
+ */
+function getDayOfYear(targetDate = new Date()) {
+    const startOfYear = new Date(targetDate.getFullYear(), 0, 0);
+    const timeDiff = (targetDate - startOfYear) + ((startOfYear.getTimezoneOffset() - targetDate.getTimezoneOffset()) * 60 * 1000);
+    const oneDayMs = 1000 * 60 * 60 * 24;
+    return Math.floor(timeDiff / oneDayMs);
+}
+
+/**
+ * Resolves current Daily Dingbat state (Before 11am: Puzzle, 11am+: Answer).
+ */
+function getCurrentDailyDingbatInfo() {
+    const systemNow = new Date();
+    const dayOfYear = getDayOfYear(systemNow);
+    const currentHours = systemNow.getHours();
+    const isBefore11Am = currentHours < 11;
+
+    let matchedItem = null;
+    if (Array.isArray(dingbatsManifestArray) && dingbatsManifestArray.length > 0) {
+        matchedItem = dingbatsManifestArray.find(d => d.day === dayOfYear) || 
+                      dingbatsManifestArray[(dayOfYear - 1) % dingbatsManifestArray.length];
+    }
+
+    if (!matchedItem) {
+        const paddedDayStr = String(Math.min(366, Math.max(1, dayOfYear))).padStart(3, '0');
+        matchedItem = {
+            day: dayOfYear,
+            puzzle_text: "STAND / I",
+            answer_text: "I UNDERSTAND",
+            puzzle_image: `dingbat_${paddedDayStr}_puzzle.png`,
+            answer_image: `dingbat_${paddedDayStr}_answer.png`
+        };
+    }
+
+    const currentImageFile = isBefore11Am ? matchedItem.puzzle_image : matchedItem.answer_image;
+    const currentMode = isBefore11Am ? "PUZZLE" : "ANSWER";
+
+    return {
+        item: matchedItem,
+        dayOfYear: dayOfYear,
+        isBefore11Am: isBefore11Am,
+        currentMode: currentMode,
+        imageFilename: currentImageFile,
+        imagePath: `dingbats/${currentImageFile}`
+    };
+}
+
+/**
+ * Periodically checks if the clock crossed 11am or midnight and updates slot 35.
+ */
+function refreshDailyDingbatButtonIfChanged() {
+    const dingbatBtn = document.getElementById('slot-35-daily-dingbat');
+    if (!dingbatBtn) return;
+
+    const dingbatInfo = getCurrentDailyDingbatInfo();
+    const stateSpan = dingbatBtn.querySelector('.dingbat-btn-state');
+    const targetStateText = dingbatInfo.isBefore11Am ? "PUZZLE" : "ANSWER";
+    const targetBg = dingbatInfo.isBefore11Am ? "#FFFFFF" : "#D4EDDA";
+
+    if (stateSpan && stateSpan.textContent !== targetStateText) {
+        stateSpan.textContent = targetStateText;
+    }
+    dingbatBtn.style.setProperty('background-color', targetBg, 'important');
+}
+
+/**
+ * Handles click on slot 35 Daily Dingbat button.
+ * Directly prints 1 label without opening the numeric keypad overlay.
+ */
+function handleDailyDingbatClick() {
+    const dingbatInfo = getCurrentDailyDingbatInfo();
+    const isPuzzle = dingbatInfo.isBefore11Am;
+
+    const slot1 = document.getElementById('cat-word1');
+    const slot2 = document.getElementById('cat-word2');
+
+    const word1 = "DAILY DINGBAT";
+    const word2 = isPuzzle ? "PUZZLE" : "ANSWER";
+
+    if (slot1 && slot2) {
+        slot1.textContent = word1;
+        slot2.textContent = word2;
+    }
+
+    lastExecutedPrintPayload = {
+        color: "plain", // Spools directly to plain_labels queue
+        cwrd1: word1,
+        cwrd2: word2,
+        q: isPuzzle ? "DINGBAT_PUZZLE" : "DINGBAT_ANSWER",
+        year: " ",
+        m1: dingbatInfo.imageFilename,
+        m2: dingbatInfo.item.answer_text || " ",
+        m3: isPuzzle ? dingbatInfo.item.puzzle_text : " ",
+        finalHex: isPuzzle ? "#FFFFFF" : "#D4EDDA",
+        finalPeriod: " "
+    };
+
+    // Directly print 1 label immediately - no numeric keypad overlay required
+    executePhysicalPrintSpooler(lastExecutedPrintPayload, 1);
+}
+
 /**
  * Loads category database array and dynamically renders the 35-button matrix grid.
+ * Slot position 35 (index 34) is reserved for the Daily Dingbat.
  */
 function loadHomeMatrixCategories() {
     const homeGrid = document.getElementById('home-category-grid');
@@ -529,6 +658,24 @@ function loadHomeMatrixCategories() {
             let matrixHTML = '';
 
             for (let index = 0; index < 35; index++) {
+                // Position 35 (Index 34) is the Daily Dingbat Button
+                if (index === 34) {
+                    const dingbatInfo = getCurrentDailyDingbatInfo();
+                    const dingbatStateText = dingbatInfo.isBefore11Am ? "PUZZLE" : "ANSWER";
+                    const dingbatBg = dingbatInfo.isBefore11Am ? "#FFFFFF" : "#D4EDDA";
+
+                    matrixHTML += `
+                        <button class="home-cat-btn daily-dingbat-btn" 
+                                id="slot-35-daily-dingbat"
+                                style="background-color: ${dingbatBg} !important; box-shadow: 0px 0.5vh 0px rgba(0,0,0,1) !important;" 
+                                onclick="handleDailyDingbatClick()">
+                            <span class="dingbat-btn-title">DAILY DINGBAT</span>
+                            <span class="dingbat-btn-state">${dingbatStateText}</span>
+                            <span class="dingbat-btn-action">PRESS TO PRINT</span>
+                        </button>`;
+                    continue;
+                }
+
                 const slotItem = categoryDataArray[index] || {};
                 const line1Text = (slotItem.text1 || "").toString().trim().toUpperCase();
                 const line2Text = (slotItem.text2 || "").toString().trim().toUpperCase();
@@ -1816,7 +1963,7 @@ function clearMultiplesKey() {
 }
 
 function dismissMultiplesQuantityOverlay() {
-    if (lastExecutedPrintPayload && (lastExecutedPrintPayload.q === 'EFB_LABEL' || lastExecutedPrintPayload.q === 'BLANK_DISPATCH')) {
+    if (lastExecutedPrintPayload && (lastExecutedPrintPayload.q === 'EFB_LABEL' || lastExecutedPrintPayload.q === 'BLANK_DISPATCH' || lastExecutedPrintPayload.q === 'DINGBAT_PUZZLE' || lastExecutedPrintPayload.q === 'DINGBAT_ANSWER')) {
         const multiplesModal = document.getElementById('admin-multiples-modal');
         if (multiplesModal) {
             multiplesModal.style.setProperty('display', 'none', 'important');
@@ -1851,6 +1998,18 @@ function confirmMultiplesQuantityRun() {
     }
 
     const finalNumericValue = collectedValue;
+
+    if (lastExecutedPrintPayload && (lastExecutedPrintPayload.q === 'DINGBAT_PUZZLE' || lastExecutedPrintPayload.q === 'DINGBAT_ANSWER')) {
+        const runCount = parseInt(finalNumericValue) || 1;
+        executePhysicalPrintSpooler(lastExecutedPrintPayload, runCount);
+
+        const multiplesModal = document.getElementById('admin-multiples-modal');
+        if (multiplesModal) {
+            multiplesModal.style.setProperty('display', 'none', 'important');
+            multiplesModal.classList.add('modal-hide');
+        }
+        return;
+    }
 
     if (lastExecutedPrintPayload && lastExecutedPrintPayload.q === 'EFB_LABEL') {
         const runCount = parseInt(finalNumericValue) || 1;
@@ -2405,6 +2564,12 @@ function showUserAlert(type, data = {}, duration = 3000) {
             if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
             
             if (type === 'PRINT_CONFIRM') {
+                if (lastExecutedPrintPayload && (lastExecutedPrintPayload.q === 'DINGBAT_PUZZLE' || lastExecutedPrintPayload.q === 'DINGBAT_ANSWER')) {
+                    loadHomeMatrixCategories();
+                    switchKioskScreenLayout("1");
+                    return;
+                }
+
                 if (lastExecutedPrintPayload && lastExecutedPrintPayload.q === 'EFB_LABEL') {
                     loadPlainLabelsMatrix();
                     switchKioskScreenLayout("4");
@@ -2434,10 +2599,15 @@ function showUserAlert(type, data = {}, duration = 3000) {
 // ==========================================================================
 
 window.addEventListener('DOMContentLoaded', () => {
-    // 1. Load configuration and initialize matrix grids
-    loadKioskConfigurationState();
+    // 1. Preload Dingbats manifest and kiosk configuration
+    loadDingbatsManifest().finally(() => {
+        loadKioskConfigurationState();
+    });
 
     // 2. Poll printer hardware status immediately on load, then every 5 seconds
     pollPrinterHardwareStatus();
     setInterval(pollPrinterHardwareStatus, 5000);
+
+    // 3. Monitor system clock to seamlessly reveal answers at 11am or rotate at midnight
+    setInterval(refreshDailyDingbatButtonIfChanged, 15000);
 });

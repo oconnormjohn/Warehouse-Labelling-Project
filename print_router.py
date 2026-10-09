@@ -57,17 +57,31 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
     if base_dir is None:
         base_dir = BASE_DIR
         
-    file_path = os.path.join(base_dir, 'label-graphics', image_filename)
-    if not os.path.exists(file_path):
-        file_path = os.path.join(base_dir, 'label-graphics', image_filename.lower())
-    if not os.path.exists(file_path):
-        graphics_dir = os.path.join(base_dir, 'label-graphics')
-        if os.path.exists(graphics_dir):
-            for fname in os.listdir(graphics_dir):
-                if fname.lower() == image_filename.lower():
-                    file_path = os.path.join(graphics_dir, fname)
+    clean_filename = os.path.basename(image_filename)
+    search_dirs = [
+        os.path.join(base_dir, 'label-graphics'),
+        os.path.join(base_dir, 'dingbats'),
+        base_dir
+    ]
+    file_path = None
+    for s_dir in search_dirs:
+        candidate = os.path.join(s_dir, clean_filename)
+        if os.path.exists(candidate):
+            file_path = candidate
+            break
+        candidate_lower = os.path.join(s_dir, clean_filename.lower())
+        if os.path.exists(candidate_lower):
+            file_path = candidate_lower
+            break
+        if os.path.exists(s_dir):
+            for fname in os.listdir(s_dir):
+                if fname.lower() == clean_filename.lower():
+                    file_path = os.path.join(s_dir, fname)
                     break
-    if not os.path.exists(file_path):
+        if file_path:
+            break
+
+    if not file_path or not os.path.exists(file_path):
         file_path = os.path.join(base_dir, 'label-graphics', 'blank.png')
         if not os.path.exists(file_path):
             return ""
@@ -81,12 +95,20 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
             else:
                 img = img.convert('RGB')
 
-            # Scale icons to 400px width while preserving native dimensions for dispatch graphics
+            # Scale icons to 400px width while preserving native dimensions for dispatch and double-size dingbat graphics
             if image_filename.lower() not in ('dispatch-van-90.png', 'durham and sunderland foodbank logo.png', 'fb-logo90.png'):
-                target_width = 400
-                w_percent = target_width / float(img.size[0])
-                target_height = int(float(img.size[1]) * float(w_percent))
-                img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+                if 'dingbat' in image_filename.lower():
+                    # Preserve double-sized dingbat graphics (up to 800px printhead width)
+                    if img.size[0] > 800:
+                        target_width = 800
+                        w_percent = target_width / float(img.size[0])
+                        target_height = int(float(img.size[1]) * float(w_percent))
+                        img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+                else:
+                    target_width = 400
+                    w_percent = target_width / float(img.size[0])
+                    target_height = int(float(img.size[1]) * float(w_percent))
+                    img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
 
             # High-contrast 1-bit monochrome conversion
             monochrome_img = img.convert("1")
@@ -344,11 +366,17 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     else:
                         final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING DISPATCH TEMPLATE^XZ"
 
-            # 3. Plain Labels Mode
+            # 2. Plain Labels Mode
             elif color == 'plain':
                 template_path = os.path.join(BASE_DIR, 'ZPL', 'PlainLabel.zpl')
+                if q_num in ('DINGBAT_PUZZLE', 'DINGBAT_ANSWER') or 'dingbat' in str(m1).lower():
+                    if os.path.exists(os.path.join(BASE_DIR, 'dingbats', 'dingbat-label.zpl')):
+                        template_path = os.path.join(BASE_DIR, 'dingbats', 'dingbat-label.zpl')
+                    elif os.path.exists(os.path.join(BASE_DIR, 'ZPL', 'dingbat-label.zpl')):
+                        template_path = os.path.join(BASE_DIR, 'ZPL', 'dingbat-label.zpl')
+                        
                 if not os.path.exists(template_path):
-                    final_zpl_payload = "^XA^FO50,50^A0N,40,40^FDERROR: MISSING PLAIN TEMPLATE^XZ"
+                    final_zpl_payload = f"^XA^FO50,50^A0N,40,40^FDERROR: MISSING TEMPLATE {os.path.basename(template_path)}^XZ"
                 else:
                     with open(template_path, 'r', encoding='utf-8') as f:
                         zpl_content = f.read()
@@ -359,7 +387,7 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     image_download_command = convert_image_to_zpl_graphic(m1)
                     final_zpl_payload = f"^XA\n{image_download_command}\n^XZ\n{zpl_content}" if image_download_command else zpl_content
             
-            # 4. Standard Rolling Calendar / Months Labels Mode
+            # 3. Standard Rolling Calendar / Months Labels Mode
             else:
                 is_month_mode = (str(q_num).upper() == 'MM')
                 is_full_year  = (str(q_num).upper() == 'FY' or 'ALL' in [m1, m2, m3])
