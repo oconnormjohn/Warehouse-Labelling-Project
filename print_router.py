@@ -3,9 +3,11 @@ Production Label Dashboard - CUPS Print Router & Local Web Server
 Designed for Raspberry Pi Linux environments with physical Zebra label printers.
 """
 
+import datetime
 import http.server
 import json
 import os
+import re
 import subprocess
 
 try:
@@ -95,12 +97,12 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
             else:
                 img = img.convert('RGB')
 
-            # Scale icons to 400px width while preserving native dimensions for dispatch and double-size dingbat graphics
+            # Scale icons to 400px width while preserving native dimensions for dispatch and standardized dingbats
             if image_filename.lower() not in ('dispatch-van-90.png', 'durham and sunderland foodbank logo.png', 'fb-logo90.png'):
                 if 'dingbat' in image_filename.lower():
-                    # Preserve double-sized dingbat graphics (up to 800px printhead width)
-                    if img.size[0] > 800:
-                        target_width = 800
+                    # Preserve standardized 650x390 dingbat graphics (scale down if wider than 650px)
+                    if img.size[0] > 650:
+                        target_width = 650
                         w_percent = target_width / float(img.size[0])
                         target_height = int(float(img.size[1]) * float(w_percent))
                         img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
@@ -366,14 +368,19 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     else:
                         final_zpl_payload = "^XA^FO50,50^A0N,20,20^FDERROR: MISSING DISPATCH TEMPLATE^XZ"
 
-            # 2. Plain Labels Mode
+            # 2. Plain Labels Mode (Includes Daily Dingbats)
             elif color == 'plain':
                 template_path = os.path.join(BASE_DIR, 'ZPL', 'PlainLabel.zpl')
                 if q_num in ('DINGBAT_PUZZLE', 'DINGBAT_ANSWER') or 'dingbat' in str(m1).lower():
-                    if os.path.exists(os.path.join(BASE_DIR, 'dingbats', 'dingbat-label.zpl')):
-                        template_path = os.path.join(BASE_DIR, 'dingbats', 'dingbat-label.zpl')
-                    elif os.path.exists(os.path.join(BASE_DIR, 'ZPL', 'dingbat-label.zpl')):
-                        template_path = os.path.join(BASE_DIR, 'ZPL', 'dingbat-label.zpl')
+                    for cand in [
+                        os.path.join(BASE_DIR, 'ZPL', 'dingbat.zpl'),
+                        os.path.join(BASE_DIR, 'ZPL', 'dingbat-label.zpl'),
+                        os.path.join(BASE_DIR, 'dingbats', 'dingbat.zpl'),
+                        os.path.join(BASE_DIR, 'dingbats', 'dingbat-label.zpl')
+                    ]:
+                        if os.path.exists(cand):
+                            template_path = cand
+                            break
                         
                 if not os.path.exists(template_path):
                     final_zpl_payload = f"^XA^FO50,50^A0N,40,40^FDERROR: MISSING TEMPLATE {os.path.basename(template_path)}^XZ"
@@ -381,6 +388,17 @@ class PrintRouterHandler(http.server.BaseHTTPRequestHandler):
                     with open(template_path, 'r', encoding='utf-8') as f:
                         zpl_content = f.read()
 
+                    # Resolve day number for dingbat header
+                    day_val = str(payload.get('day', '')).strip()
+                    if not day_val:
+                        m = re.search(r'dingbat_(\d+)', str(m1), re.IGNORECASE)
+                        if m:
+                            day_val = str(int(m.group(1)))
+                        else:
+                            day_val = str(datetime.datetime.now().timetuple().tm_yday)
+
+                    zpl_content = zpl_content.replace('{{DAY}}', day_val)
+                    zpl_content = zpl_content.replace('{{day}}', day_val)
                     zpl_content = zpl_content.replace('{{CWRD1}}', cwrd1)
                     zpl_content = zpl_content.replace('{{CWRD2}}', cwrd2)
 

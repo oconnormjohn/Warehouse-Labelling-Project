@@ -165,16 +165,21 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
     if (!payload) return;
 
     const mainWrapper = document.getElementById('main-app-wrapper');
-    if (mainWrapper) mainWrapper.classList.remove('printing-active-state');
-
     if (isDemoModeActive) {
         let displayYearText = payload.year;
         if (payload.q === 'EFB_LABEL' || payload.q === 'BLANK_DISPATCH' || payload.color === 'plain') {
             displayYearText = '';
         }
 
+        let confirmTitle = `${payload.cwrd1} ${payload.cwrd2}`.trim();
+        if (payload.q === 'DINGBAT_PUZZLE') {
+            confirmTitle = 'DAILY DINGBAT PUZZLE';
+        } else if (payload.q === 'DINGBAT_ANSWER') {
+            confirmTitle = 'DAILY DINGBAT ANSWER';
+        }
+
         showUserAlert('PRINT_CONFIRM', { 
-            categoryName: `${payload.cwrd1} ${payload.cwrd2}`.trim(), 
+            categoryName: confirmTitle, 
             periodText: payload.finalPeriod, 
             yearText: displayYearText, 
             hexColor: payload.finalHex 
@@ -214,6 +219,7 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
                 color: payload.color,
                 cwrd1: payload.cwrd1,
                 cwrd2: payload.cwrd2,
+                day: payload.day || "",
                 q: payload.q,
                 year: payload.year,
                 m1: payload.m1,
@@ -239,8 +245,15 @@ async function executePhysicalPrintSpooler(payload, totalRuns) {
             displayYearText = `BATCH RUN OF ${payload.year}`;
         }
 
+        let confirmTitle = `${payload.cwrd1} ${payload.cwrd2}`.trim();
+        if (payload.q === 'DINGBAT_PUZZLE') {
+            confirmTitle = 'DAILY DINGBAT PUZZLE';
+        } else if (payload.q === 'DINGBAT_ANSWER') {
+            confirmTitle = 'DAILY DINGBAT ANSWER';
+        }
+
         showUserAlert('PRINT_CONFIRM', { 
-            categoryName: `${payload.cwrd1} ${payload.cwrd2}`.trim(), 
+            categoryName: confirmTitle, 
             periodText: payload.finalPeriod, 
             yearText: displayYearText, 
             hexColor: payload.finalHex 
@@ -517,10 +530,17 @@ let dingbatsManifestArray = [];
 
 /**
  * Loads the pre-compiled 366 offline Daily Dingbat manifest.
+ * Checks dingbats.json first, and falls back to dingbat.json if present.
  */
 function loadDingbatsManifest() {
     const baseUrl = getApiBaseUrl();
     return fetch(`${baseUrl}/dingbats.json`)
+        .then(res => {
+            if (!res.ok) {
+                return fetch(`${baseUrl}/dingbat.json`);
+            }
+            return res;
+        })
         .then(res => {
             if (!res.ok) throw new Error("Dingbats manifest missing or unreachable.");
             return res.json();
@@ -549,31 +569,32 @@ function getDayOfYear(targetDate = new Date()) {
 
 /**
  * Resolves current Daily Dingbat state (Before 11am: Puzzle, 11am+: Answer).
+ * Supports the single-image standardised workflow (dingbat_XXX.png).
  */
 function getCurrentDailyDingbatInfo() {
     const systemNow = new Date();
     const dayOfYear = getDayOfYear(systemNow);
     const currentHours = systemNow.getHours();
     const isBefore11Am = currentHours < 11;
+    const paddedDayStr = String(Math.min(366, Math.max(1, dayOfYear))).padStart(3, '0');
 
     let matchedItem = null;
     if (Array.isArray(dingbatsManifestArray) && dingbatsManifestArray.length > 0) {
-        matchedItem = dingbatsManifestArray.find(d => d.day === dayOfYear) || 
+        matchedItem = dingbatsManifestArray.find(d => Number(d.day) === dayOfYear) || 
                       dingbatsManifestArray[(dayOfYear - 1) % dingbatsManifestArray.length];
     }
 
     if (!matchedItem) {
-        const paddedDayStr = String(Math.min(366, Math.max(1, dayOfYear))).padStart(3, '0');
         matchedItem = {
             day: dayOfYear,
-            puzzle_text: "STAND / I",
-            answer_text: "I UNDERSTAND",
-            puzzle_image: `dingbat_${paddedDayStr}_puzzle.png`,
-            answer_image: `dingbat_${paddedDayStr}_answer.png`
+            hint: "",
+            answer: "ANSWER: I UNDERSTAND",
+            image: `dingbat_${paddedDayStr}.png`
         };
     }
 
-    const currentImageFile = isBefore11Am ? matchedItem.puzzle_image : matchedItem.answer_image;
+    // Standardized single image per day: dingbat_XXX.png
+    const currentImageFile = matchedItem.puzzle_image || matchedItem.image || matchedItem.image_file || `dingbat_${paddedDayStr}.png`;
     const currentMode = isBefore11Am ? "PUZZLE" : "ANSWER";
 
     return {
@@ -606,11 +627,13 @@ function refreshDailyDingbatButtonIfChanged() {
 
 /**
  * Handles click on slot 35 Daily Dingbat button.
+ * Sends the hint/clue to {{CWRD1}}, and before 11am sends "" to {{CWRD2}} (solution after 11am).
  * Directly prints 1 label without opening the numeric keypad overlay.
  */
 function handleDailyDingbatClick() {
     const dingbatInfo = getCurrentDailyDingbatInfo();
     const isPuzzle = dingbatInfo.isBefore11Am;
+    const item = dingbatInfo.item || {};
 
     const slot1 = document.getElementById('cat-word1');
     const slot2 = document.getElementById('cat-word2');
@@ -623,15 +646,30 @@ function handleDailyDingbatClick() {
         slot2.textContent = word2;
     }
 
+    // Extract hint and answer
+    const hintText = (item.hint || item.clue || item.hint_text || "").trim();
+    let rawSolution = (item.answer || item.answer_text || item.solution || "").trim();
+    const cleanAnswerContent = rawSolution.replace(/^ANSWER:\s*/i, '').trim();
+    let solutionText = "";
+    if (cleanAnswerContent) {
+        solutionText = `ANSWER: ${cleanAnswerContent}`;
+    }
+
+    // {{CWRD1}} holds the hint/clue (or blank)
+    // {{CWRD2}} holds "" before 11am, and the prefixed answer after 11am
+    const labelCwrd1 = hintText;
+    const labelCwrd2 = isPuzzle ? "" : solutionText;
+
     lastExecutedPrintPayload = {
         color: "plain", // Spools directly to plain_labels queue
-        cwrd1: word1,
-        cwrd2: word2,
+        cwrd1: labelCwrd1,
+        cwrd2: labelCwrd2,
+        day: String(dingbatInfo.dayOfYear),
         q: isPuzzle ? "DINGBAT_PUZZLE" : "DINGBAT_ANSWER",
         year: " ",
         m1: dingbatInfo.imageFilename,
-        m2: dingbatInfo.item.answer_text || " ",
-        m3: isPuzzle ? dingbatInfo.item.puzzle_text : " ",
+        m2: solutionText,
+        m3: hintText,
         finalHex: isPuzzle ? "#FFFFFF" : "#D4EDDA",
         finalPeriod: " "
     };
@@ -1082,7 +1120,7 @@ function rebuildMonthCellsValidationAesthetics() {
         if (monthActiveTargetYearInt < systemYear) {
             isExpired = true;
         } else if (monthActiveTargetYearInt === systemYear) {
-            if (mIdx < systemMonthIndex) isExpired = true;
+            if (mIdx < systemMonthIndex) isMonthExpired = true;
         }
         
         if (!isExpired) {
@@ -1274,7 +1312,7 @@ function triggerUniversalKeypadStep() {
     }
 
     if (activeDispatchStep === "trolleys") {
-        if (keypadTitle) keypadTitle.textContent = "How many trolleys?";
+        if (keypadTitle) keypadTitle.textContent = "How many Dollies?";
         if (keypadSubmitText) keypadSubmitText.textContent = "ENTER";
     } else if (activeDispatchStep === "trays") {
         if (keypadTitle) keypadTitle.textContent = "How many trays?";
