@@ -534,7 +534,17 @@ let dingbatsManifestArray = [];
  */
 function loadDingbatsManifest() {
     const baseUrl = getApiBaseUrl();
-    return fetch(`${baseUrl}/dingbats.json`)
+    const currentYear = new Date().getFullYear();
+    const isOddYear = (currentYear % 2 !== 0);
+    const primaryFile = isOddYear ? "dingbats_year_1.json" : "dingbats_year_2.json";
+
+    return fetch(`${baseUrl}/${primaryFile}`)
+        .then(res => {
+            if (!res.ok) {
+                return fetch(`${baseUrl}/dingbats.json`);
+            }
+            return res;
+        })
         .then(res => {
             if (!res.ok) {
                 return fetch(`${baseUrl}/dingbat.json`);
@@ -548,6 +558,8 @@ function loadDingbatsManifest() {
         .then(data => {
             if (Array.isArray(data)) {
                 dingbatsManifestArray = data;
+            } else if (data && typeof data === 'object') {
+                dingbatsManifestArray = Object.values(data);
             }
             return dingbatsManifestArray;
         })
@@ -603,7 +615,7 @@ function getCurrentDailyDingbatInfo() {
         isBefore11Am: isBefore11Am,
         currentMode: currentMode,
         imageFilename: currentImageFile,
-        imagePath: `dingbats/${currentImageFile}`
+        imagePath: `${(new Date().getFullYear() % 2 !== 0) ? 'dingbats_year_1' : 'dingbats_year_2'}/${currentImageFile}`
     };
 }
 
@@ -652,7 +664,7 @@ function handleDailyDingbatClick() {
     const cleanAnswerContent = rawSolution.replace(/^ANSWER:\s*/i, '').trim();
     let solutionText = "";
     if (cleanAnswerContent) {
-        solutionText = `ANSWER: ${cleanAnswerContent}`;
+        solutionText = `${cleanAnswerContent}`;
     }
 
     // {{CWRD1}} holds the hint/clue (or blank)

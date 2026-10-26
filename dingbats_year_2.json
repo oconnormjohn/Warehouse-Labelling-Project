@@ -1,0 +1,2198 @@
+[
+  {
+    "day": 1,
+    "puzzle_image": "dingbat_001.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MEN OUT OF WORK"
+  },
+  {
+    "day": 2,
+    "puzzle_image": "dingbat_002.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A FOREGONE CONCLUSION"
+  },
+  {
+    "day": 3,
+    "puzzle_image": "dingbat_003.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SHORT AND SWEET"
+  },
+  {
+    "day": 4,
+    "puzzle_image": "dingbat_004.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A BREAK IN TRANSMISSION"
+  },
+  {
+    "day": 5,
+    "puzzle_image": "dingbat_005.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LONG JOHN SILVER"
+  },
+  {
+    "day": 6,
+    "puzzle_image": "dingbat_006.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: LOVE, HONOUR AND OBEY"
+  },
+  {
+    "day": 7,
+    "puzzle_image": "dingbat_007.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONWARD CHRISTIAN SOLDIERS"
+  },
+  {
+    "day": 8,
+    "puzzle_image": "dingbat_008.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BIG SHOW-OFF"
+  },
+  {
+    "day": 9,
+    "puzzle_image": "dingbat_009.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PIN-UP"
+  },
+  {
+    "day": 10,
+    "puzzle_image": "dingbat_010.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: IT'S A MISTAKE, WHICHEVER WAY YOU LOOK AT IT"
+  },
+  {
+    "day": 11,
+    "puzzle_image": "dingbat_011.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FALL APART"
+  },
+  {
+    "day": 12,
+    "puzzle_image": "dingbat_012.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FORGIVE AND FORGET"
+  },
+  {
+    "day": 13,
+    "puzzle_image": "dingbat_013.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A PLAY ON WORDS"
+  },
+  {
+    "day": 14,
+    "puzzle_image": "dingbat_014.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: MARRY ME"
+  },
+  {
+    "day": 15,
+    "puzzle_image": "dingbat_015.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: IT'S UP TO YOU"
+  },
+  {
+    "day": 16,
+    "puzzle_image": "dingbat_016.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BREACH OF CONTRACT"
+  },
+  {
+    "day": 17,
+    "puzzle_image": "dingbat_017.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SPLITTING HAIRS"
+  },
+  {
+    "day": 18,
+    "puzzle_image": "dingbat_018.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: KISS AND MAKE UP"
+  },
+  {
+    "day": 19,
+    "puzzle_image": "dingbat_019.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NO TURNING BACK"
+  },
+  {
+    "day": 20,
+    "puzzle_image": "dingbat_020.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: AFTERNOON TEA"
+  },
+  {
+    "day": 21,
+    "puzzle_image": "dingbat_021.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MOVING IN THE RIGHT CIRCLES"
+  },
+  {
+    "day": 22,
+    "puzzle_image": "dingbat_022.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ACCIDENT PRONE"
+  },
+  {
+    "day": 23,
+    "puzzle_image": "dingbat_023.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FAIR AND SQUARE"
+  },
+  {
+    "day": 24,
+    "puzzle_image": "dingbat_024.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: IT FELL OFF THE BACK OF A LORRY"
+  },
+  {
+    "day": 25,
+    "puzzle_image": "dingbat_025.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FOOT IN THE DOOR"
+  },
+  {
+    "day": 26,
+    "puzzle_image": "dingbat_026.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: CROSS COUNTRY RUN"
+  },
+  {
+    "day": 27,
+    "puzzle_image": "dingbat_027.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TOO HOT TO HANDLE"
+  },
+  {
+    "day": 28,
+    "puzzle_image": "dingbat_028.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HE WHO LAUGHS LAST LAUGHS LONGEST"
+  },
+  {
+    "day": 29,
+    "puzzle_image": "dingbat_029.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ON THE RIGHT SIDE OF THE LAW"
+  },
+  {
+    "day": 30,
+    "puzzle_image": "dingbat_030.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ALL FOR ONE AND ONE FOR ALL"
+  },
+  {
+    "day": 31,
+    "puzzle_image": "dingbat_031.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HIGH IQ"
+  },
+  {
+    "day": 32,
+    "puzzle_image": "dingbat_032.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MAKING ENDS MEET"
+  },
+  {
+    "day": 33,
+    "puzzle_image": "dingbat_033.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NOTHING OUT OF THE ORDINARY"
+  },
+  {
+    "day": 34,
+    "puzzle_image": "dingbat_034.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: BREAD AND BUTTER"
+  },
+  {
+    "day": 35,
+    "puzzle_image": "dingbat_035.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A BACKWARD STEP"
+  },
+  {
+    "day": 36,
+    "puzzle_image": "dingbat_036.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TOO FEW TO MENTION"
+  },
+  {
+    "day": 37,
+    "puzzle_image": "dingbat_037.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PIE IN THE SKY"
+  },
+  {
+    "day": 38,
+    "puzzle_image": "dingbat_038.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: THE CARDS ARE STACKED AGAINST YOU"
+  },
+  {
+    "day": 39,
+    "puzzle_image": "dingbat_039.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PARTING OF THE WAYS"
+  },
+  {
+    "day": 40,
+    "puzzle_image": "dingbat_040.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TAKE A TIP FROM ME"
+  },
+  {
+    "day": 41,
+    "puzzle_image": "dingbat_041.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TWIST OF FATE"
+  },
+  {
+    "day": 42,
+    "puzzle_image": "dingbat_042.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: UNCLE SAM NEEDS YOU"
+  },
+  {
+    "day": 43,
+    "puzzle_image": "dingbat_043.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ALL TIME HIGH"
+  },
+  {
+    "day": 44,
+    "puzzle_image": "dingbat_044.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LOOKING AFTER NUMBER ONE"
+  },
+  {
+    "day": 45,
+    "puzzle_image": "dingbat_045.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WE DOC AND DORIS"
+  },
+  {
+    "day": 46,
+    "puzzle_image": "dingbat_046.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: TURN THE HOUSE UPSIDE DOWN"
+  },
+  {
+    "day": 47,
+    "puzzle_image": "dingbat_047.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TOO CLEVER BY HALF"
+  },
+  {
+    "day": 48,
+    "puzzle_image": "dingbat_048.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE SOUTH OF FRANCE"
+  },
+  {
+    "day": 49,
+    "puzzle_image": "dingbat_049.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WHAT GOES UP MUST COME DOWN"
+  },
+  {
+    "day": 50,
+    "puzzle_image": "dingbat_050.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: TOTAL FAILURE"
+  },
+  {
+    "day": 51,
+    "puzzle_image": "dingbat_051.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ALL IN A GOOD CAUSE"
+  },
+  {
+    "day": 52,
+    "puzzle_image": "dingbat_052.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THROUGH THICK AND THIN"
+  },
+  {
+    "day": 53,
+    "puzzle_image": "dingbat_053.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SPLIT SECOND TIMING"
+  },
+  {
+    "day": 54,
+    "puzzle_image": "dingbat_054.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: SEEING THINGS IN A DIFFERENT LIGHT"
+  },
+  {
+    "day": 55,
+    "puzzle_image": "dingbat_055.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FILLING IN TIME"
+  },
+  {
+    "day": 56,
+    "puzzle_image": "dingbat_056.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: CHANGE OF LIFE"
+  },
+  {
+    "day": 57,
+    "puzzle_image": "dingbat_057.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PUT A SOCK IN IT"
+  },
+  {
+    "day": 58,
+    "puzzle_image": "dingbat_058.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: BOWLED OVER"
+  },
+  {
+    "day": 59,
+    "puzzle_image": "dingbat_059.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: DOWN ON THE FARM"
+  },
+  {
+    "day": 60,
+    "puzzle_image": "dingbat_060.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ANTS IN THE PANTS"
+  },
+  {
+    "day": 61,
+    "puzzle_image": "dingbat_061.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ON THE OUTSIDE LOOKING IN"
+  },
+  {
+    "day": 62,
+    "puzzle_image": "dingbat_062.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: RACE AGAINST TIME"
+  },
+  {
+    "day": 63,
+    "puzzle_image": "dingbat_063.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A SWARM OF BEES"
+  },
+  {
+    "day": 64,
+    "puzzle_image": "dingbat_064.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MAD ABOUT YOU"
+  },
+  {
+    "day": 65,
+    "puzzle_image": "dingbat_065.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A LITTLE ON THE LARGE SIDE"
+  },
+  {
+    "day": 66,
+    "puzzle_image": "dingbat_066.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: BACKWARD PUPILS"
+  },
+  {
+    "day": 67,
+    "puzzle_image": "dingbat_067.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LIFE IS FULL OF LITTLE IRONIES"
+  },
+  {
+    "day": 68,
+    "puzzle_image": "dingbat_068.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: GET UP AND GO"
+  },
+  {
+    "day": 69,
+    "puzzle_image": "dingbat_069.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THIS ONE IS ON THE HOUSE"
+  },
+  {
+    "day": 70,
+    "puzzle_image": "dingbat_070.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: MORE OR LESS"
+  },
+  {
+    "day": 71,
+    "puzzle_image": "dingbat_071.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BENDING THE TRUTH"
+  },
+  {
+    "day": 72,
+    "puzzle_image": "dingbat_072.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TWISTED ANKLE"
+  },
+  {
+    "day": 73,
+    "puzzle_image": "dingbat_073.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ROCK BOTTOM"
+  },
+  {
+    "day": 74,
+    "puzzle_image": "dingbat_074.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: SOUTH OF THE BORDER"
+  },
+  {
+    "day": 75,
+    "puzzle_image": "dingbat_075.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THAT'S BESIDE THE POINT"
+  },
+  {
+    "day": 76,
+    "puzzle_image": "dingbat_076.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SOCIAL CLIMBER"
+  },
+  {
+    "day": 77,
+    "puzzle_image": "dingbat_077.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HANG THE EXPENSE"
+  },
+  {
+    "day": 78,
+    "puzzle_image": "dingbat_078.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: GO FORTH AND MULTIPLY"
+  },
+  {
+    "day": 79,
+    "puzzle_image": "dingbat_079.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THREE DEGREES BELOW ZERO"
+  },
+  {
+    "day": 80,
+    "puzzle_image": "dingbat_080.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: AN AFTERTHOUGHT"
+  },
+  {
+    "day": 81,
+    "puzzle_image": "dingbat_081.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TAKE YOU OUT TO LUNCH"
+  },
+  {
+    "day": 82,
+    "puzzle_image": "dingbat_082.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: NEVER GIVE A SUCKER AN EVEN BREAK"
+  },
+  {
+    "day": 83,
+    "puzzle_image": "dingbat_083.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE NAME OF THE GAME"
+  },
+  {
+    "day": 84,
+    "puzzle_image": "dingbat_084.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MOTOR RACING"
+  },
+  {
+    "day": 85,
+    "puzzle_image": "dingbat_085.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BAGS UNDER THE EYES"
+  },
+  {
+    "day": 86,
+    "puzzle_image": "dingbat_086.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: CASH ON DELIVERY"
+  },
+  {
+    "day": 87,
+    "puzzle_image": "dingbat_087.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: READING BETWEEN THE LINES"
+  },
+  {
+    "day": 88,
+    "puzzle_image": "dingbat_088.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONE THING AFTER ANOTHER"
+  },
+  {
+    "day": 89,
+    "puzzle_image": "dingbat_089.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TWIST OF FATE"
+  },
+  {
+    "day": 90,
+    "puzzle_image": "dingbat_090.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: COME TO A SAD END"
+  },
+  {
+    "day": 91,
+    "puzzle_image": "dingbat_091.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BOB UP AND DOWN"
+  },
+  {
+    "day": 92,
+    "puzzle_image": "dingbat_092.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ALL RIGHT ON THE NIGHT"
+  },
+  {
+    "day": 93,
+    "puzzle_image": "dingbat_093.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NOT IN USE"
+  },
+  {
+    "day": 94,
+    "puzzle_image": "dingbat_094.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: HYMNS ANCIENT AND MODERN"
+  },
+  {
+    "day": 95,
+    "puzzle_image": "dingbat_095.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: RIGHT BETWEEN THE EYES"
+  },
+  {
+    "day": 96,
+    "puzzle_image": "dingbat_096.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: RISING DAMP"
+  },
+  {
+    "day": 97,
+    "puzzle_image": "dingbat_097.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A DIFFERENCE OF OPINION"
+  },
+  {
+    "day": 98,
+    "puzzle_image": "dingbat_098.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A WORD OF WARNING"
+  },
+  {
+    "day": 99,
+    "puzzle_image": "dingbat_099.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: EVERYTHING INTACT"
+  },
+  {
+    "day": 100,
+    "puzzle_image": "dingbat_100.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE WRITING IS ON THE WALL"
+  },
+  {
+    "day": 101,
+    "puzzle_image": "dingbat_101.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: CHICKEN OUT"
+  },
+  {
+    "day": 102,
+    "puzzle_image": "dingbat_102.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: MAKING ENDS MEET"
+  },
+  {
+    "day": 103,
+    "puzzle_image": "dingbat_103.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE START OF SOMETHING BIG"
+  },
+  {
+    "day": 104,
+    "puzzle_image": "dingbat_104.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MAKING A BEELINE"
+  },
+  {
+    "day": 105,
+    "puzzle_image": "dingbat_105.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MORE HARM THAN GOOD"
+  },
+  {
+    "day": 106,
+    "puzzle_image": "dingbat_106.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A PAIR OF SLIPPERS"
+  },
+  {
+    "day": 107,
+    "puzzle_image": "dingbat_107.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WITHIN REASON"
+  },
+  {
+    "day": 108,
+    "puzzle_image": "dingbat_108.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONE MISTAKE ON TOP OF ANOTHER"
+  },
+  {
+    "day": 109,
+    "puzzle_image": "dingbat_109.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE BOOT IS ON THE OTHER FOOT"
+  },
+  {
+    "day": 110,
+    "puzzle_image": "dingbat_110.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: THANK HEAVEN FOR SMALL MERCIES"
+  },
+  {
+    "day": 111,
+    "puzzle_image": "dingbat_111.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: COME DOWN TO EARTH"
+  },
+  {
+    "day": 112,
+    "puzzle_image": "dingbat_112.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A DROP IN  THE OCEAN"
+  },
+  {
+    "day": 113,
+    "puzzle_image": "dingbat_113.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FESTIVE SEASON"
+  },
+  {
+    "day": 114,
+    "puzzle_image": "dingbat_114.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: THE TOP AND BOTTOM OF IT"
+  },
+  {
+    "day": 115,
+    "puzzle_image": "dingbat_115.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: OUT AND ABOUT"
+  },
+  {
+    "day": 116,
+    "puzzle_image": "dingbat_116.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ROOM FOR ONE ON TOP"
+  },
+  {
+    "day": 117,
+    "puzzle_image": "dingbat_117.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: CURL UP WITH A GOOD BOOK"
+  },
+  {
+    "day": 118,
+    "puzzle_image": "dingbat_118.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: MIXING BUSINESS WITH PLEASURE"
+  },
+  {
+    "day": 119,
+    "puzzle_image": "dingbat_119.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE BACK OF BEYOND"
+  },
+  {
+    "day": 120,
+    "puzzle_image": "dingbat_120.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BACK SOON"
+  },
+  {
+    "day": 121,
+    "puzzle_image": "dingbat_121.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HORSING AROUND"
+  },
+  {
+    "day": 122,
+    "puzzle_image": "dingbat_122.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ARE YOU FOR OR AGAINST ME?"
+  },
+  {
+    "day": 123,
+    "puzzle_image": "dingbat_123.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WAIT IN VAIN"
+  },
+  {
+    "day": 124,
+    "puzzle_image": "dingbat_124.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: GOING ROUND THE BEND"
+  },
+  {
+    "day": 125,
+    "puzzle_image": "dingbat_125.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MADE IN GREAT BRITAIN"
+  },
+  {
+    "day": 126,
+    "puzzle_image": "dingbat_126.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ALL PULL TOGETHER"
+  },
+  {
+    "day": 127,
+    "puzzle_image": "dingbat_127.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A LEAP IN THE DARK"
+  },
+  {
+    "day": 128,
+    "puzzle_image": "dingbat_128.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PAY RISE"
+  },
+  {
+    "day": 129,
+    "puzzle_image": "dingbat_129.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WEEKEND BREAK"
+  },
+  {
+    "day": 130,
+    "puzzle_image": "dingbat_130.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: LITTLE WOMEN"
+  },
+  {
+    "day": 131,
+    "puzzle_image": "dingbat_131.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A CUT ABOVE THE REST"
+  },
+  {
+    "day": 132,
+    "puzzle_image": "dingbat_132.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A BIRD IN THE HAND IS WORTH TWO IN THE BUSH"
+  },
+  {
+    "day": 133,
+    "puzzle_image": "dingbat_133.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: IN BLACK AND WHITE"
+  },
+  {
+    "day": 134,
+    "puzzle_image": "dingbat_134.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: HIGH, WIDE AND HANDSOME"
+  },
+  {
+    "day": 135,
+    "puzzle_image": "dingbat_135.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONE FLEW OVER THE CUCKOO'S NEST"
+  },
+  {
+    "day": 136,
+    "puzzle_image": "dingbat_136.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NOT ENOUGH TO GO AROUND"
+  },
+  {
+    "day": 137,
+    "puzzle_image": "dingbat_137.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SUNNY SIDE UP"
+  },
+  {
+    "day": 138,
+    "puzzle_image": "dingbat_138.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: YOU LUCKY DOG"
+  },
+  {
+    "day": 139,
+    "puzzle_image": "dingbat_139.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NO ROOM FOR MANOEUVRE"
+  },
+  {
+    "day": 140,
+    "puzzle_image": "dingbat_140.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LIFT OUT OF ORDER"
+  },
+  {
+    "day": 141,
+    "puzzle_image": "dingbat_141.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NEITHER HERE NOR THERE"
+  },
+  {
+    "day": 142,
+    "puzzle_image": "dingbat_142.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: EASY ON THE EYES"
+  },
+  {
+    "day": 143,
+    "puzzle_image": "dingbat_143.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LACKING IN IMAGINATION"
+  },
+  {
+    "day": 144,
+    "puzzle_image": "dingbat_144.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WAVE GOODBYE"
+  },
+  {
+    "day": 145,
+    "puzzle_image": "dingbat_145.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MOTHER-IN-LAW"
+  },
+  {
+    "day": 146,
+    "puzzle_image": "dingbat_146.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A PARADOX"
+  },
+  {
+    "day": 147,
+    "puzzle_image": "dingbat_147.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A BIG LET DOWN"
+  },
+  {
+    "day": 148,
+    "puzzle_image": "dingbat_148.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TIME AFTER TIME"
+  },
+  {
+    "day": 149,
+    "puzzle_image": "dingbat_149.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FED UP TO THE BACK TEETH"
+  },
+  {
+    "day": 150,
+    "puzzle_image": "dingbat_150.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: IT'S THE THOUGHT THAT COUNTS"
+  },
+  {
+    "day": 151,
+    "puzzle_image": "dingbat_151.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A TIME AND A PLACE FOR EVERYTHING"
+  },
+  {
+    "day": 152,
+    "puzzle_image": "dingbat_152.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LAST DITCH STAND"
+  },
+  {
+    "day": 153,
+    "puzzle_image": "dingbat_153.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BEAT ABOUT THE BUSH"
+  },
+  {
+    "day": 154,
+    "puzzle_image": "dingbat_154.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A BAD SPELL OF WEATHER"
+  },
+  {
+    "day": 155,
+    "puzzle_image": "dingbat_155.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NOTHING TO WRITE HOME ABOUT"
+  },
+  {
+    "day": 156,
+    "puzzle_image": "dingbat_156.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WET UNDERFOOT"
+  },
+  {
+    "day": 157,
+    "puzzle_image": "dingbat_157.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PEACE IN OUR TIME"
+  },
+  {
+    "day": 158,
+    "puzzle_image": "dingbat_158.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A STITCH IN TIME"
+  },
+  {
+    "day": 159,
+    "puzzle_image": "dingbat_159.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: AN UPHILL STRUGGLE"
+  },
+  {
+    "day": 160,
+    "puzzle_image": "dingbat_160.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: AN OUTSIDE CHANCE"
+  },
+  {
+    "day": 161,
+    "puzzle_image": "dingbat_161.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A PLAY ON WORDS"
+  },
+  {
+    "day": 162,
+    "puzzle_image": "dingbat_162.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A PAIR OF SHORTS"
+  },
+  {
+    "day": 163,
+    "puzzle_image": "dingbat_163.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FIDDLER ON THE ROOF"
+  },
+  {
+    "day": 164,
+    "puzzle_image": "dingbat_164.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: DRUNK AND DISORDERLY"
+  },
+  {
+    "day": 165,
+    "puzzle_image": "dingbat_165.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SCRAMBLED EGGS"
+  },
+  {
+    "day": 166,
+    "puzzle_image": "dingbat_166.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: POTTER AROUND IN THE GARDEN"
+  },
+  {
+    "day": 167,
+    "puzzle_image": "dingbat_167.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A BREAK IN THE CLOUDS"
+  },
+  {
+    "day": 168,
+    "puzzle_image": "dingbat_168.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HIGH SEAS"
+  },
+  {
+    "day": 169,
+    "puzzle_image": "dingbat_169.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BACK HANDER"
+  },
+  {
+    "day": 170,
+    "puzzle_image": "dingbat_170.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: IN COMPLETE CONTROL"
+  },
+  {
+    "day": 171,
+    "puzzle_image": "dingbat_171.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PUT TWO AND TWO TOGETHER"
+  },
+  {
+    "day": 172,
+    "puzzle_image": "dingbat_172.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THIN DIVIDING LINE"
+  },
+  {
+    "day": 173,
+    "puzzle_image": "dingbat_173.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FULL OF BEANS"
+  },
+  {
+    "day": 174,
+    "puzzle_image": "dingbat_174.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: CHEQUERED CAREER"
+  },
+  {
+    "day": 175,
+    "puzzle_image": "dingbat_175.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: DOG IN A MANGER"
+  },
+  {
+    "day": 176,
+    "puzzle_image": "dingbat_176.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: UNFINISHED SYMPHONY"
+  },
+  {
+    "day": 177,
+    "puzzle_image": "dingbat_177.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: RED IN THE FACE"
+  },
+  {
+    "day": 178,
+    "puzzle_image": "dingbat_178.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: LOOK BOTH WAYS"
+  },
+  {
+    "day": 179,
+    "puzzle_image": "dingbat_179.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TURN  THE OTHER CHEEK"
+  },
+  {
+    "day": 180,
+    "puzzle_image": "dingbat_180.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONCE UPON A TIME"
+  },
+  {
+    "day": 181,
+    "puzzle_image": "dingbat_181.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: EGGS ON TOAST"
+  },
+  {
+    "day": 182,
+    "puzzle_image": "dingbat_182.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: WATERSHIP DOWN"
+  },
+  {
+    "day": 183,
+    "puzzle_image": "dingbat_183.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LONDON UNDERGROUND"
+  },
+  {
+    "day": 184,
+    "puzzle_image": "dingbat_184.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: STAR TURN"
+  },
+  {
+    "day": 185,
+    "puzzle_image": "dingbat_185.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BEND OVER BACKWARDS"
+  },
+  {
+    "day": 186,
+    "puzzle_image": "dingbat_186.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: AN IMPROPER SUGGESTION"
+  },
+  {
+    "day": 187,
+    "puzzle_image": "dingbat_187.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PAY THROUGH THE NOSE"
+  },
+  {
+    "day": 188,
+    "puzzle_image": "dingbat_188.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: KISS AND MAKE UP"
+  },
+  {
+    "day": 189,
+    "puzzle_image": "dingbat_189.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NEITHER HERE NOR THERE"
+  },
+  {
+    "day": 190,
+    "puzzle_image": "dingbat_190.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: CALL IT A DAY"
+  },
+  {
+    "day": 191,
+    "puzzle_image": "dingbat_191.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: OVERCOME ALL ODDS"
+  },
+  {
+    "day": 192,
+    "puzzle_image": "dingbat_192.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: JACK IN THE BOX"
+  },
+  {
+    "day": 193,
+    "puzzle_image": "dingbat_193.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TURN A DEAF EAR"
+  },
+  {
+    "day": 194,
+    "puzzle_image": "dingbat_194.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: OUT ON A LIMB"
+  },
+  {
+    "day": 195,
+    "puzzle_image": "dingbat_195.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A ROUND OF DRINKS"
+  },
+  {
+    "day": 196,
+    "puzzle_image": "dingbat_196.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PLUS FOURS"
+  },
+  {
+    "day": 197,
+    "puzzle_image": "dingbat_197.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ON THE DOUBLE"
+  },
+  {
+    "day": 198,
+    "puzzle_image": "dingbat_198.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: CLEANLINESS IS NEXT TO GODLINESS"
+  },
+  {
+    "day": 199,
+    "puzzle_image": "dingbat_199.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: OVER MY DEAD BODY"
+  },
+  {
+    "day": 200,
+    "puzzle_image": "dingbat_200.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: AN INSIDE JOB"
+  },
+  {
+    "day": 201,
+    "puzzle_image": "dingbat_201.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WASH AND BRUSH UP"
+  },
+  {
+    "day": 202,
+    "puzzle_image": "dingbat_202.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: DOWN ON YOUR LUCK"
+  },
+  {
+    "day": 203,
+    "puzzle_image": "dingbat_203.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: OVER THE MOON"
+  },
+  {
+    "day": 204,
+    "puzzle_image": "dingbat_204.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THIN ON TOP"
+  },
+  {
+    "day": 205,
+    "puzzle_image": "dingbat_205.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A BIG MISUNDERSTANDING"
+  },
+  {
+    "day": 206,
+    "puzzle_image": "dingbat_206.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PUT IT IN WRITING"
+  },
+  {
+    "day": 207,
+    "puzzle_image": "dingbat_207.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BREAK THE BANK"
+  },
+  {
+    "day": 208,
+    "puzzle_image": "dingbat_208.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: THE LAST ROUND-UP"
+  },
+  {
+    "day": 209,
+    "puzzle_image": "dingbat_209.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: STANDING ROOM ONLY"
+  },
+  {
+    "day": 210,
+    "puzzle_image": "dingbat_210.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: OUT OF SIGHT, OUT OF MIND"
+  },
+  {
+    "day": 211,
+    "puzzle_image": "dingbat_211.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TAKING THE FAMILY CUT"
+  },
+  {
+    "day": 212,
+    "puzzle_image": "dingbat_212.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: JOIN ME IN A DRINK"
+  },
+  {
+    "day": 213,
+    "puzzle_image": "dingbat_213.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BACKWARD FLIP"
+  },
+  {
+    "day": 214,
+    "puzzle_image": "dingbat_214.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MUCH ADO ABOUT NOTHING"
+  },
+  {
+    "day": 215,
+    "puzzle_image": "dingbat_215.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: KEEP RIGHT ON TO THE END OF THE ROAD"
+  },
+  {
+    "day": 216,
+    "puzzle_image": "dingbat_216.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SELL IN PART EXCHANGE"
+  },
+  {
+    "day": 217,
+    "puzzle_image": "dingbat_217.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: UNHAPPY WITHOUT YOU"
+  },
+  {
+    "day": 218,
+    "puzzle_image": "dingbat_218.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BACKSTROKE"
+  },
+  {
+    "day": 219,
+    "puzzle_image": "dingbat_219.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A SCORE TO SETTLE"
+  },
+  {
+    "day": 220,
+    "puzzle_image": "dingbat_220.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LAID BACK"
+  },
+  {
+    "day": 221,
+    "puzzle_image": "dingbat_221.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SPLIT RIGHT DOWN THE MIDDLE"
+  },
+  {
+    "day": 222,
+    "puzzle_image": "dingbat_222.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: UNITED STATES OF AMERICA"
+  },
+  {
+    "day": 223,
+    "puzzle_image": "dingbat_223.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: RUB THE WRONG WAY"
+  },
+  {
+    "day": 224,
+    "puzzle_image": "dingbat_224.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A DARK HORSE"
+  },
+  {
+    "day": 225,
+    "puzzle_image": "dingbat_225.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: OUT TO LUNCH"
+  },
+  {
+    "day": 226,
+    "puzzle_image": "dingbat_226.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: WATERING THE BEER"
+  },
+  {
+    "day": 227,
+    "puzzle_image": "dingbat_227.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BRING ON THE DANCING GIRLS"
+  },
+  {
+    "day": 228,
+    "puzzle_image": "dingbat_228.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HALF A DOLLAR"
+  },
+  {
+    "day": 229,
+    "puzzle_image": "dingbat_229.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MAIL ON SUNDAY"
+  },
+  {
+    "day": 230,
+    "puzzle_image": "dingbat_230.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: 'I' BEFORE 'E' EXCEPT AFTER 'C'"
+  },
+  {
+    "day": 231,
+    "puzzle_image": "dingbat_231.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BACK TO FRONT"
+  },
+  {
+    "day": 232,
+    "puzzle_image": "dingbat_232.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HONOUR AMONG THIEVES"
+  },
+  {
+    "day": 233,
+    "puzzle_image": "dingbat_233.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LIGHT AT THE END OF THE TUNNEL"
+  },
+  {
+    "day": 234,
+    "puzzle_image": "dingbat_234.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: NO EXCUSE FOR IT"
+  },
+  {
+    "day": 235,
+    "puzzle_image": "dingbat_235.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NO TRUTH IN THE RUMOUR"
+  },
+  {
+    "day": 236,
+    "puzzle_image": "dingbat_236.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BEND OVER BACKWARDS"
+  },
+  {
+    "day": 237,
+    "puzzle_image": "dingbat_237.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HOME IS WHERE THE HEART IS"
+  },
+  {
+    "day": 238,
+    "puzzle_image": "dingbat_238.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ODD MAN OUT"
+  },
+  {
+    "day": 239,
+    "puzzle_image": "dingbat_239.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MADE TO MEASURE"
+  },
+  {
+    "day": 240,
+    "puzzle_image": "dingbat_240.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THIS THING IS BIGGER THAN BOTH OF US"
+  },
+  {
+    "day": 241,
+    "puzzle_image": "dingbat_241.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SHRINKING VIOLET"
+  },
+  {
+    "day": 242,
+    "puzzle_image": "dingbat_242.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A BIT OF THIS AND THAT"
+  },
+  {
+    "day": 243,
+    "puzzle_image": "dingbat_243.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: CAN'T SPELL FOR TOFFEE"
+  },
+  {
+    "day": 244,
+    "puzzle_image": "dingbat_244.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: CROSSED FINGERS"
+  },
+  {
+    "day": 245,
+    "puzzle_image": "dingbat_245.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: KNIGHT IN SHINING ARMOUR"
+  },
+  {
+    "day": 246,
+    "puzzle_image": "dingbat_246.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: WEST INDIES"
+  },
+  {
+    "day": 247,
+    "puzzle_image": "dingbat_247.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: RIGHT IN THE MIDDLE OF THINGS"
+  },
+  {
+    "day": 248,
+    "puzzle_image": "dingbat_248.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SLUMP IN THE MARKET"
+  },
+  {
+    "day": 249,
+    "puzzle_image": "dingbat_249.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: YOU TURN ME ON"
+  },
+  {
+    "day": 250,
+    "puzzle_image": "dingbat_250.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: STORE IN A DRY PLACE"
+  },
+  {
+    "day": 251,
+    "puzzle_image": "dingbat_251.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NO GOING BACK"
+  },
+  {
+    "day": 252,
+    "puzzle_image": "dingbat_252.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SIDE SADDLE"
+  },
+  {
+    "day": 253,
+    "puzzle_image": "dingbat_253.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A LABOUR OF LOVE"
+  },
+  {
+    "day": 254,
+    "puzzle_image": "dingbat_254.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: BLOOD COUNT"
+  },
+  {
+    "day": 255,
+    "puzzle_image": "dingbat_255.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FEELING ON TOP OF THE WORLD"
+  },
+  {
+    "day": 256,
+    "puzzle_image": "dingbat_256.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PAINLESS OPERATION"
+  },
+  {
+    "day": 257,
+    "puzzle_image": "dingbat_257.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: IN THE SOUP"
+  },
+  {
+    "day": 258,
+    "puzzle_image": "dingbat_258.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: STICK 'EM UP"
+  },
+  {
+    "day": 259,
+    "puzzle_image": "dingbat_259.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: EYE SHADOW"
+  },
+  {
+    "day": 260,
+    "puzzle_image": "dingbat_260.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A LITTLE WHITE LIE"
+  },
+  {
+    "day": 261,
+    "puzzle_image": "dingbat_261.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LOST FOR WORDS"
+  },
+  {
+    "day": 262,
+    "puzzle_image": "dingbat_262.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: HALF HEARTED"
+  },
+  {
+    "day": 263,
+    "puzzle_image": "dingbat_263.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SINGING IN THE RAIN"
+  },
+  {
+    "day": 264,
+    "puzzle_image": "dingbat_264.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SIX OF ONE AND HALF A DOZEN OF ANOTHER"
+  },
+  {
+    "day": 265,
+    "puzzle_image": "dingbat_265.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MANY HAPPY RETURNS"
+  },
+  {
+    "day": 266,
+    "puzzle_image": "dingbat_266.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: MAKING A MONKEY OUT OF HIM"
+  },
+  {
+    "day": 267,
+    "puzzle_image": "dingbat_267.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ANOTHER FINE MESS YOU'VE GOT ME INTO"
+  },
+  {
+    "day": 268,
+    "puzzle_image": "dingbat_268.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A WHITE ELEPHANT"
+  },
+  {
+    "day": 269,
+    "puzzle_image": "dingbat_269.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: AN UPSET TUMMY"
+  },
+  {
+    "day": 270,
+    "puzzle_image": "dingbat_270.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: PARADISE LOST"
+  },
+  {
+    "day": 271,
+    "puzzle_image": "dingbat_271.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PARTING GIFT"
+  },
+  {
+    "day": 272,
+    "puzzle_image": "dingbat_272.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NOTHING TO DO"
+  },
+  {
+    "day": 273,
+    "puzzle_image": "dingbat_273.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: YOU ARE UNDER ARREST"
+  },
+  {
+    "day": 274,
+    "puzzle_image": "dingbat_274.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: HOOK, LINE AND SINKER"
+  },
+  {
+    "day": 275,
+    "puzzle_image": "dingbat_275.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BOOK ENDS"
+  },
+  {
+    "day": 276,
+    "puzzle_image": "dingbat_276.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BED AND BREAKFAST"
+  },
+  {
+    "day": 277,
+    "puzzle_image": "dingbat_277.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A LITTLE LIGHT RELIEF"
+  },
+  {
+    "day": 278,
+    "puzzle_image": "dingbat_278.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: GOLD SOVEREIGN"
+  },
+  {
+    "day": 279,
+    "puzzle_image": "dingbat_279.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WISH UPON A STAR"
+  },
+  {
+    "day": 280,
+    "puzzle_image": "dingbat_280.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BUTTON UP YOUR OVER COAT"
+  },
+  {
+    "day": 281,
+    "puzzle_image": "dingbat_281.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: RUNNING OUT OF TIME"
+  },
+  {
+    "day": 282,
+    "puzzle_image": "dingbat_282.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: UNDERCOVER AGENT"
+  },
+  {
+    "day": 283,
+    "puzzle_image": "dingbat_283.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: GOOD LOOKING"
+  },
+  {
+    "day": 284,
+    "puzzle_image": "dingbat_284.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NO END OF TROUBLE"
+  },
+  {
+    "day": 285,
+    "puzzle_image": "dingbat_285.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: EACH WAY BET"
+  },
+  {
+    "day": 286,
+    "puzzle_image": "dingbat_286.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: BLANK CHEQUE"
+  },
+  {
+    "day": 287,
+    "puzzle_image": "dingbat_287.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: IN FOR A PENNY IN FOR A POUND"
+  },
+  {
+    "day": 288,
+    "puzzle_image": "dingbat_288.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TORN ASUNDER"
+  },
+  {
+    "day": 289,
+    "puzzle_image": "dingbat_289.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BACK DOOR"
+  },
+  {
+    "day": 290,
+    "puzzle_image": "dingbat_290.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: FOR EVER AND EVER"
+  },
+  {
+    "day": 291,
+    "puzzle_image": "dingbat_291.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: KNOW TWO WAYS ABOUT IT"
+  },
+  {
+    "day": 292,
+    "puzzle_image": "dingbat_292.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: DEAD-EYE DICK"
+  },
+  {
+    "day": 293,
+    "puzzle_image": "dingbat_293.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: JUMPING TO CONCLUSIONS"
+  },
+  {
+    "day": 294,
+    "puzzle_image": "dingbat_294.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ATTORNEY GENERAL"
+  },
+  {
+    "day": 295,
+    "puzzle_image": "dingbat_295.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PUBLIC RIGHT OF WAY"
+  },
+  {
+    "day": 296,
+    "puzzle_image": "dingbat_296.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE LONG AND SHORT OF IT"
+  },
+  {
+    "day": 297,
+    "puzzle_image": "dingbat_297.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SKATING ON THIN ICE"
+  },
+  {
+    "day": 298,
+    "puzzle_image": "dingbat_298.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: CLOSE QUARTERS"
+  },
+  {
+    "day": 299,
+    "puzzle_image": "dingbat_299.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A DISAPPEARING ACT"
+  },
+  {
+    "day": 300,
+    "puzzle_image": "dingbat_300.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BESIDE THE SEA"
+  },
+  {
+    "day": 301,
+    "puzzle_image": "dingbat_301.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HIGH EXPLOSIVE"
+  },
+  {
+    "day": 302,
+    "puzzle_image": "dingbat_302.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: OK BY ME"
+  },
+  {
+    "day": 303,
+    "puzzle_image": "dingbat_303.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: EASY COME EASY GO"
+  },
+  {
+    "day": 304,
+    "puzzle_image": "dingbat_304.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BE SEEIN' YOU"
+  },
+  {
+    "day": 305,
+    "puzzle_image": "dingbat_305.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A GROSS INJUSTICE"
+  },
+  {
+    "day": 306,
+    "puzzle_image": "dingbat_306.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: SOMEONE TO TURN TO"
+  },
+  {
+    "day": 307,
+    "puzzle_image": "dingbat_307.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BREAKING THE ICE"
+  },
+  {
+    "day": 308,
+    "puzzle_image": "dingbat_308.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SAY THAT AGAIN"
+  },
+  {
+    "day": 309,
+    "puzzle_image": "dingbat_309.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WAY OUT IN FRONT"
+  },
+  {
+    "day": 310,
+    "puzzle_image": "dingbat_310.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A DOWNRIGHT LIBERTY"
+  },
+  {
+    "day": 311,
+    "puzzle_image": "dingbat_311.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ROYAL PARDON"
+  },
+  {
+    "day": 312,
+    "puzzle_image": "dingbat_312.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A FOLLOWING WIND"
+  },
+  {
+    "day": 313,
+    "puzzle_image": "dingbat_313.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NO IDEA"
+  },
+  {
+    "day": 314,
+    "puzzle_image": "dingbat_314.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SON OF A GUN"
+  },
+  {
+    "day": 315,
+    "puzzle_image": "dingbat_315.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: ROBIN HOOD"
+  },
+  {
+    "day": 316,
+    "puzzle_image": "dingbat_316.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A SHINING EXAMPLE"
+  },
+  {
+    "day": 317,
+    "puzzle_image": "dingbat_317.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: VANISHING CREAM"
+  },
+  {
+    "day": 318,
+    "puzzle_image": "dingbat_318.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SMALL OF THE BACK"
+  },
+  {
+    "day": 319,
+    "puzzle_image": "dingbat_319.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: FOUL LANGUAGE"
+  },
+  {
+    "day": 320,
+    "puzzle_image": "dingbat_320.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: JUST A TICK"
+  },
+  {
+    "day": 321,
+    "puzzle_image": "dingbat_321.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BLOCK OF FLATS"
+  },
+  {
+    "day": 322,
+    "puzzle_image": "dingbat_322.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: AN AFTERTHOUGHT"
+  },
+  {
+    "day": 323,
+    "puzzle_image": "dingbat_323.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: NO PEACE FOR THE WICKED"
+  },
+  {
+    "day": 324,
+    "puzzle_image": "dingbat_324.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: GENERATION GAP"
+  },
+  {
+    "day": 325,
+    "puzzle_image": "dingbat_325.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: HIGH TEA"
+  },
+  {
+    "day": 326,
+    "puzzle_image": "dingbat_326.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: YOU OUGHT TO BE IN THE PICTURES"
+  },
+  {
+    "day": 327,
+    "puzzle_image": "dingbat_327.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: SEASON TICKET"
+  },
+  {
+    "day": 328,
+    "puzzle_image": "dingbat_328.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: OUT OF COURT"
+  },
+  {
+    "day": 329,
+    "puzzle_image": "dingbat_329.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONCE AND FOR ALL"
+  },
+  {
+    "day": 330,
+    "puzzle_image": "dingbat_330.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LITTLE BY LITTLE"
+  },
+  {
+    "day": 331,
+    "puzzle_image": "dingbat_331.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: CLERICAL ERRORS"
+  },
+  {
+    "day": 332,
+    "puzzle_image": "dingbat_332.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BOTTLE PARTY"
+  },
+  {
+    "day": 333,
+    "puzzle_image": "dingbat_333.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: DOCTOR DOOLITTLE"
+  },
+  {
+    "day": 334,
+    "puzzle_image": "dingbat_334.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TURN THE CLOCKS BACK"
+  },
+  {
+    "day": 335,
+    "puzzle_image": "dingbat_335.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: 10 DOWNING STREET"
+  },
+  {
+    "day": 336,
+    "puzzle_image": "dingbat_336.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ANOTHER TIME, ANOTHER PLACE"
+  },
+  {
+    "day": 337,
+    "puzzle_image": "dingbat_337.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FROM TOP TO BOTTOM"
+  },
+  {
+    "day": 338,
+    "puzzle_image": "dingbat_338.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A KICK IN THE PANTS"
+  },
+  {
+    "day": 339,
+    "puzzle_image": "dingbat_339.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: A SQUARE MEAL"
+  },
+  {
+    "day": 340,
+    "puzzle_image": "dingbat_340.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: PIECES OF EIGHT"
+  },
+  {
+    "day": 341,
+    "puzzle_image": "dingbat_341.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONE IN A MILLION"
+  },
+  {
+    "day": 342,
+    "puzzle_image": "dingbat_342.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: LONG UNDERWEAR"
+  },
+  {
+    "day": 343,
+    "puzzle_image": "dingbat_343.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: SOMEWHERE OVER THE RAINBOW"
+  },
+  {
+    "day": 344,
+    "puzzle_image": "dingbat_344.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: FISH OUT OF WATER"
+  },
+  {
+    "day": 345,
+    "puzzle_image": "dingbat_345.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: JUST AROUND THE CORNER"
+  },
+  {
+    "day": 346,
+    "puzzle_image": "dingbat_346.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONE OVER THE EIGHT"
+  },
+  {
+    "day": 347,
+    "puzzle_image": "dingbat_347.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: DEAD GIVEAWAY"
+  },
+  {
+    "day": 348,
+    "puzzle_image": "dingbat_348.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE JOKE'S ON YOU"
+  },
+  {
+    "day": 349,
+    "puzzle_image": "dingbat_349.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: NOTHING TO WRITE HOME ABOUT"
+  },
+  {
+    "day": 350,
+    "puzzle_image": "dingbat_350.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THE DRINKS ARE ON THE HOUSE"
+  },
+  {
+    "day": 351,
+    "puzzle_image": "dingbat_351.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: WOLF IN SHEEP'S CLOTHING"
+  },
+  {
+    "day": 352,
+    "puzzle_image": "dingbat_352.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: THEREBY HANGS A TALE"
+  },
+  {
+    "day": 353,
+    "puzzle_image": "dingbat_353.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SLAP AND TICKLE"
+  },
+  {
+    "day": 354,
+    "puzzle_image": "dingbat_354.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: BOXING CLEVER"
+  },
+  {
+    "day": 355,
+    "puzzle_image": "dingbat_355.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: BACK TO SQUARE ONE"
+  },
+  {
+    "day": 356,
+    "puzzle_image": "dingbat_356.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: MORE OFTEN THAN NOT"
+  },
+  {
+    "day": 357,
+    "puzzle_image": "dingbat_357.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: I'M NUTS ABOUT YOU"
+  },
+  {
+    "day": 358,
+    "puzzle_image": "dingbat_358.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: A STITCH IN TIME"
+  },
+  {
+    "day": 359,
+    "puzzle_image": "dingbat_359.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ONE STEP FORWARD, TWO STEPS BACK"
+  },
+  {
+    "day": 360,
+    "puzzle_image": "dingbat_360.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: TIME'S UP"
+  },
+  {
+    "day": 361,
+    "puzzle_image": "dingbat_361.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: RETURN TICKET"
+  },
+  {
+    "day": 362,
+    "puzzle_image": "dingbat_362.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: WATER UNDER THE BRIDGE"
+  },
+  {
+    "day": 363,
+    "puzzle_image": "dingbat_363.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: TURN A BLIND EYE"
+  },
+  {
+    "day": 364,
+    "puzzle_image": "dingbat_364.png",
+    "hint_text": "WARNING: DIABOLICAL DINGBAT",
+    "answer_text": "SOLUTION: TREBLE CHANCE"
+  },
+  {
+    "day": 365,
+    "puzzle_image": "dingbat_365.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: SPREAD A LITTLE HAPPINESS"
+  },
+  {
+    "day": 366,
+    "puzzle_image": "dingbat_366.png",
+    "hint_text": "",
+    "answer_text": "SOLUTION: ROGER, OVER AND OUT"
+  }
+]

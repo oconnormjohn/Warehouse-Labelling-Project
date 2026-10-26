@@ -60,8 +60,14 @@ def convert_image_to_zpl_graphic(image_filename, base_dir=None):
         base_dir = BASE_DIR
         
     clean_filename = os.path.basename(image_filename)
+    current_year = datetime.datetime.now().year
+    active_year_dir = 'dingbats_year_1' if (current_year % 2 != 0) else 'dingbats_year_2'
+    fallback_year_dir = 'dingbats_year_2' if (current_year % 2 != 0) else 'dingbats_year_1'
+
     search_dirs = [
         os.path.join(base_dir, 'label-graphics'),
+        os.path.join(base_dir, active_year_dir),
+        os.path.join(base_dir, fallback_year_dir),
         os.path.join(base_dir, 'dingbats'),
         base_dir
     ]
