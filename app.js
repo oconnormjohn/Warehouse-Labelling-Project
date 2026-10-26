@@ -62,6 +62,15 @@ let currentListSchemaDataArray = [];
 let secretPinkSquareTapCount = 0;
 let secretPinkSquareTimeoutId = null;
 
+// Inactivity Timeout Configuration & State (Universal return to Home Screen)
+const INACTIVITY_WARNING_DELAY_MS = 50000; // 50 seconds before warning appears
+const INACTIVITY_COUNTDOWN_SECONDS = 10;   // 10 seconds warning countdown (total 60s)
+let inactivityWarningTimer = null;
+let inactivityCountdownInterval = null;
+let inactivityRemainingSeconds = 10;
+let isInactivityWarningVisible = false;
+
+
 // ==========================================================================
 // 2. NETWORK & HARDWARE COMMUNICATION LAYER
 // ==========================================================================
@@ -441,6 +450,201 @@ function switchKioskScreenLayout(targetScreenName) {
 /**
  * Universal Navigation Sidebar Action Manager.
  */
+
+// ==========================================================================
+// 3A. INACTIVITY TIMEOUT & AUTO-RETURN TO HOME SCREEN (1-MINUTE INACTIVITY)
+// ==========================================================================
+
+let kioskAudioCtx = null;
+
+/**
+ * Initializes and unlocks the Web Audio Context for speaker output.
+ */
+function getKioskAudioContext() {
+    try {
+        if (!kioskAudioCtx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) {
+                kioskAudioCtx = new AudioContextClass();
+            }
+        }
+        if (kioskAudioCtx && kioskAudioCtx.state === 'suspended') {
+            kioskAudioCtx.resume().catch(() => {});
+        }
+    } catch (e) {
+        // Fallback silently if audio context unavailable
+    }
+    return kioskAudioCtx;
+}
+
+/**
+ * Plays a clean, professional two-tone warning beep through the monitor speakers.
+ */
+function playInactivityWarningBeep() {
+    try {
+        const ctx = getKioskAudioContext();
+        if (!ctx) return;
+
+        const now = ctx.currentTime;
+
+        // Tone 1: 750 Hz
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(750, now);
+        gain1.gain.setValueAtTime(0.001, now);
+        gain1.gain.linearRampToValueAtTime(0.3, now + 0.02);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.15);
+
+        // Tone 2: 900 Hz (short distinctive double-beep)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(900, now + 0.18);
+        gain2.gain.setValueAtTime(0.001, now + 0.18);
+        gain2.gain.linearRampToValueAtTime(0.3, now + 0.20);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.18);
+        osc2.stop(now + 0.35);
+    } catch (err) {
+        console.warn("Unable to play warning beep:", err);
+    }
+}
+
+/**
+ * Resets or clears the kiosk inactivity countdown.
+ * Automatically active on all ancillary screens ("1A", "2", "2A", "3", "3A", "4", "5", "6", "7").
+ * Automatically inactive on Home Screen ("1").
+ */
+function resetInactivityTimer() {
+    clearTimeout(inactivityWarningTimer);
+    inactivityWarningTimer = null;
+
+    if (inactivityCountdownInterval) {
+        clearInterval(inactivityCountdownInterval);
+        inactivityCountdownInterval = null;
+    }
+
+    if (isInactivityWarningVisible) {
+        hideInactivityWarningModal();
+    }
+
+    // Do NOT run timeout on the Home Screen ("1")
+    if (currentActiveScreen === "1") {
+        return;
+    }
+
+    // Arm the 50-second timer to display the 10-second countdown warning modal
+    inactivityWarningTimer = setTimeout(() => {
+        showInactivityWarningModal();
+    }, INACTIVITY_WARNING_DELAY_MS);
+}
+
+/**
+ * Displays the 10-second countdown warning modal before returning to the Home Screen.
+ */
+function showInactivityWarningModal() {
+    if (currentActiveScreen === "1") return;
+
+    isInactivityWarningVisible = true;
+    inactivityRemainingSeconds = INACTIVITY_COUNTDOWN_SECONDS;
+
+    // Trigger speaker warning beep
+    playInactivityWarningBeep();
+
+    const modal = document.getElementById('inactivity-warning-modal');
+    const countdownEl = document.getElementById('inactivity-countdown-number');
+
+    if (countdownEl) {
+        countdownEl.textContent = inactivityRemainingSeconds.toString();
+    }
+
+    if (modal) {
+        modal.classList.remove('modal-hide');
+        modal.style.setProperty('display', 'flex', 'important');
+    }
+
+    // Start 1-second interval countdown
+    if (inactivityCountdownInterval) {
+        clearInterval(inactivityCountdownInterval);
+    }
+
+    inactivityCountdownInterval = setInterval(() => {
+        inactivityRemainingSeconds--;
+
+        if (countdownEl) {
+            countdownEl.textContent = Math.max(0, inactivityRemainingSeconds).toString();
+        }
+
+        if (inactivityRemainingSeconds <= 0) {
+            clearInterval(inactivityCountdownInterval);
+            inactivityCountdownInterval = null;
+            returnToHomeScreenDueToInactivity();
+        }
+    }, 1000);
+}
+
+/**
+ * Hides the inactivity warning countdown modal and clears running interval.
+ */
+function hideInactivityWarningModal() {
+    isInactivityWarningVisible = false;
+
+    if (inactivityCountdownInterval) {
+        clearInterval(inactivityCountdownInterval);
+        inactivityCountdownInterval = null;
+    }
+
+    const modal = document.getElementById('inactivity-warning-modal');
+    if (modal) {
+        modal.style.setProperty('display', 'none', 'important');
+        modal.classList.add('modal-hide');
+    }
+}
+
+/**
+ * Invoked when user taps the "STAY ON THIS SCREEN" button or touches anywhere during warning.
+ */
+function cancelInactivityTimeout() {
+    hideInactivityWarningModal();
+    resetInactivityTimer();
+}
+
+/**
+ * Automatically returns the kiosk to the Home screen after 60 seconds of inactivity.
+ * Cleans up open overlays, input states, and category headers.
+ */
+function returnToHomeScreenDueToInactivity() {
+    hideInactivityWarningModal();
+
+    // Dismiss any active overlays or keypads
+    if (typeof dismissNumericKeypadOverlay === 'function') dismissNumericKeypadOverlay();
+    if (typeof dismissMultiplesQuantityOverlay === 'function') dismissMultiplesQuantityOverlay();
+    if (typeof dismissPinPadSecurity === 'function') dismissPinPadSecurity();
+    if (typeof cancelAdminPasswordVerification === 'function') cancelAdminPasswordVerification();
+    if (typeof handleCalendarManualCancelAction === 'function') handleCalendarManualCancelAction();
+
+    // Reset slot headers
+    const slot1 = document.getElementById('cat-word1');
+    const slot2 = document.getElementById('cat-word2');
+    if (slot1) slot1.textContent = '';
+    if (slot2) slot2.textContent = '';
+
+    // If coming from plain labels, restore home categories
+    if (currentActiveScreen === "4") {
+        loadHomeMatrixCategories();
+    }
+
+    // Return cleanly to Home Screen
+    switchKioskScreenLayout("1");
+}
+
 function sidebarAction(action) {
     if (action === 'PLAIN_MODE') {
         loadPlainLabelsMatrix();
@@ -2660,4 +2864,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // 3. Monitor system clock to seamlessly reveal answers at 11am or rotate at midnight
     setInterval(refreshDailyDingbatButtonIfChanged, 15000);
+});
+
+
+// Universal touchscreen and input activity listeners for auto-resetting inactivity timer & audio unlock
+['touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(eventName => {
+    window.addEventListener(eventName, () => {
+        getKioskAudioContext();
+        if (isInactivityWarningVisible) {
+            cancelInactivityTimeout();
+        } else if (currentActiveScreen !== "1") {
+            resetInactivityTimer();
+        }
+    }, { passive: true });
 });

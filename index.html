@@ -787,6 +787,30 @@
     </div>
 </div>
 
+<!-- ==========================================================================
+     INACTIVITY TIMEOUT 10-SECOND COUNTDOWN WARNING MODAL
+     ========================================================================== -->
+<div id="inactivity-warning-modal" class="modal-overlay modal-hide" onclick="cancelInactivityTimeout()" style="display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background-color: rgba(0, 0, 0, 0.75) !important; justify-content: center !important; align-items: center !important; z-index: 9999999999 !important; pointer-events: auto !important;">
+    <div class="inactivity-warning-card" style="background-color: #FFF4C2 !important; border: 4px solid #000000 !important; border-radius: 28px !important; padding: 3.5vh 3vw !important; width: 44vw !important; max-width: 540px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; align-items: center !important; box-shadow: 0px 1.5vh 4vh rgba(0,0,0,0.6) !important; text-align: center !important;">
+        
+        <div style="font-family: Arial, sans-serif; font-size: 3.0vh; font-weight: 900; color: #000000; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; margin-bottom: 0.8vh;">
+            NO RECENT ACTIVITY
+        </div>
+        
+        <div style="font-family: Arial, sans-serif; font-size: 2.6vh; font-weight: 900; color: #000000; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; margin-bottom: 2.5vh;">
+            RETURNING TO HOME SCREEN IN:
+        </div>
+
+        <div id="inactivity-countdown-number" style="width: 11vh; height: 11vh; border-radius: 50%; background-color: #C64B4B; color: #FFFFFF; border: 3px solid #000000; display: flex; align-items: center; justify-content: center; font-size: 6.2vh; font-weight: 900; font-family: Arial, sans-serif; box-shadow: 0px 3px 0px #000000; margin-bottom: 3vh;">
+            10
+        </div>
+
+        <button type="button" id="inactivity-cancel-btn" onclick="cancelInactivityTimeout()" style="width: 92%; height: 7.5vh; border: 3px solid #000000; border-radius: 22px; font-size: 2.5vh; font-weight: 900; background-color: #28a745; color: #FFFFFF; box-shadow: 0px 5px 0px #000000; cursor: pointer; text-transform: uppercase; outline: none; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center;">
+            STAY ON THIS SCREEN
+        </button>
+    </div>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
